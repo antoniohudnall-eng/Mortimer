@@ -1,0 +1,38 @@
+; COBRA Vertebra - L2 V20
+; Material: Rohacell IG-51 8.25mm
+; Tool: 2.0mm carbide end mill
+
+G21
+G90
+G17
+G54
+
+; Safe start
+G0 Z50
+G0 X0 Y0
+M3 S20000
+G4 P2000
+
+; Cut outer profile
+
+; Pass 1/2, Z=-5.0
+G0 X6.425 Y0
+G1 Z-5.000 F500
+G2 I-6.425 J0 F1500
+
+; Pass 2/2, Z=-8.25
+G0 X6.425 Y0
+G1 Z-8.250 F500
+G2 I-6.425 J0 F1500
+
+; Mounting holes
+G81 X2.425 Y0.000 Z-8.250 R2 F500
+G81 X-2.425 Y0.000 Z-8.250 R2 F500
+G81 X0.000 Y2.425 Z-8.250 R2 F500
+G81 X0.000 Y-2.425 Z-8.250 R2 F500
+
+; End of program
+G0 Z50
+M5
+G0 X0 Y0
+M30

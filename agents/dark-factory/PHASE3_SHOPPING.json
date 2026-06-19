@@ -1,0 +1,29 @@
+{
+  "3d_printer_option": {
+    "item": "Prusa MK4 3D Printer Kit",
+    "cost": 499.0,
+    "vendor": "Prusa Research or Amazon",
+    "link": "https://www.prusa3d.com/product/original-prusa-mk4-2/",
+    "priority": "high"
+  },
+  "filament": {
+    "item": "Prusament PLA (5 rolls, various colors)",
+    "cost": 49.5,
+    "vendor": "Prusa Research",
+    "priority": "high"
+  },
+  "octoprint": {
+    "item": "Raspberry Pi 4 4GB + SD Card",
+    "cost": 75.0,
+    "vendor": "Raspberry Pi or Amazon",
+    "priority": "medium"
+  },
+  "sensors": {
+    "item": "Temperature/Humidity sensors (optional)",
+    "cost": 25.0,
+    "vendor": "Amazon",
+    "priority": "low"
+  },
+  "total": 648.5,
+  "budget_variance": "+$148.50 over budget (consider cheaper printer option)"
+}

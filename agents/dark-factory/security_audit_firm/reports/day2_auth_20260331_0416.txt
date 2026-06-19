@@ -1,0 +1,31 @@
+===============================================
+SENTINEL SECURITY - DAY 2: AUTHENTICATION TESTS
+Target: Dusty Wallet
+Started: 2026-03-31T04:16:19+00:00
+===============================================
+
+[1] BRUTE FORCE RESISTANCE TEST
+-------------------------------------------
+Attempting 10 rapid login requests...
+
+Request 1: HTTP 000
+Request 2: HTTP 000
+Request 3: HTTP 000
+Request 4: HTTP 000
+Request 5: HTTP 000
+Request 6: HTTP 000
+Request 7: HTTP 000
+Request 8: HTTP 000
+Request 9: HTTP 000
+Request 10: HTTP 000
+
+[2] JWT TOKEN SECURITY
+-------------------------------------------
+Analyzing JWT implementation...
+✓ JWT_SECRET configured
+✓ Token expiration: expiresIn: '7d' }
+✓ Password hashing: bcrypt.hash(password, 12
+
+[3] INPUT VALIDATION TESTS
+-------------------------------------------
+Testing SQL injection protection...

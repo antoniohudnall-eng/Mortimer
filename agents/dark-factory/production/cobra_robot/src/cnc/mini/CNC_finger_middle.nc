@@ -1,0 +1,30 @@
+; COBRA Finger Segment - middle
+; Length: 6.6000000000000005mm, Width: 10mm
+
+G21
+G90
+G17
+
+G0 Z50
+M3 S20000
+
+; Cut profile
+G0 X-5.000 Y0
+G1 Z-8 F500
+G1 X5.000 F1500
+G1 Y6.600
+G1 X-5.000
+G1 Y0
+
+; Tendon channel
+G0 X0 Y3.300
+G1 Z-8 F500
+G0 Z50
+
+; Pivot holes
+G81 X0 Y0 Z-8 R2 F500
+G81 X0 Y6.600 Z-8 R2 F500
+
+M5
+G0 X0 Y0
+M30

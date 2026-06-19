@@ -1,0 +1,11 @@
+name,business,phone,status,notes,date_added,last_contact,next_action
+Maria Santos,Bean There Cafe,555-0142,QUOTED,Interested in weekly delivery. Cafe owner - high traffic mornings,2026-03-02,2026-03-02,Follow up 3/5
+Jamal Wright,Taco Loco Truck,555-0198,NEW,Food truck owner - limited storage space. Needs small frequent delivery,2026-03-02,,Call today
+David Chen,Bistro Versailles,555-0167,INTERESTED,Premium restaurant owner - cares about receipt quality for brand image,2026-03-02,,Send quote
+Sarah Patterson,The Daily Grind Coffee,555-0221,CALLBACK,Manager asked to call back Thu afternoon after 2pm,2026-03-02,,
+Roberto Garcia,Taqueria Mexico,555-0284,NEW,Mexican restaurant owner. Currently buying from Costco. Mentioned price concern.,2026-03-02,,Focus on per-roll savings
+Angela Foster,Corner Market Grocery,555-0337,PROSPECT,Small grocery store with cafe section. 2 POS stations,2026-03-02,,Ask about current supplier
+Kevin Murphy,O'Malley's Pub,555-0401,NOT_INTERESTED,Said don't need supplies now. Will keep card on file.,2026-03-02,2026-03-02,Check back in 60 days
+Lisa Wong,Sushi Express,555-0456,QUOTED,Fast casual sushi. Needs reliable delivery. Quote sent.,2026-03-02,2026-03-02,Close by Friday
+Tom Bradley,Bradley's BBQ,555-0512,NEW,Food truck - weekend events only. Seasonal business starting March,2026-03-02,,Ask about event schedule
+Nina Patel,Spice Route Indian,555-0568,INTERESTED,Indian restaurant. Uses Clover POS. Wants to compare current pricing,2026-03-02,,Send comparison sheet

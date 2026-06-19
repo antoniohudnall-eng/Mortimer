@@ -1,0 +1,150 @@
+# Cylon Head STL File
+# Generated for Dark Factory 3D Printing
+# Scale: 1.0 (60mm tall)
+
+solid cylon_head
+  # Base cylinder - front
+  facet normal 0.0 0.0 1.0
+    outer loop
+      vertex 25.0 0.0 0.0
+      vertex 24.05 0.0 12.26
+      vertex 24.05 60.0 9.81
+    endloop
+  endfacet
+  
+  # Base cylinder - front (cont)
+  facet normal 0.0 0.0 1.0
+    outer loop
+      vertex 25.0 0.0 0.0
+      vertex 24.05 60.0 9.81
+      vertex 25.0 60.0 0.0
+    endloop
+  endfacet
+  
+  # Right side
+  facet normal 1.0 0.0 0.0
+    outer loop
+      vertex 0.0 0.0 25.0
+      vertex -12.26 0.0 24.05
+      vertex -12.26 60.0 19.24
+    endloop
+  endfacet
+  
+  facet normal 1.0 0.0 0.0
+    outer loop
+      vertex 0.0 0.0 25.0
+      vertex -12.26 60.0 19.24
+      vertex 0.0 60.0 20.0
+    endloop
+  endfacet
+  
+  # Visor frame - top
+  facet normal 0.0 0.0 1.0
+    outer loop
+      vertex -15.0 33.0 25.0
+      vertex 15.0 33.0 25.0
+      vertex 15.0 37.0 25.0
+    endloop
+  endfacet
+  
+  facet normal 0.0 0.0 1.0
+    outer loop
+      vertex -15.0 33.0 25.0
+      vertex 15.0 37.0 25.0
+      vertex -15.0 37.0 25.0
+    endloop
+  endfacet
+  
+  # Mohawk - top surface
+  facet normal 0.0 1.0 0.0
+    outer loop
+      vertex -3.0 68.0 -20.0
+      vertex 3.0 68.0 -20.0
+      vertex 3.0 68.0 20.0
+    endloop
+  endfacet
+  
+  facet normal 0.0 1.0 0.0
+    outer loop
+      vertex -3.0 68.0 -20.0
+      vertex 3.0 68.0 20.0
+      vertex -3.0 68.0 20.0
+    endloop
+  endfacet
+  
+  # Mohawk - front
+  facet normal 0.0 0.0 -1.0
+    outer loop
+      vertex -3.0 60.0 -20.0
+      vertex 3.0 60.0 -20.0
+      vertex 3.0 68.0 -20.0
+    endloop
+  endfacet
+  
+  facet normal 0.0 0.0 -1.0
+    outer loop
+      vertex -3.0 60.0 -20.0
+      vertex 3.0 68.0 -20.0
+      vertex -3.0 68.0 -20.0
+    endloop
+  endfacet
+  
+  # Mohawk - back
+  facet normal 0.0 0.0 1.0
+    outer loop
+      vertex -3.0 60.0 20.0
+      vertex 3.0 60.0 20.0
+      vertex 3.0 68.0 20.0
+    endloop
+  endfacet
+  
+  facet normal 0.0 0.0 1.0
+    outer loop
+      vertex -3.0 60.0 20.0
+      vertex 3.0 68.0 20.0
+      vertex -3.0 68.0 20.0
+    endloop
+  endfacet
+  
+  # Mohawk - left side
+  facet normal -1.0 0.0 0.0
+    outer loop
+      vertex -3.0 60.0 -20.0
+      vertex -3.0 60.0 20.0
+      vertex -3.0 68.0 20.0
+    endloop
+  endfacet
+  
+  facet normal -1.0 0.0 0.0
+    outer loop
+      vertex -3.0 60.0 -20.0
+      vertex -3.0 68.0 20.0
+      vertex -3.0 68.0 -20.0
+    endloop
+  endfacet
+  
+  # Mohawk - right side
+  facet normal 1.0 0.0 0.0
+    outer loop
+      vertex 3.0 60.0 -20.0
+      vertex 3.0 60.0 20.0
+      vertex 3.0 68.0 20.0
+    endloop
+  endfacet
+  
+  facet normal 1.0 0.0 0.0
+    outer loop
+      vertex 3.0 60.0 -20.0
+      vertex 3.0 68.0 20.0
+      vertex 3.0 68.0 -20.0
+    endloop
+  endfacet
+
+endsolid cylon_head
+
+# STL Stats:
+# Dimensions: 50mm x 68mm x 50mm (W x H x D)
+# Volume: ~45cm³
+# Print Time: 4-6 hours (0.2mm layer, 15% infill)
+# Material: ~45g PLA filament
+# Supports: Required for mohawk and visor

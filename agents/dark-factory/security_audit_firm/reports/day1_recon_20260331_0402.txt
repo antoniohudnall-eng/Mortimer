@@ -1,0 +1,117 @@
+===============================================
+SENTINEL SECURITY - DAY 1 RECONNAISSANCE
+Target: Dusty Wallet
+Started: 2026-03-31T04:02:33+00:00
+===============================================
+
+[1] API ENDPOINT DISCOVERY
+-------------------------------------------
+Routes found:
+auth.js
+staking.js
+swap.js
+transactions.js
+users.js
+validation.js
+wallet.js
+
+Endpoints discovered:
+  router.post('/register', async (req, res) => {
+  router.post('/login', async (req, res) => {
+  router.get('/me', authenticateToken, (req, res) => {
+  router.post('/logout', (req, res) => {
+  router.get('/pools', authenticateToken, (req, res) => {
+  router.get('/', authenticateToken, (req, res) => {
+  router.post('/', authenticateToken, (req, res) => {
+  router.post('/:id/unstake', authenticateToken, (req, res) => {
+  router.get('/quote', authenticateToken, (req, res) => {
+  router.post('/', authenticateToken, (req, res) => {
+  router.get('/', authenticateToken, async (req, res) => {
+  router.get('/:id', authenticateToken, async (req, res) => {
+  router.post('/', authenticateToken, async (req, res) => {
+  router.post('/broadcast-real', authenticateToken, async (req, res) => {
+  router.get('/pending', authenticateToken, async (req, res) => {
+  router.get('/price', authenticateToken, async (req, res) => {
+  router.get('/settings', authenticateToken, (req, res) => {
+  router.put('/settings', authenticateToken, (req, res) => {
+  router.get('/dashboard', authenticateToken, (req, res) => {
+  router.get('/', authenticateToken, async (req, res) => {
+  router.get('/:id', authenticateToken, async (req, res) => {
+  router.post('/', authenticateToken, async (req, res) => {
+  router.post('/:id/import', authenticateToken, async (req, res) => {
+  router.get('/:id/balance', authenticateToken, async (req, res) => {
+  router.get('/:id/dust', authenticateToken, async (req, res) => {
+  router.delete('/:id', authenticateToken, async (req, res) => {
+
+[2] AUTHENTICATION FLOW ANALYSIS
+-------------------------------------------
+✓ Authentication module found
+3:const jwt = require('jsonwebtoken');
+26:    const { email, password, name } = req.body;
+28:    if (!email || !password || !name) {
+29:      return res.status(400).json({ error: 'Email, password, and name are required' });
+37:    const hashedPassword = await bcrypt.hash(password, 12);
+42:      password: hashedPassword,
+60:    const token = jwt.sign(
+68:      token,
+84:    const { email, password } = req.body;
+86:    if (!email || !password) {
+87:      return res.status(400).json({ error: 'Email and password are required' });
+95:    const isValidPassword = await bcrypt.compare(password, user.password);
+100:    const token = jwt.sign(
+111:      token,
+125:router.get('/me', authenticateToken, (req, res) => {
+153:// Middleware to authenticate token
+154:function authenticateToken(req, res, next) {
+156:  const token = authHeader && authHeader.split(' ')[1];
+158:  if (!token) {
+159:    return res.status(401).json({ error: 'Access token required' });
+
+[3] DEPENDENCY VULNERABILITY SCAN
+-------------------------------------------
+Total dependencies: 427
+✓ No vulnerabilities found
+
+[4] CONFIGURATION REVIEW
+-------------------------------------------
+✓ Production environment file found
+Variables configured:
+  - INFURA_PROJECT_ID
+  - ETHEREUM_RPC_URL
+  - SEPOLIA_RPC_URL
+  - MONGODB_URI
+  - COINGECKO_API_KEY
+  - ENCRYPTION_KEY
+  - JWT_SECRET
+  - NODE_ENV
+  - PORT
+  - FRONTEND_URL
+  - API_VERSION
+  - RATE_LIMIT_WINDOW_MS
+  - RATE_LIMIT_MAX_REQUESTS
+  - SESSION_SECRET
+  - SESSION_DURATION_HOURS
+
+[5] DATABASE CONNECTION SECURITY
+-------------------------------------------
+16:    const dbUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/dusty_wallet';
+
+[6] ENCRYPTION IMPLEMENTATION
+-------------------------------------------
+✓ Encryption service found
+5: * Uses PBKDF2 + AES-256-GCM for maximum security
+20:  // PBKDF2 iterations - adjust based on performance vs security
+21:  iterations: process.env.NODE_ENV === 'production' ? 100000 : 10000,
+33: * Derive encryption key from password using PBKDF2
+35:async function deriveKey(password, salt) {
+39:    ENCRYPTION_CONFIG.iterations,
+58:    const key = await deriveKey(password, salt);
+82:      iterations: ENCRYPTION_CONFIG.iterations,
+112:    // Use stored iterations if available (for backward compatibility)
+113:    const iterations = data.iterations || 10000;
+
+===============================================
+DAY 1 RECONNAISSANCE COMPLETE
+Completed: 2026-03-31T04:02:53+00:00
+Report: /root/.openclaw/workspace/AGI_COMPANY/subsidiaries/DARK_FACTORY/security_audit_firm/reports/day1_recon_20260331_0402.txt
+===============================================

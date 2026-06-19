@@ -1,0 +1,14 @@
+{
+  "agent_id": "jane",
+  "portal_hub": "mortimer",
+  "portal_url": "wss://mortimer:9000",
+  "token": "jane-portal-2024-secure",
+  "status": "configured",
+  "capabilities": [
+    "recall",
+    "dispatch",
+    "status",
+    "teleport"
+  ],
+  "classification": "Q-LEVEL"
+}
