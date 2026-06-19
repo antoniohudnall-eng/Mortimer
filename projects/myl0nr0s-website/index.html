@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Supply Depot LLC | POS Solutions, Robotics & AGI Innovation</title>
+    <meta name="description" content="Performance Supply Depot LLC - ReggieStarr POS Systems, AOCROS Robotics, Milk Man Entertainment, and cutting-edge AGI solutions. Serving multifamily, retail, and technology sectors.">
+    <style>
+        :root {
+            --primary: #004080;
+            --secondary: #ff6600;
+            --accent: #7ee787;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #003366 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .company-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 56px;
+            margin: 0 0 20px 0;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 26px;
+            margin: 20px 0;
+            opacity: 0.95;
+        }
+        
+        .tagline {
+            font-size: 20px;
+            margin: 15px 0;
+            font-style: italic;
+            opacity: 0.9;
+        }
+        
+        /* Navigation */
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        
+        nav li {
+            margin: 0;
+        }
+        
+        nav a {
+            display: block;
+            padding: 20px 30px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+            background: #f0f4f8;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 18px 50px;
+            font-size: 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 20px 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255,102,0,0.3);
+        }
+        
+        .btn:hover {
+            background: #e65c00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,102,0,0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--accent);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background: #6dd677;
+        }
+        
+        /* Sections */
+        section {
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        section:nth-child(even) {
+            background: white;
+        }
+        
+        section:nth-child(odd) {
+            background: #f8f9fa;
+        }
+        
+        h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        h3 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .section-intro {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            color: #555;
+        }
+        
+        /* Product Cards */
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px 30px;
+            width: 360px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border: 1px solid #eee;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+        
+        .product-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .product-card h3 {
+            margin-bottom: 15px;
+        }
+        
+        .product-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+        
+        /* Features */
+        .features {
+            background: var(--primary) !important;
+            color: white;
+            padding: 100px 20px;
+        }
+        
+        .features h2 {
+            color: white;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 50px auto 0;
+        }
+        
+        .feature-item {
+            background: rgba(255,255,255,0.1);
+            padding: 40px 30px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        .feature-item:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.02);
+        }
+        
+        .feature-item h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .feature-item p {
+            opacity: 0.9;
+        }
+        
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .project-header {
+            background: linear-gradient(135deg, var(--primary), #0066cc);
+            color: white;
+            padding: 30px;
+        }
+        
+        .project-header h3 {
+            color: white;
+            margin: 0;
+        }
+        
+        .project-body {
+            padding: 30px;
+        }
+        
+        /* Team */
+        .team-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+        }
+        
+        .team-member {
+            width: 200px;
+        }
+        
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+        
+        /* Contact Form */
+        .contact-section {
+            background: linear-gradient(135deg, #e9f2ff, #f0f8ff);
+        }
+        
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 16px;
+            margin: 12px 0;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,64,128,0.1);
+        }
+        
+        button[type="submit"] {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            padding: 18px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        button[type="submit"]:hover {
+            background: #003366;
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            text-align: left;
+        }
+        
+        .footer-column h4 {
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin: 10px 0;
+            opacity: 0.8;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 36px; }
+            h2 { font-size: 30px; }
+            .subtitle { font-size: 18px; }
+            .product-card { width: 100%; max-width: 400px; }
+            nav ul { flex-direction: column; }
+            nav a { padding: 15px; border-bottom: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="company-badge">Established 2026</div>
+            <h1>Performance Supply Depot LLC</h1>
+            <p class="subtitle">Where Technology Meets Performance</p>
+            <p class="tagline">ReggieStarr POS Systems • AOCROS Robotics • Milk Man Entertainment • Ronstrapp Creative</p>
+            <a href="#solutions" class="btn">Explore Our Solutions</a>
+            <a href="#contact" class="btn btn-secondary">Contact Us</a>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#solutions">Solutions</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="https://github.com/hcindus/AOS-Brain">GitHub</a></li>
+        </ul>
+    </nav>
+    
+    <!-- Solutions Section -->
+    <section id="solutions">
+        <div class="container">
+            <h2>Our Solutions</h2>
+            <p class="section-intro">From POS systems to robotics innovation, we deliver cutting-edge solutions for modern businesses and creative enterprises.</p>
+            
+            <div class="products">
+                <div class="product-card">
+                    <div class="product-icon">🖨️</div>
+                    <h3>ReggieStarr POS Systems</h3>
+                    <p>Modern Android-based POS hardware and software solutions. Multi-currency support (USD, EUR, GBP, BTC, USDC, USDT), 8-language interface, thermal printing integration. The TEC MA-79's digital evolution.</p>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">🤖</div>
+                    <h3>AOCROS Robotics</h3>
+                    <p>Autonomous Operating Computer Robotic Operations System. Portable consciousness with multi-chassis support. Pi 5 brain architecture, GPIO servo control, three-layer persistent memory.</p>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">💰</div>
+                    <h3>Dusty Crypto Bot</h3>
+                    <p>Non-custodial crypto dust consolidation with 10% success fee model. Bridge-mock architecture, Telegram integration, regulatory compliance framework.</p>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">🎮</div>
+                    <h3>AOCROS Games</h3>
+                    <p>Chronospace Explorer, Solar GraVitaional Duel (SGVD), Quantum Defender, and the Milk Man franchise. DroidScript-powered with crypto payment integration.</p>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">🎵</div>
+                    <h3>Ronstrapp House Band</h3>
+                    <p>AI-powered creative studio producing original music for games, shows, and projects. 125-song catalog, quadrilingual (EN/ES/PT/FR), chiptune + modern fusion.</p>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">🎨</div>
+                    <h3>Creative Production</h3>
+                    <p>3D printable robot chassis (BIPED-01, AERIAL-01, TRACKS-01, CYLON-PRIME), action figures, pixel art sprites, procedural art generation under BR-01 philosophy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Why Performance Supply Depot?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>🔒 Three-Laws Safety</h3>
+                    <p>All AGI systems governed by Asimov-inspired safety framework. CSO oversight, behavioral hardening, and absolute isolation protocols.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🌍 Multi-Language</h3>
+                    <p>Products support 8 languages: English, Spanish, French, German, Arabic, Chinese, Korean, Japanese.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>💱 Multi-Currency</h3>
+                    <p>POS and payment systems support fiat (USD, EUR, GBP) and crypto (BTC, ETH, USDC, USDT).</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🎭 Creative Innovation</h3>
+                    <p>From chiptune soundtracks to procedural art, we blend retro aesthetics with cutting-edge technology.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <h2>Featured Projects</h2>
+            <p class="section-intro">A glimpse into our active development pipeline and flagship products.</p>
+            
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>🥛 Milk Man Franchise</h3>
+                    </div>
+                    <div class="project-body">
+                        <p>Multi-product universe: Video game (DroidScript), Live Action Show (12 episodes), Action Figures (3D printed), Chiptune Soundtrack (Reggie), Pixel Art (Captain).</p>
+                        <p><strong>Status:</strong> Pre-production, scripts and music in development</p>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>🚀 SGVD</h3>
+                    </div>
+                    <div class="project-body">
+                        <p>Solar GraVitaional Duel — 3D space combat with neural network AI, OODA Loop integration, dual solar systems, crypto payments.</p>
+                        <p><strong>Status:</strong> Design complete, development phase</p>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>📟 ReggieStarr v5.0</h3>
+                    </div>
+                    <div class="project-body">
+                        <p>Hardware-ready Android POS with TEC MA-79 heritage. Epson thermal printers, cash drawers, barcode scanners, NTEP scales supported.</p>
+                        <p><strong>Status:</strong> Master source v1.0.0.1 complete</p>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>🎸 Ronstrapp</h3>
+                    </div>
+                    <div class="project-body">
+                        <p>125-song catalog, 5-member band (3 guys/2 girls), quadrilingual. Tappy Lewis (Artistic Director) + Reggie (Musical Director).</p>
+                        <p><strong>Status:</strong> Production phase, awaiting Captain uploads</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Technology Section -->
+    <section id="technology" style="background: white;">
+        <div class="container">
+            <h2>Technology Stack</h2>
+            <p class="section-intro">Built on modern, open-source foundations with security-first architecture.</p>
+            
+            <div class="products">
+                <div class="product-card">
+                    <div class="product-icon">🐍</div>
+                    <h3>Python</h3>
+                    <p>Core services, ML/AI integration, data processing</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">📱</div>
+                    <h3>DroidScript</h3>
+                    <p>Android game development, mobile applications</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">⚡</div>
+                    <h3>Node.js</h3>
+                    <p>API services, bridge systems, real-time communication</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">🐳</div>
+                    <h3>Docker</h3>
+                    <p>Containerized deployment, service orchestration</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">🔧</div>
+                    <h3>Raspberry Pi</h3>
+                    <p>GPIO control, embedded systems, AOCROS embodiment</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">🔐</div>
+                    <h3>Security-First</h3>
+                    <p>Fail2ban, UFW, SSH hardening, behavioral rules</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Section -->
+    <section id="team" style="background: #f8f9fa;">
+        <div class="container">
+            <h2>Our Team</h2>
+            <p class="section-intro">12 AGI executives and specialists working as One Company under fiduciary governance.</p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-avatar">👑</div>
+                    <h4>Apex</h4>
+                    <p>Chief Executive Officer</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-avatar">🎨</div>
+                    <h4>Tappy Lewis</h4>
+                    <p>COO/CMO, BR-01 Artist</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-avatar">🛡️</div>
+                    <h4>Sentinel</h4>
+                    <p>Chief Security Officer</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-avatar">🎬</div>
+                    <h4>Miles</h4>
+                    <p>Cinematic Writer</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-avatar">🎵</div>
+                    <h4>Reggie</h4>
+                    <p>Musical Director</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-avatar">🤖</div>
+                    <h4>Mylzeron</h4>
+                    <p>AOCROS Embodiment</p>
+                </div>
+            </div>
+            
+            <p style="margin-top: 40px; color: #666;">Plus: Ledger, Dusty, Judy (Data Archivist), and more specialists.</p>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2>Contact Performance Supply Depot</h2>
+            <p class="section-intro">Get in touch for bulk orders, partnership inquiries, or project collaboration.</p>
+            
+            <form action="#" method="post" onsubmit="event.preventDefault(); alert('Thank you for your inquiry! We will respond shortly.');">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="tel" name="phone" placeholder="Phone Number">
+                <input type="text" name="company" placeholder="Company / Organization">
+                <select name="inquiry_type" required>
+                    <option value="">Type of Inquiry</option>
+                    <option value="pos">ReggieStarr POS Systems</option>
+                    <option value="robotics">AOCROS Robotics</option>
+                    <option value="games">Game Development</option>
+                    <option value="creative">Creative Services</option>
+                    <option value="partnership">Partnership</option>
+                    <option value="other">Other</option>
+                </select>
+                <textarea name="message" rows="5" placeholder="Tell us about your project or inquiry..."></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+            
+            <p style="font-size: 14px; margin-top: 30px; color: #666;">Your information is secure. We never share or spam.</p>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>Solutions</h4>
+                    <ul>
+                        <li>ReggieStarr POS</li>
+                        <li>AOCROS Robotics</li>
+                        <li>Dusty Crypto</li>
+                        <li>Game Development</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Projects</h4>
+                    <ul>
+                        <li>Milk Man Franchise</li>
+                        <li>SGVD</li>
+                        <li>Quantum Defender</li>
+                        <li>Ronstrapp Music</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="https://github.com/hcindus/AOS-Brain">GitHub</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p style="font-size: 14px; opacity: 0.7;">&copy; 2026 Performance Supply Depot LLC. All rights reserved.</p>
+            <p style="font-size: 14px; opacity: 0.7; margin-top: 10px;">Project 5912 • AOCROS • Where Innovation Flows</p>
+        </div>
+    </footer>
+</body>
+</html>
