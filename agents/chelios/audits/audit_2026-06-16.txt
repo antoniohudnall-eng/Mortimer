@@ -1,0 +1,34 @@
+=== Security Audit Tue Jun 16 02:00:07 UTC 2026 ===
+System: Miles.brain.cloud
+Auditor: Chelios
+
+SSH Configuration:
+#PasswordAuthentication yes
+# PasswordAuthentication.  Depending on your PAM configuration,
+# PAM authentication, then enable this but set PasswordAuthentication
+PermitRootLogin yes
+
+Active Ports:
+LISTEN 0      511          0.0.0.0:443        0.0.0.0:*    users:(("nginx",pid=2781319,fd=8),("nginx",pid=2781318,fd=8),("nginx",pid=2781314,fd=8),("nginx",pid=2781311,fd=8),("nginx",pid=1925820,fd=8))     
+LISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:(("nginx",pid=2781319,fd=9),("nginx",pid=2781318,fd=9),("nginx",pid=2781314,fd=9),("nginx",pid=2781311,fd=9),("nginx",pid=1925820,fd=9))     
+LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=1925812,fd=3),("systemd",pid=1,fd=123))                                                                                         
+LISTEN 0      5          127.0.0.1:8085       0.0.0.0:*    users:(("python3",pid=2779974,fd=3))                                                                                                               
+LISTEN 0      2048         0.0.0.0:8082       0.0.0.0:*    users:(("python3",pid=2764410,fd=13))                                                                                                              
+LISTEN 0      5            0.0.0.0:8080       0.0.0.0:*    users:(("python3",pid=1926169,fd=3))                                                                                                               
+LISTEN 0      2048         0.0.0.0:8081       0.0.0.0:*    users:(("python3",pid=2764447,fd=13))                                                                                                              
+LISTEN 0      5            0.0.0.0:8001       0.0.0.0:*    users:(("python3",pid=1925783,fd=3))                                                                                                               
+LISTEN 0      511             [::]:443           [::]:*    users:(("nginx",pid=2781319,fd=7),("nginx",pid=2781318,fd=7),("nginx",pid=2781314,fd=7),("nginx",pid=2781311,fd=7),("nginx",pid=1925820,fd=7))     
+LISTEN 0      511             [::]:80            [::]:*    users:(("nginx",pid=2781319,fd=10),("nginx",pid=2781318,fd=10),("nginx",pid=2781314,fd=10),("nginx",pid=2781311,fd=10),("nginx",pid=1925820,fd=10))
+LISTEN 0      4096            [::]:22            [::]:*    users:(("sshd",pid=1925812,fd=4),("systemd",pid=1,fd=124))                                                                                         
+
+Recent Failed Logins:
+2026-06-15T22:08:28.468798+00:00 Miles sshd[2764578]: Failed password for root from 138.252.175.106 port 41460 ssh2
+2026-06-15T22:10:47.063929+00:00 Miles sshd[2764769]: Failed password for root from 138.252.175.106 port 60466 ssh2
+2026-06-15T22:13:01.466017+00:00 Miles sshd[2765010]: Failed password for root from 138.252.175.106 port 46402 ssh2
+2026-06-15T22:15:13.867088+00:00 Miles sshd[2765251]: Failed password for invalid user user1 from 138.252.175.106 port 33718 ssh2
+2026-06-15T22:17:30.465385+00:00 Miles sshd[2765426]: Failed password for root from 138.252.175.106 port 54214 ssh2
+2026-06-15T22:19:39.767986+00:00 Miles sshd[2765715]: Failed password for root from 138.252.175.106 port 46580 ssh2
+2026-06-15T22:21:49.972349+00:00 Miles sshd[2765952]: Failed password for nobody from 138.252.175.106 port 35152 ssh2
+2026-06-15T22:24:02.765654+00:00 Miles sshd[2766210]: Failed password for invalid user kali from 138.252.175.106 port 54372 ssh2
+2026-06-15T22:26:09.668968+00:00 Miles sshd[2766486]: Failed password for invalid user linaro from 138.252.175.106 port 35428 ssh2
+2026-06-15T22:28:24.568758+00:00 Miles sshd[2766703]: Failed password for root from 138.252.175.106 port 53582 ssh2
