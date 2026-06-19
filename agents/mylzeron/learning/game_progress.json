@@ -1,0 +1,16 @@
+{
+  "agent_id": "mylzeron",
+  "games_played": {
+    "tic_tac_toe": 88,
+    "checkers": 83
+  },
+  "wins": {
+    "tic_tac_toe": 47,
+    "checkers": 40
+  },
+  "skill_levels": {
+    "tic_tac_toe": 1.0,
+    "checkers": 1.0
+  },
+  "total_experiences": 3679
+}

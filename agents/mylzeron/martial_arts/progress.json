@@ -1,0 +1,22 @@
+{
+  "agent_id": "mylzeron",
+  "body_type": "humanoid",
+  "movements_learned": 0,
+  "movements_mastered": 0,
+  "forms_practiced": 0,
+  "current_stats": {
+    "energy": 1.0,
+    "power": 0.0,
+    "balance": 0.5,
+    "flow": 0.0,
+    "chi": 0.0
+  },
+  "style_progress": {
+    "taekwondo": 0.0,
+    "taichi": 0.0,
+    "qigong": 0.0
+  },
+  "belt_rank": "White Belt",
+  "learned_movements": [],
+  "mastered_movements": []
+}

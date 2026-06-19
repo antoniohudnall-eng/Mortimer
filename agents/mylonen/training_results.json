@@ -1,0 +1,48 @@
+{
+  "child_id": "mylonen",
+  "scenarios_completed": [
+    {
+      "name": "stack_tower",
+      "success": true,
+      "steps": 0
+    },
+    {
+      "name": "sort_colors",
+      "success": false,
+      "steps": 1000
+    },
+    {
+      "name": "navigate_course",
+      "success": false,
+      "steps": 1000
+    },
+    {
+      "name": "precision_place",
+      "success": false,
+      "steps": 500
+    },
+    {
+      "name": "multi_task",
+      "success": false,
+      "steps": 0
+    }
+  ],
+  "total_steps": 2500,
+  "success_rate": 0.2,
+  "skills_learned": [
+    "stack_tower"
+  ],
+  "best_skill": "stack_tower",
+  "config": {
+    "id": "mylonen",
+    "type": "myl",
+    "created": "2026-03-29T23:29:11.145026",
+    "specialization": "sorting",
+    "stats": {
+      "strength": 0.7761054528952909,
+      "dexterity": 0.8544431952841869,
+      "intelligence": 0.7988972036246227,
+      "curiosity": 0.7018081044428418
+    }
+  }
+}

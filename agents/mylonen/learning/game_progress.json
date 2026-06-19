@@ -1,0 +1,16 @@
+{
+  "agent_id": "mylonen",
+  "games_played": {
+    "tic_tac_toe": 90,
+    "checkers": 82
+  },
+  "wins": {
+    "tic_tac_toe": 39,
+    "checkers": 37
+  },
+  "skill_levels": {
+    "tic_tac_toe": 1.0,
+    "checkers": 1.0
+  },
+  "total_experiences": 3633
+}
