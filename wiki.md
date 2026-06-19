@@ -182,3 +182,22 @@ Full DroidScript OS with:
 - Hardware Detection
 
 **Skill:** `~/.pi/agent/skills/mortimer/skills/myl0n-ros/`
+
+## 🌀 Mortimer Voice - Golden Ratio Modulation (2026-06-18)
+
+**Formula:**
+- Speed = φ × 100 = **161**
+- Pitch = (φ/π) × 100 = **51**  
+- Amplitude = φ × 70 = **113**
+- Keytoning = φ × 3 = **4**
+
+**φ (Golden Ratio):** 1.6180339887498948482...
+
+**Usage:**
+```bash
+espeak -v en-us+m3 -s 161 -p 51 -a 113 -k 4 "Your message"
+```
+
+**Files:**
+- `voice/espeak/output/mortimer_phi_voice.wav` - Generated voice sample
+- `voice/espeak/profiles/mortimer_phi.json` - Profile config
