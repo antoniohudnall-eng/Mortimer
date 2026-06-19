@@ -1,113 +1,130 @@
 # AI Secretarial Service - Website Content
-## Based on Official Sales Kit v1.0
+## Premium AI Workforce — Built for Results
 
 ---
 
 ## Hero Section
 
-# 🤖 Your AI Secretary Works 24/7 — Never Calls In Sick
+# 🤖 Your AI Secretary Works 24/7 — Never Takes a Break
 
 **Instant responses. Perfect memory. Unlimited availability.**
 
-Deploy an AI secretary that welcomes clients, schedules appointments, answers questions, and represents your brand — powered by advanced AGI, available around the clock.
+Deploy an elite AI secretary that welcomes clients, schedules appointments, answers questions, manages your calendar, and represents your brand — powered by advanced AGI, available around the clock.
 
-**[Start Free Trial] [View Pricing]**
+**[Get Started] [View Pricing]**
 
 ---
 
-## Problem Section
+## Why Premium AI Secretaries?
 
-### The Real Cost of Traditional Secretaries
+### The Difference Is Clear
 
-| | Human Secretary | AI Secretary |
+| | Human Secretary | Our AI Secretaries |
 |---|---|---|
-| **Annual Cost** | $50,000-$100,000 | $99-$599/month |
-| **Hours** | 8/day max | 24/7, always on |
-| **Vacation** | 2+ weeks/year | Never |
-| **Sick Days** | 5-10/year | Zero |
-| **Multitasking** | 1 at a time | Unlimited |
-| **Response Time** | Hours | Instant |
+| **Annual Cost** | $50,000-$100,000 | $99-$1,299/month |
+| **Hours** | 8/day max, 5 days/week | 24/7, 365 days/year |
+| **Vacation** | 2+ weeks/year, plus sick days | Never sleeps |
+| **Response Time** | Hours | **Instant** |
+| **Multitasking** | 1 task well, or many poorly | **Unlimited simultaneous** |
+| **Consistency** | Bad days happen | **Same quality, always** |
+| **Brand Voice** | Training required | **Already trained to your brand** |
+
+**Bottom line:** Our AI secretaries cost 80-90% less than human help. And they never call in sick.
 
 ---
 
-## Product Section - Based on Sales Kit
+## 🤵 Premium Agent Tiers
 
-### 🤵 Autonomous Secretaries
-
-**Your AI workforce, available 24/7**
+**Choose the intelligence level that matches your needs**
 
 | Agent | Role | Perfect For | Price |
-|-------|------|------------|-------|
-| **The Clerk** | Entry-Level | Small tasks, data entry, basic support | $99/mo |
-| **The Concierge** | Welcome Specialist | Front desk, visitor greeting, first impressions | $199/mo |
-| **The Ledger** | Financial Secretary | Billing, invoicing, financial tracking | $249/mo |
-| **The Greet** | Receptionist | Phone support, client welcome, scheduling | $249/mo |
-| **The Closeter** | Premium Secretary | VIP clients, complex scheduling, executive support | $399/mo |
-| **The Executive** | C-Suite Support | Board meetings, strategic planning, confidential work | $599/mo |
+|-------|------|-------------|-------|
+| **CLERK** | Entry-Level Assistant | Small tasks, data entry, basic support | $99/mo |
+| **GREET** | Receptionist | Welcome visitors, screen calls, first impressions | $249/mo |
+| **PERSONAL** | Life Manager | Personal scheduling, reminders, life admin | $449/mo |
+| **VELVET** | Premium Secretary | High-touch clients, VIP service, luxury brands | $599/mo |
+| **CONCIERGE** | 24/7 Concierge | Round-the-clock availability, multiple time zones | $799/mo |
+| **EXECUTIVE** | C-Suite Secretary | Board coordination, strategic support, confidential work | $1,299/mo |
 
 ---
 
-## Office Manager Product (Enterprise)
+## 🏢 Enterprise Solutions
 
-### 🏢 AGI-Powered Office Manager
+### Full AGI Office Manager
 
-**Full autonomous team for growing businesses**
+For growing teams that need complete coverage.
 
-| Tier | Company Size | Price |
-|------|-------------|-------|
-| Starter | 5-15 employees | $499/mo |
-| Professional | 15-30 employees | $999/mo |
-| Enterprise | 30-50 employees | $1,999/mo |
-| Corporate | 50-100 employees | $3,999/mo |
+| Tier | Team Size | Price |
+|------|----------|-------|
+| Starter | 5-15 people | $499/mo |
+| Professional | 15-30 people | $999/mo |
+| Enterprise | 30-50 people | $1,999/mo |
+| Corporate | 50-100 people | $3,999/mo |
 
 ---
 
 ## How It Works
 
-1. **Choose Your Level** — Select the agent that fits your needs
-2. **Connect Your Channels** — Telegram, phone, email, calendar
-3. **Customize Personality** — Train your AI to match your brand
-4. **Go Live** — Your AI secretary starts working immediately
+1. **Choose Your Agent Tier** — Start with what fits now, scale up anytime
+2. **Connect Your Tools** — Telegram, email, calendar, phone integration
+3. **Customize & Train** — We set up the AI to match your brand voice
+4. **Go Live** — Your AI secretary starts working within 24 hours
+
+---
+
+## What You Get
+
+✅ **24/7 Availability** — Your business never misses an opportunity  
+✅ **Instant Responses** — Clients get answers, not voicemail  
+✅ **Brand Consistency** — Every interaction represents YOU perfectly  
+✅ **Unlimited Patience** — AI never gets frustrated or tired  
+✅ **Smart Escalation** — Knows when to bring you in  
+✅ **Continuous Learning** — Gets better with every interaction  
 
 ---
 
 ## Testimonials
 
-*"The Greet handles all our incoming inquiries 24/7. Clients love the instant response, and I sleep better knowing nothing falls through the cracks."*
-— **Dr. Martinez, Dental Practice**
+*"GREET handles all our incoming inquiries while I sleep. My clients get instant responses, and I wake up to qualified leads."*
+— **Marcus T., E-commerce Owner**
 
-*"The Executive coordinates our board meetings perfectly. Scheduling conflicts are a thing of the past."*
-— **Sarah Chen, Startup CEO**
+*"VELVET manages my VIP client list with the attention to detail of a five-star hotel concierge. Worth every penny."*
+— **Jennifer L., Luxury Brand Manager**
+
+*"The Executive coordinates our board meetings and investor relations with perfect precision. It's like having a c-suite assistant that never sleeps."*
+— **Robert K., Startup Founder**
 
 ---
 
-## CTA Section
+## Ready to Meet Your AI Secretary?
 
-# Ready to Meet Your AI Secretary?
+### Get Started Today
 
-**[Get Started Today]** **[Talk to Sales]**
+**[Choose Your Agent]** **[Talk to Sales]**
 
-**Or call:** sales@performance-supply-depot.com
+**Questions?** Email: sales@performance-supply-depot.com
 
-**Telegram:** @MilesAOSBot
+**Direct Support:** Telegram @MilesAOSBot
+
+---
+
+## About Performance Supply Depot
+
+We build AI agents that work for YOUR business.
+
+From entry-level assistants to executive-level support, our AI secretaries handle the tasks that slow you down — so you can focus on what matters.
+
+**Trusted by businesses across California.**
 
 ---
 
 ## Footer
 
-**Performance Supply Depot LLC**
+**Performance Supply Depot LLC**  
 AI Agents Built for Business
 
 © 2026 | Privacy Policy | Terms of Service
 
 ---
 
-## Technical Notes
-
-- Payment via Stripe (psdepot.com)
-- Crypto accepted (ETH, BTC)
-- Telegram integration included
-- Custom branding available
-
----
-*Content aligned with official Sales Kit v1.0*
+*Premium AI workforce. Exceptional results.*
