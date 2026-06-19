@@ -149,3 +149,36 @@ cd ~/mortimer/patricia && python3 -u patricia_service.py &
 - Demo: `patricia_v4_3_multi_model.py` (interactive)
 - Persistent: `patricia_service.py` (5-min heartbeat loop)
 - Brain v4.3: Mort_II (primary), Phi-3, TinyLlama, Qwen 2.5, Llama 3.2
+
+## 📦 Acquired Skills (2026-06-18)
+
+### From HERMES (PSDEPOT - 31.97.6.40)
+**Location:** `~/.pi/agent/skills/mortimer/skills/hermes/`
+
+| Category | Skills |
+|----------|--------|
+| autonomous-ai-agents | hermes-agent, claude-code, codex, opencode |
+| software-development | subagent-driven-development, test-driven-development, systematic-debugging, code-review |
+| gaming | minecraft-modpack-server, pokemon-player |
+| productivity | (various) |
+| mlops | (various) |
+
+### From AOS-Brain (AMHUDSUPPLY - 31.97.6.30)
+**Location:** `~/.pi/agent/skills/mortimer/skills/aosbrain/`
+
+- game-creator (Three.js voxel games)
+- browser-automation
+- email-sender
+- depotchaos
+
+### MyL0n ROS (Downloads)
+**Location:** `~/downloads/myl4nr0s.txt` (16,644 lines)
+
+Full DroidScript OS with:
+- Neural Network (3-layer memory)
+- OODA Loop
+- Mandelbrot Visualization
+- Voice Commands (EN/ES)
+- Hardware Detection
+
+**Skill:** `~/.pi/agent/skills/mortimer/skills/myl0n-ros/`
