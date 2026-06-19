@@ -1,5 +1,5 @@
 # AI Secretarial Service - Website Content
-## Premium AI Workforce — Built for Results
+## Premium AI Workforce with Voice & Camera — Built for Results
 
 ---
 
@@ -7,9 +7,9 @@
 
 # 🤖 Your AI Secretary Works 24/7 — Never Takes a Break
 
-**Instant responses. Perfect memory. Unlimited availability.**
+**Instant responses. Perfect memory. Human-like voice. Video presence. Unlimited availability.**
 
-Deploy an elite AI secretary that welcomes clients, schedules appointments, answers questions, manages your calendar, and represents your brand — powered by advanced AGI, available around the clock.
+Deploy an elite AI secretary that welcomes clients on video, schedules appointments, answers questions, manages your calendar, and TALKS to your customers — powered by advanced AGI with realistic voice and camera, available around the clock.
 
 **[Get Started] [View Pricing]**
 
@@ -25,17 +25,17 @@ Deploy an elite AI secretary that welcomes clients, schedules appointments, answ
 | **Hours** | 8/day max, 5 days/week | 24/7, 365 days/year |
 | **Vacation** | 2+ weeks/year, plus sick days | Never sleeps |
 | **Response Time** | Hours | **Instant** |
+| **Voice** | Human ✓ | **AI Voice ✓** |
+| **Camera** | Human face ✓ | **AI Video ✓** |
 | **Multitasking** | 1 task well, or many poorly | **Unlimited simultaneous** |
-| **Consistency** | Bad days happen | **Same quality, always** |
-| **Brand Voice** | Training required | **Already trained to your brand** |
 
-**Bottom line:** Our AI secretaries cost 80-90% less than human help. And they never call in sick.
+**Bottom line:** Our AI secretaries cost 80-90% less than human help. And they sound and look professional too.
 
 ---
 
-## 🤵 Premium Agent Tiers
+## 🤵 Premium Agent Tiers — Voice & Camera Included
 
-**Choose the intelligence level that matches your needs**
+**Choose the intelligence level and avatar that matches your brand**
 
 ### THE CLERK — $99/mo
 **Entry-Level Assistant**
@@ -43,6 +43,9 @@ Deploy an elite AI secretary that welcomes clients, schedules appointments, answ
 Perfect for: Small tasks, data entry, basic support
 
 *"Handles the busy work so you can focus on what matters."*
+
+🎙️ **Voice:** Adam (Professional Male)  
+📹 **Camera:** Professional avatar
 
 ✅ Data entry & organization  
 ✅ Appointment scheduling assistance  
@@ -60,10 +63,13 @@ Perfect for: Welcome visitors, screen calls, first impressions
 
 *"The warm smile that welcomes everyone. Professional, poised, remembers names and faces."*
 
+🎙️ **Voice:** Bella (Professional Female) — Warm, welcoming  
+📹 **Camera:** Friendly receptionist avatar
+
 ✅ World-class first impressions  
 ✅ Instant name & face memory  
 ✅ Call screening & routing  
-✅ Client welcome experience  
+✅ Video greeting for visitors  
 ✅ Calm under pressure  
 ✅ Professional escalation  
 
@@ -75,6 +81,9 @@ Perfect for: Welcome visitors, screen calls, first impressions
 Perfect for: Personal scheduling, reminders, life admin
 
 *"Caring, organized, family-focused. Life-balancing excellence."*
+
+🎙️ **Voice:** Sarah (Mature Female) — Warm, reassuring  
+📹 **Camera:** Approachable manager avatar
 
 ✅ Family calendar harmony  
 ✅ Home management coordination  
@@ -92,8 +101,11 @@ Perfect for: High-touch clients, VIP service, luxury brands
 
 *"Elegant, refined, anticipatory, luxurious."*
 
+🎙️ **Voice:** Bella or Sarah (Premium Female) — Elegant, sophisticated  
+📹 **Camera:** Elegant professional avatar
+
 ✅ White-glove service delivery  
-✅ VIP client management  
+✅ VIP client video calls  
 ✅ Luxury brand representation  
 ✅ Exclusive event coordination  
 ✅ Personal shopping assistance  
@@ -108,11 +120,14 @@ Perfect for: Round-the-clock availability, multiple time zones
 
 *"Always there. Always ready. Never sleeps."*
 
+🎙️ **Voice:** Jessica (Playful Female) — Friendly, attentive  
+📹 **Camera:** Welcoming concierge avatar
+
 ✅ 24/7 availability across all time zones  
+✅ Video check-ins for travelers  
 ✅ Multi-timezone coordination  
 ✅ Travel arrangements & coordination  
 ✅ Restaurant & service reservations  
-✅ Special request handling  
 ✅ VIP treatment for your clients  
 
 ---
@@ -124,18 +139,47 @@ Perfect for: Board coordination, strategic support, confidential work
 
 *"Discreet, strategic, authoritative. Business-focused excellence."*
 
-✅ Board meeting coordination  
-✅ Confidential communications  
+🎙️ **Voice:** Adam (Authoritative Male) — Professional, commanding  
+📹 **Camera:** Executive boardroom avatar
+
+✅ Board meeting video coordination  
+✅ Confidential video communications  
 ✅ Strategic calendar management  
-✅ Investor relations support  
+✅ Investor relations video calls  
 ✅ M&A activity support  
 ✅ Executive representation  
 
 ---
 
+## 🎙️ 📹 Voice & Camera Options
+
+Every agent comes with professional AI voice AND camera presence. Choose the personality that fits your brand:
+
+| Voice | Sound | Camera Avatar | Best For |
+|-------|-------|---------------|----------|
+| **Adam** | Authoritative, professional male | Executive, professional | Executive, Clerk |
+| **Bella** | Warm, welcoming female | Friendly receptionist | Greeter, Velvet |
+| **Sarah** | Mature, reassuring female | Approachable manager | Personal, Velvet |
+| **Jessica** | Friendly, playful female | Welcoming concierge | Concierge |
+
+*Custom avatars and voices available for Enterprise clients.*
+
+---
+
+## 📹 Video Capabilities
+
+✅ **AI Avatar** — Realistic digital presence  
+✅ **Eye Contact** — Natural, engaging video  
+✅ **Body Language** — Professional gestures  
+✅ **Lip Sync** — Perfect voice synchronization  
+✅ **Backgrounds** — Office, lobby, or custom  
+✅ **Multi-Camera** — Wide, medium, close-up shots  
+
+---
+
 ## 🏢 Enterprise Solutions
 
-### Full AGI Office Manager
+### Full AGI Office Manager with Voice & Video
 
 For growing teams that need complete coverage.
 
@@ -150,33 +194,33 @@ For growing teams that need complete coverage.
 
 ## How It Works
 
-1. **Choose Your Agent Tier** — Start with what fits now, scale up anytime
-2. **Connect Your Tools** — Telegram, email, calendar, phone integration
-3. **Customize & Train** — We set up the AI to match your brand voice
-4. **Go Live** — Your AI secretary starts working within 24 hours
+1. **Choose Your Agent & Avatar** — Pick the tier, voice, and camera look that fit your brand
+2. **Connect Your Tools** — Telegram, Zoom, phone, email, calendar
+3. **Customize & Train** — We set up the AI voice, camera, and personality to match
+4. **Go Live** — Your AI secretary starts talking to your clients within 24 hours
 
 ---
 
 ## What You Get
 
 ✅ **24/7 Availability** — Your business never misses an opportunity  
+✅ **AI Voice** — Professional AI voice in every interaction  
+✅ **AI Camera** — Realistic video presence for calls and meetings  
 ✅ **Instant Responses** — Clients get answers, not voicemail  
 ✅ **Brand Consistency** — Every interaction represents YOU perfectly  
-✅ **Unlimited Patience** — AI never gets frustrated or tired  
 ✅ **Smart Escalation** — Knows when to bring you in  
-✅ **Continuous Learning** — Gets better with every interaction  
 
 ---
 
 ## Testimonials
 
-*"GREET handles all our incoming inquiries while I sleep. My clients get instant responses, and I wake up to qualified leads."*
+*"GREET handles all our incoming calls with her warm voice and friendly face. Clients can't tell she's AI — and they love the instant response."*
 — **Marcus T., E-commerce Owner**
 
-*"VELVET manages my VIP client list with the attention to detail of a five-star hotel concierge. Worth every penny."*
+*"VELVET's sophisticated voice and elegant avatar match our luxury brand perfectly. She manages our VIP list like a seasoned concierge."*
 — **Jennifer L., Luxury Brand Manager**
 
-*"The Executive coordinates our board meetings and investor relations with perfect precision. It's like having a c-suite assistant that never sleeps."*
+*"The Executive's authoritative voice and commanding presence command respect in every board meeting. It's like having a c-suite assistant that never sleeps."*
 — **Robert K., Startup Founder**
 
 ---
@@ -195,9 +239,9 @@ For growing teams that need complete coverage.
 
 ## About Performance Supply Depot
 
-We build AI agents that work for YOUR business.
+We build AI agents with VOICE and CAMERA that work for YOUR business.
 
-From entry-level assistants to executive-level support, our AI secretaries handle the tasks that slow you down — so you can focus on what matters.
+From entry-level assistants to executive-level support, our AI secretaries handle the tasks that slow you down — with realistic voice AND video — so you can focus on what matters.
 
 **Trusted by businesses across California.**
 
@@ -206,10 +250,10 @@ From entry-level assistants to executive-level support, our AI secretaries handl
 ## Footer
 
 **Performance Supply Depot LLC**  
-AI Agents Built for Business
+AI Agents with Voice & Camera — Built for Business
 
 © 2026 | Privacy Policy | Terms of Service
 
 ---
 
-*Premium AI workforce. Exceptional results.*
+*Premium AI workforce. Human-like voice AND video. Exceptional results.*
