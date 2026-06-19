@@ -1,0 +1,352 @@
+[
+  {
+    "lead_id": "LEAD-58052",
+    "email": "contact@barbarataylor.com",
+    "name": "Jessica Martinez",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.077242"
+  },
+  {
+    "lead_id": "LEAD-10068",
+    "email": "contact@karensmith.com",
+    "name": "Karen Williams",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079838"
+  },
+  {
+    "lead_id": "LEAD-24336",
+    "email": "contact@sarahmiller.com",
+    "name": "Linda Davis",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079872"
+  },
+  {
+    "lead_id": "LEAD-64768",
+    "email": "contact@lindarodriguez.com",
+    "name": "Jessica Davis",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079879"
+  },
+  {
+    "lead_id": "LEAD-35398",
+    "email": "contact@lisamiller.com",
+    "name": "Lisa Johnson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079884"
+  },
+  {
+    "lead_id": "LEAD-44196",
+    "email": "contact@jessicadavis.com",
+    "name": "Michael Williams",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079889"
+  },
+  {
+    "lead_id": "LEAD-39067",
+    "email": "contact@sarahwilliams.com",
+    "name": "Sarah Davis",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079893"
+  },
+  {
+    "lead_id": "LEAD-94866",
+    "email": "contact@jessicathomas.com",
+    "name": "Patricia Martinez",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079906"
+  },
+  {
+    "lead_id": "LEAD-58693",
+    "email": "contact@barbaramiller.com",
+    "name": "Elizabeth Williams",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079911"
+  },
+  {
+    "lead_id": "LEAD-52553",
+    "email": "contact@elizabethmiller.com",
+    "name": "Elizabeth Anderson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079915"
+  },
+  {
+    "lead_id": "LEAD-68779",
+    "email": "contact@elizabethjones.com",
+    "name": "Jennifer Smith",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079920"
+  },
+  {
+    "lead_id": "LEAD-89754",
+    "email": "contact@mariajackson.com",
+    "name": "William Anderson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079924"
+  },
+  {
+    "lead_id": "LEAD-62376",
+    "email": "contact@jamesjackson.com",
+    "name": "Patricia Williams",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079928"
+  },
+  {
+    "lead_id": "LEAD-61642",
+    "email": "contact@davidtaylor.com",
+    "name": "Sarah Jones",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079933"
+  },
+  {
+    "lead_id": "LEAD-73842",
+    "email": "contact@robertsmith.com",
+    "name": "William Davis",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079937"
+  },
+  {
+    "lead_id": "LEAD-14538",
+    "email": "contact@robertmartinez.com",
+    "name": "Maria Smith",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079941"
+  },
+  {
+    "lead_id": "LEAD-20180",
+    "email": "contact@sarahjohnson.com",
+    "name": "Michael Smith",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079946"
+  },
+  {
+    "lead_id": "LEAD-15143",
+    "email": "contact@jamesanderson.com",
+    "name": "Linda Garcia",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079950"
+  },
+  {
+    "lead_id": "LEAD-76079",
+    "email": "contact@lindamiller.com",
+    "name": "Jessica Jackson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079954"
+  },
+  {
+    "lead_id": "LEAD-86740",
+    "email": "contact@elizabethmoore.com",
+    "name": "William Smith",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079958"
+  },
+  {
+    "lead_id": "LEAD-88912",
+    "email": "contact@jessicawilliams.com",
+    "name": "Patricia Moore",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079963"
+  },
+  {
+    "lead_id": "LEAD-46757",
+    "email": "contact@williammiller.com",
+    "name": "Elizabeth Johnson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079967"
+  },
+  {
+    "lead_id": "LEAD-15715",
+    "email": "contact@patriciabrown.com",
+    "name": "William Taylor",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079971"
+  },
+  {
+    "lead_id": "LEAD-66937",
+    "email": "contact@michaelmartinez.com",
+    "name": "William Garcia",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079975"
+  },
+  {
+    "lead_id": "LEAD-33115",
+    "email": "contact@robertgarcia.com",
+    "name": "Robert Jackson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079983"
+  },
+  {
+    "lead_id": "LEAD-36000",
+    "email": "contact@michaelbrown.com",
+    "name": "Robert Johnson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079988"
+  },
+  {
+    "lead_id": "LEAD-46019",
+    "email": "contact@jessicaanderson.com",
+    "name": "Barbara Smith",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079993"
+  },
+  {
+    "lead_id": "LEAD-57404",
+    "email": "contact@sarahmiller.com",
+    "name": "Patricia Anderson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.079997"
+  },
+  {
+    "lead_id": "LEAD-73488",
+    "email": "contact@davidgarcia.com",
+    "name": "James Anderson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080001"
+  },
+  {
+    "lead_id": "LEAD-45840",
+    "email": "contact@jessicathomas.com",
+    "name": "Karen Taylor",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080007"
+  },
+  {
+    "lead_id": "LEAD-45214",
+    "email": "contact@karenrodriguez.com",
+    "name": "Michael Miller",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080012"
+  },
+  {
+    "lead_id": "LEAD-96189",
+    "email": "contact@michaelmoore.com",
+    "name": "Robert Williams",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080016"
+  },
+  {
+    "lead_id": "LEAD-72421",
+    "email": "contact@patriciamiller.com",
+    "name": "Sarah Miller",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080021"
+  },
+  {
+    "lead_id": "LEAD-80006",
+    "email": "contact@davidjones.com",
+    "name": "William Jackson",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080026"
+  },
+  {
+    "lead_id": "LEAD-94728",
+    "email": "contact@patriciamoore.com",
+    "name": "Maria Taylor",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080030"
+  },
+  {
+    "lead_id": "LEAD-85975",
+    "email": "contact@jameswilliams.com",
+    "name": "Jessica Thomas",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080035"
+  },
+  {
+    "lead_id": "LEAD-84923",
+    "email": "contact@elizabethjones.com",
+    "name": "Barbara Williams",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080040"
+  },
+  {
+    "lead_id": "LEAD-48384",
+    "email": "contact@barbarawilliams.com",
+    "name": "James Thomas",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080045"
+  },
+  {
+    "lead_id": "LEAD-90057",
+    "email": "contact@michaelrodriguez.com",
+    "name": "Maria Thomas",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080049"
+  },
+  {
+    "lead_id": "LEAD-73394",
+    "email": "contact@lindagarcia.com",
+    "name": "Elizabeth Thomas",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080055"
+  },
+  {
+    "lead_id": "LEAD-74774",
+    "email": "contact@karenthomas.com",
+    "name": "Jennifer Williams",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080059"
+  },
+  {
+    "lead_id": "LEAD-20117",
+    "email": "contact@daviddavis.com",
+    "name": "Patricia Jones",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080064"
+  },
+  {
+    "lead_id": "LEAD-88521",
+    "email": "contact@michaelmiller.com",
+    "name": "Elizabeth Smith",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080068"
+  },
+  {
+    "lead_id": "LEAD-88134",
+    "email": "contact@lisamoore.com",
+    "name": "Michael Williams",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080072"
+  },
+  {
+    "lead_id": "LEAD-52356",
+    "email": "contact@lindawilliams.com",
+    "name": "William Martinez",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080077"
+  },
+  {
+    "lead_id": "LEAD-24031",
+    "email": "contact@williammiller.com",
+    "name": "Barbara Miller",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080125"
+  },
+  {
+    "lead_id": "LEAD-23690",
+    "email": "contact@davidmiller.com",
+    "name": "Jennifer Martinez",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080135"
+  },
+  {
+    "lead_id": "LEAD-57551",
+    "email": "contact@sarahdavis.com",
+    "name": "David Moore",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080139"
+  },
+  {
+    "lead_id": "LEAD-47137",
+    "email": "contact@karenbrown.com",
+    "name": "James Brown",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080143"
+  },
+  {
+    "lead_id": "LEAD-72547",
+    "email": "contact@sarahmartinez.com",
+    "name": "David Thomas",
+    "template": "followup",
+    "scheduled_for": "2026-06-26T14:04:46.080148"
+  }
+]

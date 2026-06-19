@@ -1,0 +1,902 @@
+[
+  {
+    "id": "EMAIL-00001",
+    "lead_id": "LEAD-58052",
+    "to": "contact@barbarataylor.com",
+    "name": "Jessica Martinez",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.228835",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00002",
+    "lead_id": "LEAD-10068",
+    "to": "contact@karensmith.com",
+    "name": "Karen Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.229317",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00003",
+    "lead_id": "LEAD-24336",
+    "to": "contact@sarahmiller.com",
+    "name": "Linda Davis",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.229597",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00004",
+    "lead_id": "LEAD-64768",
+    "to": "contact@lindarodriguez.com",
+    "name": "Jessica Davis",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.229825",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00005",
+    "lead_id": "LEAD-35398",
+    "to": "contact@lisamiller.com",
+    "name": "Lisa Johnson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.230041",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00006",
+    "lead_id": "LEAD-44196",
+    "to": "contact@jessicadavis.com",
+    "name": "Michael Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.230241",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00007",
+    "lead_id": "LEAD-39067",
+    "to": "contact@sarahwilliams.com",
+    "name": "Sarah Davis",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.230432",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00008",
+    "lead_id": "LEAD-94866",
+    "to": "contact@jessicathomas.com",
+    "name": "Patricia Martinez",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.230632",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00009",
+    "lead_id": "LEAD-58693",
+    "to": "contact@barbaramiller.com",
+    "name": "Elizabeth Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.230830",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00010",
+    "lead_id": "LEAD-52553",
+    "to": "contact@elizabethmiller.com",
+    "name": "Elizabeth Anderson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.231041",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00011",
+    "lead_id": "LEAD-68779",
+    "to": "contact@elizabethjones.com",
+    "name": "Jennifer Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.231660",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00012",
+    "lead_id": "LEAD-89754",
+    "to": "contact@mariajackson.com",
+    "name": "William Anderson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.231963",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00013",
+    "lead_id": "LEAD-62376",
+    "to": "contact@jamesjackson.com",
+    "name": "Patricia Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.232227",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00014",
+    "lead_id": "LEAD-61642",
+    "to": "contact@davidtaylor.com",
+    "name": "Sarah Jones",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.232480",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00015",
+    "lead_id": "LEAD-73842",
+    "to": "contact@robertsmith.com",
+    "name": "William Davis",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.232743",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00016",
+    "lead_id": "LEAD-14538",
+    "to": "contact@robertmartinez.com",
+    "name": "Maria Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.233071",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00017",
+    "lead_id": "LEAD-20180",
+    "to": "contact@sarahjohnson.com",
+    "name": "Michael Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.233414",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00018",
+    "lead_id": "LEAD-15143",
+    "to": "contact@jamesanderson.com",
+    "name": "Linda Garcia",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.233738",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00019",
+    "lead_id": "LEAD-76079",
+    "to": "contact@lindamiller.com",
+    "name": "Jessica Jackson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.234094",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00020",
+    "lead_id": "LEAD-86740",
+    "to": "contact@elizabethmoore.com",
+    "name": "William Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.234516",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00021",
+    "lead_id": "LEAD-88912",
+    "to": "contact@jessicawilliams.com",
+    "name": "Patricia Moore",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.234917",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00022",
+    "lead_id": "LEAD-46757",
+    "to": "contact@williammiller.com",
+    "name": "Elizabeth Johnson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.235360",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00023",
+    "lead_id": "LEAD-15715",
+    "to": "contact@patriciabrown.com",
+    "name": "William Taylor",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.235809",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00024",
+    "lead_id": "LEAD-66937",
+    "to": "contact@michaelmartinez.com",
+    "name": "William Garcia",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.236218",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00025",
+    "lead_id": "LEAD-33115",
+    "to": "contact@robertgarcia.com",
+    "name": "Robert Jackson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.236627",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00026",
+    "lead_id": "LEAD-36000",
+    "to": "contact@michaelbrown.com",
+    "name": "Robert Johnson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.237064",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00027",
+    "lead_id": "LEAD-46019",
+    "to": "contact@jessicaanderson.com",
+    "name": "Barbara Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.237512",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00028",
+    "lead_id": "LEAD-57404",
+    "to": "contact@sarahmiller.com",
+    "name": "Patricia Anderson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.237935",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00029",
+    "lead_id": "LEAD-73488",
+    "to": "contact@davidgarcia.com",
+    "name": "James Anderson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.238354",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00030",
+    "lead_id": "LEAD-45840",
+    "to": "contact@jessicathomas.com",
+    "name": "Karen Taylor",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.238776",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00031",
+    "lead_id": "LEAD-45214",
+    "to": "contact@karenrodriguez.com",
+    "name": "Michael Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.239213",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00032",
+    "lead_id": "LEAD-96189",
+    "to": "contact@michaelmoore.com",
+    "name": "Robert Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.239650",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00033",
+    "lead_id": "LEAD-72421",
+    "to": "contact@patriciamiller.com",
+    "name": "Sarah Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.240093",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00034",
+    "lead_id": "LEAD-80006",
+    "to": "contact@davidjones.com",
+    "name": "William Jackson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.240553",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00035",
+    "lead_id": "LEAD-94728",
+    "to": "contact@patriciamoore.com",
+    "name": "Maria Taylor",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.241062",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00036",
+    "lead_id": "LEAD-85975",
+    "to": "contact@jameswilliams.com",
+    "name": "Jessica Thomas",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.241604",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00037",
+    "lead_id": "LEAD-84923",
+    "to": "contact@elizabethjones.com",
+    "name": "Barbara Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.242150",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00038",
+    "lead_id": "LEAD-48384",
+    "to": "contact@barbarawilliams.com",
+    "name": "James Thomas",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.242704",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00039",
+    "lead_id": "LEAD-90057",
+    "to": "contact@michaelrodriguez.com",
+    "name": "Maria Thomas",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.243258",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00040",
+    "lead_id": "LEAD-73394",
+    "to": "contact@lindagarcia.com",
+    "name": "Elizabeth Thomas",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.243813",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00041",
+    "lead_id": "LEAD-74774",
+    "to": "contact@karenthomas.com",
+    "name": "Jennifer Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.244374",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00042",
+    "lead_id": "LEAD-20117",
+    "to": "contact@daviddavis.com",
+    "name": "Patricia Jones",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.244936",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00043",
+    "lead_id": "LEAD-88521",
+    "to": "contact@michaelmiller.com",
+    "name": "Elizabeth Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.245590",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00044",
+    "lead_id": "LEAD-88134",
+    "to": "contact@lisamoore.com",
+    "name": "Michael Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.246190",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00045",
+    "lead_id": "LEAD-52356",
+    "to": "contact@lindawilliams.com",
+    "name": "William Martinez",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.246782",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00046",
+    "lead_id": "LEAD-24031",
+    "to": "contact@williammiller.com",
+    "name": "Barbara Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.247393",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00047",
+    "lead_id": "LEAD-23690",
+    "to": "contact@davidmiller.com",
+    "name": "Jennifer Martinez",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.248002",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00048",
+    "lead_id": "LEAD-57551",
+    "to": "contact@sarahdavis.com",
+    "name": "David Moore",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.248633",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00049",
+    "lead_id": "LEAD-47137",
+    "to": "contact@karenbrown.com",
+    "name": "James Brown",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.249316",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00050",
+    "lead_id": "LEAD-72547",
+    "to": "contact@sarahmartinez.com",
+    "name": "David Thomas",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.249987",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00051",
+    "lead_id": "LEAD-54845",
+    "to": "contact@karenmiller.com",
+    "name": "Karen Rodriguez",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.250695",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00052",
+    "lead_id": "LEAD-16902",
+    "to": "contact@davidrodriguez.com",
+    "name": "Jessica Anderson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.251426",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00053",
+    "lead_id": "LEAD-40170",
+    "to": "contact@robertgarcia.com",
+    "name": "Jessica Anderson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.252163",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00054",
+    "lead_id": "LEAD-89609",
+    "to": "contact@mariajackson.com",
+    "name": "Karen Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.252921",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00055",
+    "lead_id": "LEAD-97686",
+    "to": "contact@sarahmiller.com",
+    "name": "Maria Jackson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.253787",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00056",
+    "lead_id": "LEAD-49230",
+    "to": "contact@lindarodriguez.com",
+    "name": "Patricia Davis",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.254578",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00057",
+    "lead_id": "LEAD-66271",
+    "to": "contact@elizabethwilliams.com",
+    "name": "Karen Johnson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.255371",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00058",
+    "lead_id": "LEAD-56363",
+    "to": "contact@sarahwilliams.com",
+    "name": "Linda Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.256160",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00059",
+    "lead_id": "LEAD-80026",
+    "to": "contact@jessicagarcia.com",
+    "name": "Lisa Jackson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.256970",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00060",
+    "lead_id": "LEAD-34402",
+    "to": "contact@karengarcia.com",
+    "name": "James Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.257897",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00061",
+    "lead_id": "LEAD-21041",
+    "to": "contact@lisasmith.com",
+    "name": "Sarah Johnson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.258766",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00062",
+    "lead_id": "LEAD-25087",
+    "to": "contact@patriciadavis.com",
+    "name": "Elizabeth Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.259627",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00063",
+    "lead_id": "LEAD-71233",
+    "to": "contact@barbarasmith.com",
+    "name": "Elizabeth Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.260459",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00064",
+    "lead_id": "LEAD-72280",
+    "to": "contact@lisasmith.com",
+    "name": "James Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.261358",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00065",
+    "lead_id": "LEAD-92430",
+    "to": "contact@williamtaylor.com",
+    "name": "David Anderson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.262272",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00066",
+    "lead_id": "LEAD-57073",
+    "to": "contact@barbarasmith.com",
+    "name": "Patricia Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.263169",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00067",
+    "lead_id": "LEAD-58258",
+    "to": "contact@sarahgarcia.com",
+    "name": "David Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.264056",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00068",
+    "lead_id": "LEAD-10935",
+    "to": "contact@jenniferwilliams.com",
+    "name": "Sarah Jackson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.265034",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00069",
+    "lead_id": "LEAD-13748",
+    "to": "contact@jamesmoore.com",
+    "name": "Jennifer Taylor",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.265989",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00070",
+    "lead_id": "LEAD-53021",
+    "to": "contact@jessicadavis.com",
+    "name": "Barbara Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.266885",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00071",
+    "lead_id": "LEAD-72692",
+    "to": "contact@jessicarodriguez.com",
+    "name": "Sarah Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.268079",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00072",
+    "lead_id": "LEAD-23527",
+    "to": "contact@mariataylor.com",
+    "name": "Patricia Thomas",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.269014",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00073",
+    "lead_id": "LEAD-15052",
+    "to": "contact@sarahdavis.com",
+    "name": "David Garcia",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.269964",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00074",
+    "lead_id": "LEAD-50518",
+    "to": "contact@mariaanderson.com",
+    "name": "Linda Jones",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.270881",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00075",
+    "lead_id": "LEAD-16893",
+    "to": "contact@davidgarcia.com",
+    "name": "Maria Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.271798",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00076",
+    "lead_id": "LEAD-90923",
+    "to": "contact@daviddavis.com",
+    "name": "Lisa Jackson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.272726",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00077",
+    "lead_id": "LEAD-93115",
+    "to": "contact@lindajackson.com",
+    "name": "Patricia Johnson",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.273698",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00078",
+    "lead_id": "LEAD-46561",
+    "to": "contact@lisamoore.com",
+    "name": "Michael Jones",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.274671",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00079",
+    "lead_id": "LEAD-43626",
+    "to": "contact@elizabeththomas.com",
+    "name": "Elizabeth Davis",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.275696",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00080",
+    "lead_id": "LEAD-11032",
+    "to": "contact@jenniferwilliams.com",
+    "name": "Sarah Taylor",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.276727",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00081",
+    "lead_id": "LEAD-75642",
+    "to": "contact@sarahrodriguez.com",
+    "name": "Robert Thomas",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.277833",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00082",
+    "lead_id": "LEAD-45152",
+    "to": "contact@jamesjones.com",
+    "name": "Lisa Jones",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.278916",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00083",
+    "lead_id": "LEAD-37178",
+    "to": "contact@williambrown.com",
+    "name": "Jessica Taylor",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.280075",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00084",
+    "lead_id": "LEAD-25942",
+    "to": "contact@williamjohnson.com",
+    "name": "David Moore",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.281274",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00085",
+    "lead_id": "LEAD-93765",
+    "to": "contact@jessicajackson.com",
+    "name": "William Thomas",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.282371",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00086",
+    "lead_id": "LEAD-83800",
+    "to": "contact@williamjackson.com",
+    "name": "Lisa Brown",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.283484",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00087",
+    "lead_id": "LEAD-49881",
+    "to": "contact@lisadavis.com",
+    "name": "Karen Miller",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.284560",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00088",
+    "lead_id": "LEAD-90683",
+    "to": "contact@barbaramartinez.com",
+    "name": "Patricia Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.285693",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00089",
+    "lead_id": "LEAD-50333",
+    "to": "contact@barbararodriguez.com",
+    "name": "David Brown",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.286832",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00090",
+    "lead_id": "LEAD-76383",
+    "to": "contact@barbarabrown.com",
+    "name": "Jessica Garcia",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.287997",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00091",
+    "lead_id": "LEAD-88511",
+    "to": "contact@michaelsmith.com",
+    "name": "Lisa Rodriguez",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.289254",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00092",
+    "lead_id": "LEAD-75652",
+    "to": "contact@elizabethjackson.com",
+    "name": "Patricia Moore",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.290560",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00093",
+    "lead_id": "LEAD-34109",
+    "to": "contact@jessicamiller.com",
+    "name": "William Smith",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.291878",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00094",
+    "lead_id": "LEAD-69054",
+    "to": "contact@sarahjohnson.com",
+    "name": "Linda Williams",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.293230",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00095",
+    "lead_id": "LEAD-73599",
+    "to": "contact@lisagarcia.com",
+    "name": "David Martinez",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.294506",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00096",
+    "lead_id": "LEAD-45148",
+    "to": "contact@mariamiller.com",
+    "name": "Michael Jones",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.295731",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00097",
+    "lead_id": "LEAD-89359",
+    "to": "contact@patriciarodriguez.com",
+    "name": "Patricia Taylor",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.296949",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00098",
+    "lead_id": "LEAD-72166",
+    "to": "contact@williamdavis.com",
+    "name": "Barbara Jones",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.298254",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00099",
+    "lead_id": "LEAD-83896",
+    "to": "contact@jessicathomas.com",
+    "name": "Jennifer Garcia",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.299507",
+    "status": "sent"
+  },
+  {
+    "id": "EMAIL-00100",
+    "lead_id": "LEAD-55332",
+    "to": "contact@lindarodriguez.com",
+    "name": "Michael Martinez",
+    "template": "intro",
+    "sent_at": "2026-06-19T14:04:38.300739",
+    "status": "sent"
+  }
+]
