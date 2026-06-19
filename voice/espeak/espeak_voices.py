@@ -294,3 +294,15 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+MORTIMER = {
+    "name": "MORTIMER",
+    "voice": "en-us",
+    "speed": 115,       # Measured, calm pace
+    "pitch": 80,        # Deep, authoritative
+    "amplitude": 110,   # Strong presence
+    "variant": "m3",    # Deep male variant
+    "keytoning": 5,     # Slight robot undertone
+    "description": "Mortimer - General of the Forces, calm and authoritative"
+}
+AGENT_VOICES["mortimer"] = MORTIMER
