@@ -1,0 +1,15 @@
+#!/bin/bash
+# jordan-complete-task - Mark task as complete
+
+TASK="$1"
+if [ -z "$TASK" ]; then
+    echo "Usage: jordan-complete-task <task-number-or-description>"
+    exit 1
+fi
+
+TASKS_FILE="/root/.openclaw/workspace/aocros/agent_sandboxes/jordan/TASKS.md"
+
+# Mark task as complete (simple sed replacement)
+sed -i "s/- \[ \] $TASK/- [x] $TASK/" "$TASKS_FILE" 2>/dev/null || true
+
+echo "✅ Task marked complete: $TASK"

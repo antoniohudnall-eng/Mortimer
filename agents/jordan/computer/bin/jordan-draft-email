@@ -1,0 +1,31 @@
+#!/bin/bash
+# jordan-draft-email - Email drafting tool
+
+SUBJECT="$1"
+if [ -z "$SUBJECT" ]; then
+    echo "Usage: jordan-draft-email <subject>"
+    exit 1
+fi
+
+OUTPUT_FILE="/root/.openclaw/workspace/aocros/agent_sandboxes/jordan/drafts/email-$(date +%Y%m%d-%H%M).md"
+
+cat > "$OUTPUT_FILE" << EOL
+# Email Draft
+
+**To:** 
+**Subject:** $SUBJECT
+**Date:** $(date)
+**Status:** Draft (Pending Miles' Approval)
+
+---
+
+(Draft content here)
+
+---
+
+**Notes for Miles:**
+- 
+
+EOL
+
+echo "✅ Email draft created: $OUTPUT_FILE"

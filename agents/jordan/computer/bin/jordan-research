@@ -1,0 +1,23 @@
+#!/bin/bash
+# jordan-research - Research assistant tool
+
+TOPIC="$1"
+if [ -z "$TOPIC" ]; then
+    echo "Usage: jordan-research <topic>"
+    exit 1
+fi
+
+OUTPUT_FILE="/root/.openclaw/workspace/aocros/agent_sandboxes/jordan/research/$(date +%Y-%m-%d)-$(echo $TOPIC | tr ' ' '-').md"
+
+echo "# Research: $TOPIC" > "$OUTPUT_FILE"
+echo "" >> "$OUTPUT_FILE"
+echo "**Date:** $(date)" >> "$OUTPUT_FILE"
+echo "" >> "$OUTPUT_FILE"
+echo "## Summary" >> "$OUTPUT_FILE"
+echo "" >> "$OUTPUT_FILE"
+echo "(Research findings go here)" >> "$OUTPUT_FILE"
+echo "" >> "$OUTPUT_FILE"
+echo "## Sources" >> "$OUTPUT_FILE"
+echo "" >> "$OUTPUT_FILE"
+
+echo "✅ Research file created: $OUTPUT_FILE"

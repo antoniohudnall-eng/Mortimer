@@ -1,0 +1,31 @@
+# Patricia - THIS (Ternary High-Integrity System) Connection
+this:
+  socket: "/tmp/bhsi_v4.sock"
+  brain_socket: "/tmp/aos_brain.sock"
+  connection_type: "unix_socket"
+  
+integration:
+  report_defects: true
+  report_capabilities: true
+  report_dmaic_phases: true
+  health_monitoring: true
+  interval_seconds: 300
+
+monitoring:
+  heart_status: true
+  stomach_status: true
+  intestines_status: true
+  brain_health: true
+  
+alerts:
+  heart_rest_mode: "warning"
+  stomach_hungry: "critical"
+  intestines_buffer_full: "warning"
+  brain_stall: "critical"
+  process_not_capable: "warning"
+
+patricia_metrics:
+  report_to_this: true
+  defect_tracking: true
+  sigma_level_updates: true
+  project_status_updates: true

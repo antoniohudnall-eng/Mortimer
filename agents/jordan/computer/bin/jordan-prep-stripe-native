@@ -1,0 +1,313 @@
+#!/bin/bash
+# Jordan's Task: Prepare Stripe Native SDK Integration
+# Status: IN PROGRESS
+
+echo "🏦 Stripe Native SDK Setup Preparation"
+echo "======================================"
+echo ""
+
+# Create setup checklist
+cat > "/root/.openclaw/workspace/aocros/agent_sandboxes/jordan/drafts/stripe-setup-checklist.md" << 'EOF'
+# Stripe Native SDK Setup Checklist
+
+## Business Entity Selection
+**Options:**
+- [ ] AM HUD Supply (Sole Proprietor) - Use SSN
+- [ ] Performance Supply Depot LLC - Use EIN
+
+**Recommendation:** Start with whichever has:
+- Clean bank account
+- Clear business purpose
+- Easier tax filing
+
+## Phase 1: Stripe Account Creation (Miles Must Do)
+**Jordan CANNOT do this - requires your direct identity verification**
+
+### Step 1: Create Account
+- [ ] Go to https://dashboard.stripe.com/register
+- [ ] Use business email (miles@performancesupplydepot.com or similar)
+- [ ] Select country: United States
+- [ ] Complete email verification
+
+### Step 2: Business Information
+- [ ] Business type: Sole Proprietorship OR LLC
+- [ ] Business name: [AM HUD Supply OR Performance Supply Depot LLC]
+- [ ] Business website: https://tappylewis.cloud
+- [ ] Industry: Software / Technology
+- [ ] Business description: AI-powered sales and automation tools
+
+### Step 3: Identity Verification
+- [ ] Full legal name
+- [ ] Date of birth
+- [ ] SSN (last 4 or full)
+- [ ] Home address
+
+### Step 4: Bank Account
+- [ ] Bank account number
+- [ ] Routing number
+- [ ] Account type (Checking)
+
+### Step 5: Activate Account
+- [ ] Submit for review
+- [ ] Wait for approval (usually instant, sometimes 1-2 days)
+
+## Phase 2: Technical Setup (Jordan Will Prepare)
+
+### Backend Requirements
+- [ ] Create PaymentIntent endpoint
+- [ ] Webhook handler
+- [ ] API key management
+
+### iOS Integration
+- [ ] Install stripe-ios SDK
+- [ ] Configure Apple Pay
+- [ ] Implement PaymentSheet
+
+### Android Integration  
+- [ ] Install stripe-android SDK
+- [ ] Configure Google Pay
+- [ ] Implement PaymentSheet
+
+## Phase 3: Testing
+- [ ] Test mode transactions
+- [ ] Apple Pay sandbox
+- [ ] Google Pay sandbox
+- [ ] Error handling
+
+## Phase 4: Go Live
+- [ ] Switch to live keys
+- [ ] Final testing
+- [ ] Monitor first transactions
+
+---
+
+**SECURITY NOTE:** Jordan will NEVER ask for or store your SSN, bank details, or Stripe keys in files. All sensitive information must be entered directly into Stripe's secure dashboard by you.
+
+**Next Action Required:** Miles to complete Phase 1 (account creation) at dashboard.stripe.com
+EOF
+
+echo "✅ Checklist created: drafts/stripe-setup-checklist.md"
+
+# Create iOS integration guide
+cat > "/root/.openclaw/workspace/aocros/agent_sandboxes/jordan/drafts/stripe-ios-integration.md" << 'EOF'
+# Stripe iOS SDK Integration Guide
+
+## Installation
+
+### CocoaPods
+```ruby
+pod 'StripePaymentSheet', '~> 23.0'
+```
+
+### Swift Package Manager
+```swift
+dependencies: [
+    .package(url: "https://github.com/stripe/stripe-ios.git", from: "23.0.0")
+]
+```
+
+## Implementation
+
+### 1. Configure Stripe
+```swift
+import StripePaymentSheet
+
+class PaymentViewController: UIViewController {
+    var paymentSheet: PaymentSheet?
+    let backendCheckoutUrl = "https://your-backend.com/create-payment-intent"
+    
+    func configureStripe() {
+        // Fetch PaymentIntent from backend
+        var request = URLRequest(url: URL(string: backendCheckoutUrl)!)
+        request.httpMethod = "POST"
+        
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let clientSecret = json["clientSecret"] as? String else {
+                return
+            }
+            
+            // Configure PaymentSheet
+            var configuration = PaymentSheet.Configuration()
+            configuration.merchantDisplayName = "Performance Supply Depot"
+            configuration.applePay = .init(merchantId: "merchant.com.yourcompany", merchantCountryCode: "US")
+            
+            self?.paymentSheet = PaymentSheet(
+                paymentIntentClientSecret: clientSecret,
+                configuration: configuration
+            )
+        }
+        task.resume()
+    }
+}
+```
+
+### 2. Present PaymentSheet
+```swift
+func presentPaymentSheet() {
+    guard let paymentSheet = paymentSheet else { return }
+    
+    paymentSheet.present(from: self) { [weak self] result in
+        switch result {
+        case .completed:
+            print("Payment completed!")
+        case .canceled:
+            print("Payment canceled")
+        case .failed(let error):
+            print("Payment failed: \(error)")
+        }
+    }
+}
+```
+
+### 3. Apple Pay Configuration
+```swift
+// In your Info.plist
+<key&gt;com.apple.developer.in-app-payments</key&gt;
+<array&gt;
+    <string&gt;merchant.com.yourcompany</string&gt;
+</array&gt;
+```
+
+## Backend Endpoint (Node.js Example)
+```javascript
+const stripe = require('stripe')('sk_test_...'); // Your secret key
+
+app.post('/create-payment-intent', async (req, res) => {
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: 4999, // $49.99 in cents
+        currency: 'usd',
+        automatic_payment_methods: { enabled: true },
+    });
+    
+    res.json({ clientSecret: paymentIntent.client_secret });
+});
+```
+
+## Test Cards
+- Success: 4242 4242 4242 4242
+- Decline: 4000 0000 0000 0002
+- 3D Secure: 4000 0025 0000 3155
+
+EOF
+
+echo "✅ iOS integration guide created"
+
+# Create Android integration guide
+cat > "/root/.openclaw/workspace/aocros/agent_sandboxes/jordan/drafts/stripe-android-integration.md" << 'EOF'
+# Stripe Android SDK Integration Guide
+
+## Installation
+
+### Gradle
+```gradle
+dependencies {
+    implementation 'com.stripe:stripe-android:20.0.0'
+}
+```
+
+## Implementation
+
+### 1. Configure Stripe
+```kotlin
+import com.stripe.android.paymentsheet.PaymentSheet
+
+class PaymentActivity : AppCompatActivity() {
+    private lateinit var paymentSheet: PaymentSheet
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        paymentSheet = PaymentSheet(this) { result ->
+            onPaymentSheetResult(result)
+        }
+        
+        fetchPaymentIntent()
+    }
+    
+    private fun fetchPaymentIntent() {
+        // Call your backend
+        val backendUrl = "https://your-backend.com/create-payment-intent"
+        
+        // Retrofit/Volley/OkHttp call here
+        // Get client_secret from response
+        
+        presentPaymentSheet(clientSecret)
+    }
+    
+    private fun presentPaymentSheet(clientSecret: String) {
+        val configuration = PaymentSheet.Configuration(
+            merchantDisplayName = "Performance Supply Depot",
+            googlePay = PaymentSheet.GooglePayConfiguration(
+                environment = PaymentSheet.GooglePayConfiguration.Environment.Test,
+                countryCode = "US"
+            )
+        )
+        
+        paymentSheet.presentWithPaymentIntent(
+            paymentIntentClientSecret = clientSecret,
+            configuration = configuration
+        )
+    }
+    
+    private fun onPaymentSheetResult(result: PaymentSheetResult) {
+        when (result) {
+            is PaymentSheetResult.Completed -> {
+                // Payment successful
+            }
+            is PaymentSheetResult.Canceled -> {
+                // User canceled
+            }
+            is PaymentSheetResult.Failed -> {
+                // Payment failed
+                val error = result.error
+            }
+        }
+    }
+}
+```
+
+### 2. Google Pay Configuration
+```xml
+<!-- AndroidManifest.xml -->
+<meta-data
+    android:name="com.google.android.gms.wallet.api.enabled"
+    android:value="true" />
+```
+
+## Backend Endpoint (Same as iOS)
+```javascript
+const stripe = require('stripe')('sk_test_...');
+
+app.post('/create-payment-intent', async (req, res) => {
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: 4999,
+        currency: 'usd',
+        automatic_payment_methods: { enabled: true },
+    });
+    
+    res.json({ clientSecret: paymentIntent.client_secret });
+});
+```
+
+EOF
+
+echo "✅ Android integration guide created"
+
+# Update task status
+sed -i 's/- \[ \] Research Stripe integration/- [x] Research Stripe integration/' /root/.openclaw/workspace/aocros/agent_sandboxes/jordan/TASKS.md
+sed -i 's/- \[ \] Summarize findings/- [x] Summarize findings/' /root/.openclaw/workspace/aocros/agent_sandboxes/jordan/TASKS.md
+
+echo ""
+echo "======================================"
+echo "✅ Jordan's work complete!"
+echo ""
+echo "Files ready for Miles' review:"
+echo "  1. drafts/stripe-setup-checklist.md"
+echo "  2. drafts/stripe-ios-integration.md"
+echo "  3. drafts/stripe-android-integration.md"
+echo ""
+echo "⚠️  ACTION REQUIRED: Miles must complete Phase 1"
+echo "   (Stripe account creation) at dashboard.stripe.com"
+echo ""

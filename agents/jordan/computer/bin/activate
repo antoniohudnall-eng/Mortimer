@@ -1,0 +1,8 @@
+# Add Jordan's tools to PATH
+export PATH="/root/.openclaw/workspace/aocros/agent_sandboxes/jordan/computer/bin:$PATH"
+export JORDAN_HOME="/root/.openclaw/workspace/aocros/agent_sandboxes/jordan"
+export JORDAN_COMPUTER="/root/.openclaw/workspace/aocros/agent_sandboxes/jordan/computer"
+
+echo "💻 Jordan's Computer activated"
+echo "Available commands:"
+ls "/root/.openclaw/workspace/aocros/agent_sandboxes/jordan/computer/bin/" | sed 's/^/  /'
