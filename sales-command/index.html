@@ -573,9 +573,10 @@
     <script>
         // API Base
         const API = {
+            local: 'http://localhost:8080/api',
             psd: 'https://psdepot.com/psd-api',
             depotchaos: 'https://psdepot.com/depotchaos/api',
-            collections: 'https://psdepot.com/collections/api'
+            collections: .http://localhost:8080/api/collections.
         };
 
         // Agent Pricing
@@ -625,7 +626,7 @@
             console.log('[Dashboard] Starting data load...');
 
             // Load PSD
-            const psd = await fetchJSON(`${API.psd}/dashboard/overview`, 'psd');
+            const psd = await fetchJSON(`${API.local}/psd`, 'psd');
             if (psd) {
                 document.getElementById('psd-customers').textContent = psd.total_customers.toLocaleString();
                 document.getElementById('psd-revenue').textContent = '$' + psd.total_revenue_2025.toLocaleString();
@@ -634,7 +635,7 @@
             }
 
             // Load DepotChaos
-            const depot = await fetchJSON(`${API.depotchaos}/stats`, 'depot');
+            const depot = await fetchJSON(`${API.local}/depotchaos`, 'depot');
             if (depot) {
                 document.getElementById('depot-leads').textContent = depot.total_leads.toLocaleString();
                 document.getElementById('depot-intel').textContent = depot.intelligence_records.toLocaleString();
