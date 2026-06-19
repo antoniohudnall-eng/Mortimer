@@ -1,0 +1,270 @@
+/**
+ * @license Copyright (c) 2026, Performance Supply Depot LLC
+ * @author The Great Cryptonio
+ * @description 190-Point Confluence Trading System
+ *              Combines technical levels, momentum, volume, and whale signals
+ * @version 1.0.0
+ */
+
+//@version=5
+indicator("Cryptonio 190-Point Confluence System", shorttitle="CRYPTONIO_CONFLUENCE", overlay=true, max_lines_count=500, max_boxes_count=500)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// INPUTS SECTION
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Group: General
+timeframe = input.timeframe("240", "Timeframe", group="General")
+threshold = input.int(60, "Confluence Threshold (0-190)", minval=0, maxval=190, group="General")
+showLabels = input.bool(true, "Show Signal Labels", group="General")
+showBackground = input.bool(true, "Show Background Color", group="General")
+
+// Group: Support/Resistance (Video 1, 3)
+srLength = input.int(20, "S/R Lookback Period", minval=5, maxval=100, group="Support/Resistance (+40 pts)")
+srWeight = input.int(40, "S/R Max Points", minval=0, maxval=40, group="Support/Resistance (+40 pts)")
+
+// Group: Trend Analysis (Video 4)
+trendLength = input.int(28, "Trend Filter Length", minval=10, maxval=50, group="Trend Filter (+45 pts)")
+calmanShort = input.int(40, "Calman Short Length", minval=20, maxval=60, group="Trend Filter (+45 pts)")
+calmanLong = input.int(80, "Calman Long Length", minval=60, maxval=120, group="Trend Filter (+45 pts)")
+trendWeight = input.int(45, "Trend Max Points", minval=0, maxval=45, group="Trend Filter (+45 pts)")
+
+// Group: Volume Profile (Video 5)
+volLookback = input.int(20, "Volume Profile Lookback", minval=10, maxval=50, group="Volume Profile (+55 pts)")
+volWeight = input.int(55, "Volume Max Points", minval=0, maxval=55, group="Volume Profile (+55 pts)")
+
+// Group: Momentum (Video 11)
+emaShort = input.int(8, "EMA Short", minval=5, maxval=20, group="Momentum (+25 pts)")
+emaLong = input.int(21, "EMA Long", minval=15, maxval=50, group="Momentum (+25 pts)")
+rsiPeriod = input.int(14, "RSI Period", minval=7, maxval=21, group="Momentum (+25 pts)")
+rsiOverbought = input.int(70, "RSI Overbought", minval=60, maxval=90, group="Momentum (+25 pts)")
+rsiOversold = input.int(30, "RSI Oversold", minval=10, maxval=40, group="Momentum (+25 pts)")
+stochK = input.int(14, "Stochastic %K", minval=5, maxval=21, group="Momentum (+25 pts)")
+stochD = input.int(3, "Stochastic %D", minval=2, maxval=10, group="Momentum (+25 pts)")
+momentumWeight = input.int(25, "Momentum Max Points", minval=0, maxval=25, group="Momentum (+25 pts)")
+
+// Group: Whale/On-Chain (Video 16)
+whaleThreshold = input.int(100, "Whale Threshold (x1000)", minval=10, maxval=500, group="On-Chain (+30 pts)")
+ancientWallet = input.bool(true, "Track Dormant Wallets", group="On-Chain (+30 pts)")
+onchainWeight = input.int(30, "On-Chain Max Points", minval=0, maxval=30, group="On-Chain (+30 pts)")
+
+// ═════════════════════════════════════════════════════════════════════════════
+// CALCULATIONS
+// ═════════════════════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SUPPORT/RESISTANCE SCORING (Video 1, 3) — Max 40 points
+// ─────────────────────────────────────────────────────────────────────────────
+
+pivotHigh = ta.pivothigh(srLength)
+pivotLow = ta.pivotlow(srLength)
+
+// Dynamic support/resistance levels
+resistance = ta.valuewhen(pivotHigh, high, 0)
+support = ta.valuewhen(pivotLow, low, 0)
+
+// Distance from current price to nearest S/R
+srDistance = math.min(
+    math.abs(close - resistance) / close * 100,
+    math.abs(close - support) / close * 100
+)
+
+// Scoring: Closer to S/R = higher score
+srScore = srDistance < 0.5 ? 40 : srDistance < 1.0 ? 30 : srDistance < 2.0 ? 20 : srDistance < 3.0 ? 10 : 0
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TREND ANALYSIS (Video 4) — Max 45 points
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Two-pole trend filter
+trendFilter = ta.wma(close, trendLength)
+trendDirection = close > trendFilter ? 1 : -1
+
+// Calman trend levels
+shortMA = ta.sma(close, calmanShort)
+longMA = ta.sma(close, calmanLong)
+trendAlignment = close > shortMA and shortMA > longMA ? 2 : close < shortMA and shortMA < longMA ? -2 : 0
+
+// Trend strength
+trendScore = trendAlignment == 2 and trendDirection == 1 ? 45 :
+             trendAlignment == -2 and trendDirection == -1 ? 45 :
+             trendAlignment != 0 and trendDirection == trendAlignment / 2 ? 30 : 15
+
+// ─────────────────────────────────────────────────────────────────────────────
+// VOLUME PROFILE (Video 5) — Max 55 points
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Volume-weighted price levels
+vwValue = ta.vwap(hlc3)
+volAvg = ta.sma(volume, volLookback)
+volSpike = volume > volAvg * 2 ? true : false
+
+// Point of Control approximation (highest volume area)
+pocLevel = ta.valuewhen(volSpike, close, 0)
+
+// Volume-based scoring
+volAtS = close > vwValue and volume > volAvg ? 55 :
+          close > vwValue ? 40 :
+          volSpike ? 30 : 15
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MOMENTUM (Video 11) — Max 25 points
+// ─────────────────────────────────────────────────────────────────────────────
+
+// EMA alignment
+ema8 = ta.ema(close, emaShort)
+ema21 = ta.ema(close, emaLong)
+emaAlignment = ema8 > ema21 ? 1 : -1
+emaDistance = math.abs(ema8 - ema21) / close * 100
+
+// RSI
+currentRSI = ta.rsi(close, rsiPeriod)
+rsiSignal = currentRSI > rsiOverbought ? -1 : currentRSI < rsiOversold ? 1 : 0
+
+// Stochastic
+stochKVal = ta.stoch(close, high, low, stochK)
+stochDVal = ta.sma(stochKVal, stochD)
+stochSignal = stochKVal > stochDVal ? 1 : -1
+
+// Combined momentum score
+momentumScore = 0
+momentumScore := (emaAlignment == 1 and rsiSignal != -1 and stochSignal == 1) ? 25 :
+                  (emaAlignment == -1 and rsiSignal != 1 and stochSignal == -1) ? 25 :
+                  (emaAlignment == stochSignal) ? 15 : 5
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ON-CHAIN/WHALE SCORING (Video 16) — Max 30 points
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Approximate whale activity via volume spikes
+whaleActivity = volume > volAvg * whaleThreshold / 10 ? true : false
+
+// Simulate exchange flow (volume relative to average)
+exchangeInflow = volume > volAvg * 3 and close < open ? true : false
+exchangeOutflow = volume > volAvg * 3 and close > open ? true : false
+
+// On-chain score
+onchainScore = exchangeOutflow ? 30 : exchangeInflow ? 10 : whaleActivity ? 20 : 5
+
+// ═════════════════════════════════════════════════════════════════════════════
+// CONFLUENCE CALCULATION
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Total possible: 40 + 45 + 55 + 25 + 30 = 195 (capped at 190 for display)
+totalScore = srScore + trendScore + volAtS + momentumScore + onchainScore
+totalScore := math.min(totalScore, 190)
+
+// Signal generation
+longSignal = totalScore >= threshold and totalScore > 60 and trendScore >= 30 and momentumScore >= 15
+shortSignal = totalScore >= threshold and trendScore >= 30 and momentumScore <= 5 and close < ema21
+
+// ═════════════════════════════════════════════════════════════════════════════
+// PLOTTING
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Confluence level background
+bgcolorColor = longSignal ? color.new(color.green, 90) : 
+               shortSignal ? color.new(color.red, 90) : 
+               color.new(color.gray, 95)
+bgcolor(showBackground ? bgcolorColor : na)
+
+// Moving averages
+plot(ema8, "EMA 8", color=color.new(color.cyan, 0), linewidth=2)
+plot(ema21, "EMA 21", color=color.new(color.orange, 0), linewidth=2)
+plot(vwValue, "VWAP", color=color.new(color.purple, 0), linewidth=1, style=plot.style_line)
+
+// Support/Resistance levels
+plot(resistance, "Resistance", color=color.new(color.red, 50), style=plot.style_linebr)
+plot(support, "Support", color=color.new(color.green, 50), style=plot.style_linebr)
+
+// Signal labels
+plotshape(longSignal and showLabels, "LONG", shape.triangleup, location.belowbar, color.green, size=size.normal, text="LONG\n" + str.tostring(totalScore))
+plotshape(shortSignal and showLabels, "SHORT", shape.triangledown, location.abovebar, color.red, size=size.normal, text="SHORT\n" + str.tostring(totalScore))
+
+// ═════════════════════════════════════════════════════════════════════════════
+// INFORMATION PANEL
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Table for confluence breakdown
+if barstate.islast
+    var table infoTable = table.new(position.top_right, 6, 8, bgcolor=color.black, border_color=color.gray, border_width=1)
+    
+    // Header
+    table.cell(infoTable, 0, 0, "FACTOR", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 1, 0, "SCORE", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 2, 0, "MAX", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 3, 0, "% OF MAX", text_color=color.white, text_size=size.small)
+    
+    // S/R
+    table.cell(infoTable, 0, 1, "S/R Levels", text_color=color.yellow, text_size=size.tiny)
+    table.cell(infoTable, 1, 1, str.tostring(srScore), text_color=color.yellow, text_size=size.tiny)
+    table.cell(infoTable, 2, 1, str.tostring(srWeight), text_color=color.yellow, text_size=size.tiny)
+    table.cell(infoTable, 3, 1, str.tostring(srScore * 100 / srWeight) + "%", text_color=color.yellow, text_size=size.tiny)
+    
+    // Trend
+    table.cell(infoTable, 0, 2, "Trend", text_color=color.aqua, text_size=size.tiny)
+    table.cell(infoTable, 1, 2, str.tostring(trendScore), text_color=color.aqua, text_size=size.tiny)
+    table.cell(infoTable, 2, 2, str.tostring(trendWeight), text_color=color.aqua, text_size=size.tiny)
+    table.cell(infoTable, 3, 2, str.tostring(trendScore * 100 / trendWeight) + "%", text_color=color.aqua, text_size=size.tiny)
+    
+    // Volume
+    table.cell(infoTable, 0, 3, "Volume", text_color=color.fuchsia, text_size=size.tiny)
+    table.cell(infoTable, 1, 3, str.tostring(volAtS), text_color=color.fuchsia, text_size=size.tiny)
+    table.cell(infoTable, 2, 3, str.tostring(volWeight), text_color=color.fuchsia, text_size=size.tiny)
+    table.cell(infoTable, 3, 3, str.tostring(volAtS * 100 / volWeight) + "%", text_color=color.fuchsia, text_size=size.tiny)
+    
+    // Momentum
+    table.cell(infoTable, 0, 4, "Momentum", text_color=color.orange, text_size=size.tiny)
+    table.cell(infoTable, 1, 4, str.tostring(momentumScore), text_color=color.orange, text_size=size.tiny)
+    table.cell(infoTable, 2, 4, str.tostring(momentumWeight), text_color=color.orange, text_size=size.tiny)
+    table.cell(infoTable, 3, 4, str.tostring(momentumScore * 100 / momentumWeight) + "%", text_color=color.orange, text_size=size.tiny)
+    
+    // On-Chain
+    table.cell(infoTable, 0, 5, "On-Chain", text_color=color.lime, text_size=size.tiny)
+    table.cell(infoTable, 1, 5, str.tostring(onchainScore), text_color=color.lime, text_size=size.tiny)
+    table.cell(infoTable, 2, 5, str.tostring(onchainWeight), text_color=color.lime, text_size=size.tiny)
+    table.cell(infoTable, 3, 5, str.tostring(onchainScore * 100 / onchainWeight) + "%", text_color=color.lime, text_size=size.tiny)
+    
+    // Total
+    table.cell(infoTable, 0, 6, "TOTAL", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 1, 6, str.tostring(totalScore), text_color=totalScore >= threshold ? color.green : color.white, text_size=size.small)
+    table.cell(infoTable, 2, 6, "190", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 3, 6, str.tostring(totalScore * 100 / 190) + "%", text_color=color.white, text_size=size.small)
+    
+    // Signal
+    table.cell(infoTable, 0, 7, "SIGNAL", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 1, 7, longSignal ? "LONG" : shortSignal ? "SHORT" : "NEUTRAL", 
+               text_color=longSignal ? color.green : shortSignal ? color.red : color.gray, text_size=size.small)
+    table.cell(infoTable, 2, 7, "THRESH:", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 3, 7, str.tostring(threshold), text_color=color.white, text_size=size.small)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// ALERTS
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Long entry alert
+alertcondition(longSignal, title="CRYPTONIO Long Signal", message="190-Point Confluence: LONG Signal\nScore: {{plot_0}}\nPrice: {{close}}")
+
+// Short entry alert
+alertcondition(shortSignal, title="CRYPTONIO Short Signal", message="190-Point Confluence: SHORT Signal\nScore: {{plot_0}}\nPrice: {{close}}")
+
+// Threshold breach alert
+alertcondition(totalScore >= threshold, title="Threshold Breach", message="Confluence score {{plot_0}} reached threshold {{threshold}}")
+
+// ═════════════════════════════════════════════════════════════════════════════
+// STRATEGY VERSION (for backtesting)
+// ═════════════════════════════════════════════════════════════════════════════
+
+// To convert to strategy for backtesting, change indicator() to:
+// strategy("Cryptonio 190-Point Confluence Strategy", shorttitle="CRYPTONIO_STRATEGY", overlay=true)
+// Uncomment below:
+
+// if longSignal
+//     strategy.entry("Long", strategy.long)
+//     strategy.exit("Long TP", "Long", limit=close * 1.015, stop=close * 0.985) // 1.5:1 R:R
+
+// if shortSignal
+//     strategy.entry("Short", strategy.short)
+//     strategy.exit("Short TP", "Short", limit=close * 0.985, stop=close * 1.015) // 1.5:1 R:R
+
+// strategy.close_all(when=totalScore < threshold / 2)

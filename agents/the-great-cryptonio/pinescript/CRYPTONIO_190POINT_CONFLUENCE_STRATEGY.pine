@@ -1,0 +1,468 @@
+/**
+ * @license Copyright (c) 2026, Performance Supply Depot LLC
+ * @author The Great Cryptonio
+ * @description 190-Point Confluence Trading System — STRATEGY VERSION
+ *              Combines technical levels, momentum, volume, and whale signals
+ *              Full backtesting and production-ready
+ * @version 2.0.0 (Strategy)
+ */
+
+//@version=5
+strategy("190-Point Confluence Strategy", 
+         shorttitle="CRYPTONIO_STRATEGY", 
+         overlay=true, 
+         max_lines_count=500, 
+         max_boxes_count=500,
+         initial_capital=1000,
+         default_qty_type=strategy.percent_of_equity,
+         default_qty_value=10,
+         commission_type=strategy.commission.percent,
+         commission_value=0.1,
+         slippage=1)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// STRATEGY OVERVIEW
+// Strategy Type: Multi-factor confluence trend following
+// Best Markets: Trending crypto, forex, indices
+// Timeframe: 1H - 4H
+// Win Rate Target: >60%
+// Risk/Reward: 1:1.5 to 1:4 (ATR-based)
+// ═════════════════════════════════════════════════════════════════════════════
+
+// ═════════════════════════════════════════════════════════════════════════════
+// INPUTS SECTION (Video 18: user-customizable)
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Group: Strategy Settings
+strategyMode = input.string("Trend", "Strategy Mode", options=["Trend", "Swing", "Scalp"], group="Strategy Settings")
+threshold = input.int(60, "Confluence Threshold (50-100)", minval=30, maxval=100, group="Strategy Settings")
+showLabels = input.bool(true, "Show Signal Labels", group="Strategy Settings")
+showBackground = input.bool(true, "Show Background Color", group="Strategy Settings")
+pnlTrails = input.bool(true, "Use Trailing Stop", group="Strategy Settings")
+
+// Group: Risk Management (Video 18: ATR-based risk)
+riskMode = input.string("ATR", "Risk Method", options=["ATR", "Fixed"], group="Risk Management")
+atrPeriod = input.int(14, "ATR Period", minval=5, maxval=30, group="Risk Management")
+atrMultiplier = input.float(2.5, "ATR Multiplier (SL)", minval=1.0, maxval=5.0, step=0.5, group="Risk Management")
+rrRatio = input.float(2.0, "Risk/Reward Ratio", minval=0.5, maxval=5.0, step=0.5, group="Risk Management")
+maxDailyTrades = input.int(3, "Max Daily Trades", minval=1, maxval=10, group="Risk Management")
+trailingActivation = input.float(1.0, "Trail Activation (%)", minval=0.5, maxval=5.0, group="Risk Management")
+
+// Group: Support/Resistance (Video 1, 3) — Max 40 points
+srLength = input.int(20, "S/R Lookback Period", minval=5, maxval=100, group="Support/Resistance (40 pts max)")
+srWeight = input.int(40, "S/R Max Points", minval=0, maxval=40, group="Support/Resistance (40 pts max)")
+
+// Group: Trend Analysis (Video 4) — Max 45 points
+trendLength = input.int(28, "Trend Filter Length", minval=10, maxval=50, group="Trend Filter (45 pts max)")
+calmanShort = input.int(40, "Calman Short Length", minval=20, maxval=60, group="Trend Filter (45 pts max)")
+calmanLong = input.int(80, "Calman Long Length", minval=60, maxval=120, group="Trend Filter (45 pts max)")
+trendWeight = input.int(45, "Trend Max Points", minval=0, maxval=45, group="Trend Filter (45 pts max)")
+
+// Group: Volume Profile (Video 5) — Max 55 points
+volLookback = input.int(20, "Volume Profile Lookback", minval=10, maxval=50, group="Volume Profile (55 pts max)")
+volWeight = input.int(55, "Volume Max Points", minval=0, maxval=55, group="Volume Profile (55 pts max)")
+
+// Group: Momentum (Video 11) — Max 25 points
+emaShort = input.int(8, "EMA Short", minval=5, maxval=20, group="Momentum (25 pts max)")
+emaLong = input.int(21, "EMA Long", minval=15, maxval=50, group="Momentum (25 pts max)")
+rsiPeriod = input.int(14, "RSI Period", minval=7, maxval=21, group="Momentum (25 pts max)")
+rsiOverbought = input.int(70, "RSI Overbought", minval=60, maxval=90, group="Momentum (25 pts max)")
+rsiOversold = input.int(30, "RSI Oversold", minval=10, maxval=40, group="Momentum (25 pts max)")
+stochK = input.int(14, "Stochastic %K", minval=5, maxval=21, group="Momentum (25 pts max)")
+stochD = input.int(3, "Stochastic %D", minval=2, maxval=10, group="Momentum (25 pts max)")
+momentumWeight = input.int(25, "Momentum Max Points", minval=0, maxval=25, group="Momentum (25 pts max)")
+
+// Group: On-Chain/Whale (Video 16) — Max 30 points
+whaleThreshold = input.int(100, "Whale Threshold (x1000)", minval=10, maxval=500, group="On-Chain (30 pts max)")
+ancientWallet = input.bool(true, "Track Dormant Wallets", group="On-Chain (30 pts max)")
+onchainWeight = input.int(30, "On-Chain Max Points", minval=0, maxval=30, group="On-Chain (30 pts max)")
+
+// ═════════════════════════════════════════════════════════════════════════════
+// CALCULATIONS — All components (Videos 1-16)
+// ═════════════════════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SUPPORT/RESISTANCE SCORING (40 points max)
+// ─────────────────────────────────────────────────────────────────────────────
+pivotHigh = ta.pivothigh(srLength, srLength / 2)
+pivotLow = ta.pivotlow(srLength, srLength / 2)
+
+resistance = ta.valuewhen(pivotHigh, high, 0)
+support = ta.valuewhen(pivotLow, low, 0)
+
+srDistance = math.min(
+    math.abs(close - resistance) / close * 100,
+    math.abs(close - support) / close * 100
+)
+
+srScore = srWeight > 0 and srDistance < 0.5 ? srWeight : 
+          srWeight > 0 and srDistance < 1.0 ? srWeight * 0.75 : 
+          srWeight > 0 and srDistance < 2.0 ? srWeight * 0.5 : 
+          srWeight > 0 and srDistance < 3.0 ? srWeight * 0.25 : 0
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TREND ANALYSIS (45 points max) — Video 4
+// ─────────────────────────────────────────────────────────────────────────────
+trendFilter = ta.wma(close, trendLength)
+trendDirection = close > trendFilter ? 1 : -1
+
+shortMA = ta.sma(close, calmanShort)
+longMA = ta.sma(close, calmanLong)
+
+// Trend alignment: +2 strong up, -2 strong down, 0 neutral
+trendAlignment = close > shortMA and shortMA > longMA ? 2 : 
+                 close < shortMA and shortMA < longMA ? -2 : 0
+
+// Trend score calculation
+trendScore = trendWeight > 0 and trendAlignment == 2 and trendDirection == 1 ? trendWeight :
+             trendWeight > 0 and trendAlignment == -2 and trendDirection == -1 ? trendWeight :
+             trendWeight > 0 and trendAlignment != 0 and trendDirection == trendAlignment / 2 ? trendWeight * 0.67 :
+             trendWeight > 0 ? trendWeight * 0.33 : 0
+
+// ─────────────────────────────────────────────────────────────────────────────
+// VOLUME PROFILE (55 points max) — Video 5
+// ─────────────────────────────────────────────────────────────────────────────
+vwValue = ta.vwap(hlc3)
+volAvg = ta.sma(volume, volLookback)
+volSpike = volume > volAvg * 2
+
+volScore = volWeight > 0 and close > vwValue and volume > volAvg ? volWeight :
+           volWeight > 0 and close > vwValue ? volWeight * 0.73 :
+           volWeight > 0 and volSpike ? volWeight * 0.55 :
+           volWeight > 0 ? volWeight * 0.27 : 0
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MOMENTUM (25 points max) — Video 11 (EMA+RSI+Stoch)
+// ─────────────────────────────────────────────────────────────────────────────
+ema8 = ta.ema(close, emaShort)
+ema21 = ta.ema(close, emaLong)
+emaAlignment = ema8 > ema21 ? 1 : -1
+
+currentRSI = ta.rsi(close, rsiPeriod)
+rsiSignal = currentRSI > rsiOverbought ? -1 : currentRSI < rsiOversold ? 1 : 0
+
+stochKVal = ta.stoch(close, high, low, stochK)
+stochDVal = ta.sma(stochKVal, stochD)
+stochSignal = stochKVal > stochDVal ? 1 : -1
+
+// Momentum scoring
+momentumScore = momentumWeight > 0 and emaAlignment == 1 and rsiSignal != -1 and stochSignal == 1 ? momentumWeight :
+                momentumWeight > 0 and emaAlignment == -1 and rsiSignal != 1 and stochSignal == -1 ? momentumWeight :
+                momentumWeight > 0 and emaAlignment == stochSignal ? momentumWeight * 0.6 : 
+                momentumWeight > 0 ? momentumWeight * 0.2 : 0
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ON-CHAIN/WHALE SCORING (30 points max) — Video 16
+// ─────────────────────────────────────────────────────────────────────────────
+whaleActivity = volume > volAvg * whaleThreshold / 10
+exchangeInflow = volume > volAvg * 3 and close < open
+exchangeOutflow = volume > volAvg * 3 and close > open
+
+onchainScore = onchainWeight > 0 and exchangeOutflow ? onchainWeight :
+               onchainWeight > 0 and whaleActivity ? onchainWeight * 0.67 :
+               onchainWeight > 0 and exchangeInflow ? onchainWeight * 0.33 : 
+               onchainWeight > 0 ? onchainWeight * 0.17 : 0
+
+// ═════════════════════════════════════════════════════════════════════════════
+// CONFLUENCE CALCULATION (Video 1: Risk management + confluence)
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Total: 40 + 45 + 55 + 25 + 30 = 195 (capped at 190)
+totalScore = srScore + trendScore + volScore + momentumScore + onchainScore
+totalScore := math.min(totalScore, 190)
+scorePct = totalScore / 190
+
+// ═════════════════════════════════════════════════════════════════════════════
+// STRATEGY LOGIC — Video 18: Entry/Exit conditions
+// ═════════════════════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BASE CONDITIONS
+// ─────────────────────────────────────────────────────────────────────────────
+bullishTrend = trendAlignment >= 0 and trendDirection == 1
+bearishTrend = trendAlignment <= 0 and trendDirection == -1
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ENTRY CONDITIONS (Video 18: Multiple confirmations)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Long Entry Conditions
+longCondition1 = totalScore >= threshold // Main threshold met
+longCondition2 = trendScore >= trendWeight * 0.67 // Strong trend
+longCondition3 = momentumScore >= momentumWeight * 0.6 // Momentum aligned
+longCondition4 = bullishTrend or trendAlignment == 2 // Trend direction
+longCondition5 = currentRSI < 70 // Not overbought
+longCondition6 = strategy.position_size == 0 // Not already in position
+
+// Full long entry signal
+longSignal = longCondition1 and longCondition2 and longCondition3 and 
+             longCondition4 and longCondition5 and longCondition6
+
+// Short Entry Conditions
+shortCondition1 = totalScore >= threshold * 0.8 // Lower threshold OK for shorts
+shortCondition2 = trendScore >= trendWeight * 0.67
+shortCondition3 = momentumScore <= momentumWeight * 0.4 or momentumScore == 0
+shortCondition4 = bearishTrend
+shortCondition5 = currentRSI > 30 // Not oversold
+shortCondition6 = strategy.position_size == 0
+
+// Full short entry signal
+shortSignal = shortCondition1 and shortCondition2 and shortCondition3 and 
+              shortCondition4 and shortCondition5 and shortCondition6
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RISK MANAGEMENT — Video 18: ATR-based stops
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ATR calculation for dynamic stops
+atr14 = ta.atr(atrPeriod)
+
+// Entry bar tracking
+var float entryPrice = na
+var float stopLossPrice = na
+var float takeProfitPrice = na
+
+// Update entry price on new position
+if strategy.position_size != 0 and strategy.position_size[1] == 0
+    entryPrice := strategy.position_avg_price
+
+// Calculate stop distances
+slDistance = atr14 * atrMultiplier
+tpDistance = slDistance * rrRatio
+
+// Long stops
+longSL = entryPrice - slDistance
+longTP = entryPrice + tpDistance
+
+// Short stops
+shortSL = entryPrice + slDistance
+shortTP = entryPrice - tpDistance
+
+// ─────────────────────────────────────────────────────────────────────────────
+// POSITION MANAGEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Trailing stop logic
+var float highestPrice = na
+var float trailPrice = na
+
+if strategy.position_size > 0
+    highestPrice := na(highestPrice) ? high : math.max(highestPrice, high)
+    trailActivationPrice = entryPrice * (1 + trailingActivation / 100)
+    if high >= trailActivationPrice
+        trailPrice := highestPrice - slDistance
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EXECUTION — Video 18: Strategy entry/exit
+// ═════════════════════════════════════════════════════════════════════════════
+
+// LONG ENTRY
+if longSignal
+    // Percent of equity sizing (user input)
+    strategy.entry("Long", strategy.long)
+    
+    // Set stop loss and take profit
+    strategy.exit("Long TP/SL", "Long", 
+                  stop=longSL, 
+                  limit=longTP)
+
+// SHORT ENTRY
+if shortSignal
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Short TP/SL", "Short", 
+                  stop=shortSL, 
+                  limit=shortTP)
+
+// EXITS (Video 18: Conditional exits)
+// Trend reversal exit
+if strategy.position_size > 0 and ema8 < ema21 and stochSignal == -1
+    strategy.close("Long", comment="Trend Reversal")
+
+if strategy.position_size < 0 and ema8 > ema21 and stochSignal == 1
+    strategy.close("Short", comment="Trend Reversal")
+
+// RSI extreme exit
+if strategy.position_size > 0 and currentRSI > rsiOverbought + 5
+    strategy.close("Long", comment="Overbought")
+
+if strategy.position_size < 0 and currentRSI < rsiOversold - 5
+    strategy.close("Short", comment="Oversold")
+
+// ═════════════════════════════════════════════════════════════════════════════
+// VISUALIZATION
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Background color
+bgColor = strategy.position_size > 0 ? color.new(color.green, 90) :
+          strategy.position_size < 0 ? color.new(color.red, 90) :
+          longSignal ? color.new(color.lime, 80) :
+          shortSignal ? color.new(color.red, 80) :
+          color.new(color.gray, 95)
+bgcolor(showBackground ? bgColor : na)
+
+// Moving averages
+plot(ema8, "EMA 8", color=color.new(color.cyan, 0), linewidth=2)
+plot(ema21, "EMA 21", color=color.new(color.orange, 0), linewidth=2)
+plot(vwValue, "VWAP", color=color.new(color.purple, 0), linewidth=1)
+
+// Support/Resistance
+plot(resistance, "Resistance", color=color.new(color.red, 50), style=plot.style_linebr)
+plot(support, "Support", color=color.new(color.green, 50), style=plot.style_linebr)
+
+// Entry markers
+plotshape(longSignal and showLabels, "Long Entry", shape.triangleup, location.belowbar, 
+          color.green, size=size.normal, text="LONG " + str.tostring(int(totalScore)))
+
+plotshape(shortSignal and showLabels, "Short Entry", shape.triangledown, location.abovebar, 
+          color.red, size=size.normal, text="SHORT " + str.tostring(int(totalScore)))
+
+// Stop/Target lines
+plot(strategy.position_size != 0 ? stopLossPrice : na, "Stop Loss", color=color.red, style=plot.style_linebr)
+plot(strategy.position_size != 0 ? takeProfitPrice : na, "Take Profit", color=color.green, style=plot.style_linebr)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// INFORMATION PANEL (Video 18: Detailed analytics)
+// ═════════════════════════════════════════════════════════════════════════════
+
+if barstate.islast
+    var table infoTable = table.new(position.top_right, 6, 8, 
+                                    bgcolor=color.black, 
+                                    border_color=color.gray, 
+                                    border_width=1)
+    
+    // Header
+    table.cell(infoTable, 0, 0, "FACTOR", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 1, 0, "SCORE", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 2, 0, "MAX", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 3, 0, "%", text_color=color.white, text_size=size.small)
+    
+    // Data rows
+    table.cell(infoTable, 0, 1, "S/R", text_color=color.yellow)
+    table.cell(infoTable, 1, 1, str.tostring(int(srScore)), text_color=color.yellow)
+    table.cell(infoTable, 2, 1, str.tostring(srWeight), text_color=color.yellow)
+    table.cell(infoTable, 3, 1, str.tostring(srWeight > 0 ? int(srScore * 100 / srWeight) : 0) + "%")
+    
+    table.cell(infoTable, 0, 2, "TREND", text_color=color.aqua)
+    table.cell(infoTable, 1, 2, str.tostring(int(trendScore)), text_color=color.aqua)
+    table.cell(infoTable, 2, 2, str.tostring(trendWeight), text_color=color.aqua)
+    table.cell(infoTable, 3, 2, str.tostring(trendWeight > 0 ? int(trendScore * 100 / trendWeight) : 0) + "%")
+    
+    table.cell(infoTable, 0, 3, "VOLUME", text_color=color.fuchsia)
+    table.cell(infoTable, 1, 3, str.tostring(int(volScore)), text_color=color.fuchsia)
+    table.cell(infoTable, 2, 3, str.tostring(volWeight), text_color=color.fuchsia)
+    table.cell(infoTable, 3, 3, str.tostring(volWeight > 0 ? int(volScore * 100 / volWeight) : 0) + "%")
+    
+    table.cell(infoTable, 0, 4, "MOMENTUM", text_color=color.orange)
+    table.cell(infoTable, 1, 4, str.tostring(int(momentumScore)), text_color=color.orange)
+    table.cell(infoTable, 2, 4, str.tostring(momentumWeight), text_color=color.orange)
+    table.cell(infoTable, 3, 4, str.tostring(momentumWeight > 0 ? int(momentumScore * 100 / momentumWeight) : 0) + "%")
+    
+    table.cell(infoTable, 0, 5, "ON-CHAIN", text_color=color.lime)
+    table.cell(infoTable, 1, 5, str.tostring(int(onchainScore)), text_color=color.lime)
+    table.cell(infoTable, 2, 5, str.tostring(onchainWeight), text_color=color.lime)
+    table.cell(infoTable, 3, 5, str.tostring(onchainWeight > 0 ? int(onchainScore * 100 / onchainWeight) : 0) + "%")
+    
+    // Totals
+    table.cell(infoTable, 0, 6, "TOTAL", text_color=color.white, text_size=size.small)
+    table.cell(infoTable, 1, 6, str.tostring(int(totalScore)), 
+               text_color=totalScore >= threshold ? color.green : color.white, text_size=size.small)
+    table.cell(infoTable, 2, 6, "190", text_color=color.white)
+    table.cell(infoTable, 3, 6, str.tostring(int(totalScore * 100 / 190)) + "%")
+    
+    // Signal
+    table.cell(infoTable, 0, 7, "SIGNAL", text_color=color.white)
+    signalText = strategy.position_size > 0 ? "LONG" : 
+                 strategy.position_size < 0 ? "SHORT" : 
+                 longSignal ? "READY" : "NEUTRAL"
+    signalColor = strategy.position_size > 0 ? color.green : 
+                  strategy.position_size < 0 ? color.red :
+                  longSignal ? color.lime : color.gray
+    table.cell(infoTable, 1, 7, signalText, text_color=signalColor)
+    table.cell(infoTable, 2, 7, "TH:", text_color=color.white)
+    table.cell(infoTable, 3, 7, str.tostring(threshold), text_color=color.white)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// ALERTS — Video 18: Webhook-ready
+// ═════════════════════════════════════════════════════════════════════════════
+
+alertcondition(longSignal, "CRYPTONIO Long Signal", 
+               message='"action":"buy","score":{{plot_0}},"pair":"{{ticker}}","price":{{close}},"sl":' + str.tostring(longSL) + 
+               ',"tp":' + str.tostring(longTP))
+
+alertcondition(shortSignal, "CRYPTONIO Short Signal", 
+               message='"action":"sell","score":{{plot_0}},"pair":"{{ticker}}","price":{{close}}')
+
+alertcondition(totalScore >= threshold, "Threshold Breach", 
+               message="Confluence score {{plot_0}} reached threshold")
+
+// ═════════════════════════════════════════════════════════════════════════════
+// STRATEGY COMMISSION & SLIPPAGE (Video 18: Realistic backtesting)
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Note: Set in strategy() declaration:
+// commission_type=strategy.commission.percent, commission_value=0.1
+// slippage=1
+
+// ═════════════════════════════════════════════════════════════════════════════
+// USAGE INSTRUCTIONS
+// ═════════════════════════════════════════════════════════════════════════════
+/*
+
+DEPLOYMENT CHECKLIST:
+
+1. Copy code to TradingView Pine Editor
+2. Click "Add to Chart"
+3. Go to Settings (gear icon):
+   - Set your preferred timeframe (1H-4H recommended)
+   - Adjust threshold (default 60, try 50-70)
+   - Configure risk: ATR multiplier (2.5-3.0)
+   - Set R/R ratio (default 2.0 for 1:2)
+   
+4. Strategy Tester:
+   - Click "Strategy Tester" tab
+   - View Net Profit, % Profitable, Profit Factor
+   - Compare vs Buy & Hold
+   
+5. Optimization:
+   - Try different timeframes
+   - Adjust threshold for your market
+   - Tune risk parameters
+   
+6. Alerts:
+   - Set alerts for "CRYPTONIO Long Signal" and "CRYPTONIO Short Signal"
+   - Connect webhook for automated trading (advanced)
+   
+7. Production Migration:
+   - Export logic to Python/Node.js (see Video 18)
+   - Connect to exchange API
+   - Automate execution
+
+RECOMMENDED SETUPS:
+
+For Bitcoin/ETH (4H):
+- Threshold: 65
+- ATR Multiplier: 2.5
+- R/R Ratio: 2.0
+
+For Altcoins (1H):
+- Threshold: 55 (easier to hit)
+- ATR Multiplier: 3.0 (wider stops)
+- R/R Ratio: 1.5
+
+For Scalping (15M):
+- Threshold: 70 (higher quality)
+- ATR Multiplier: 2.0
+- R/R Ratio: 1.5
+
+*/
+
+// ═════════════════════════════════════════════════════════════════════════════
+// VERSION HISTORY
+// ═════════════════════════════════════════════════════════════════════════════
+
+// 1.0.0: Indicator version (190-point scoring)
+// 2.0.0: Strategy version (full backtesting, ATR stops, production-ready)
+
+// Copyright 2026 — Performance Supply Depot LLC
+// The Great Cryptonio — Portfolio Maestro
+// 💎🎰

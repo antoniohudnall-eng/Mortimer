@@ -1,0 +1,349 @@
+// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Cryptonio - Performance Supply Depot LLC
+// Strategy: Confluence Scoring System with R2-D2 Integration
+// Based on: 8-year trading masterclass framework (Videos 1-3)
+// Created: 2026-03-07 06:58 UTC
+
+//@version=5
+strategy("CRYPTONIO Confluence System", 
+     overlay=true, 
+     initial_capital=1000, 
+     default_qty_type=strategy.percent_of_equity, 
+     default_qty_value=10,
+     max_lines_count=500,
+     max_labels_count=500)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// INPUT SETTINGS
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Risk Management
+risk_per_trade = input.float(2.0, "Risk Per Trade (%)", minval=0.5, maxval=10.0, step=0.5)
+use_stop_loss = input.bool(true, "Use Stop Loss")
+use_take_profit = input.bool(true, "Use Take Profit")
+
+// Confluence Threshold
+confluence_threshold = input.int(60, "Confluence Score Threshold", minval=30, maxval=100)
+min_risk_reward = input.float(1.5, "Min Risk:Reward Ratio", minval=1.0, maxval=5.0)
+
+// Pattern Detection Settings
+show_patterns = input.bool(true, "Show Candlestick Patterns")
+show_fvg = input.bool(true, "Show Fair Value Gaps")
+show_fib = input.bool(true, "Show Fibonacci Levels")
+show_sma = input.bool(true, "Show Moving Averages (20/50/200)")
+
+// Timeframe Multipliers
+higher_tf = input.timeframe("240", "Higher Timeframe (4H default)")
+
+// ═════════════════════════════════════════════════════════════════════════════
+// INDICATORS - Moving Averages
+// ═════════════════════════════════════════════════════════════════════════════
+
+// EMAs for trend direction
+ema20 = ta.ema(close, 20)
+ema50 = ta.ema(close, 50)
+ema200 = ta.ema(close, 200)
+
+// Plot EMAs
+plot(show_sma ? ema20 : na, "EMA 20", color=color.new(#00ff88, 0), linewidth=1)
+plot(show_sma ? ema50 : na, "EMA 50", color=color.new(#ffaa00, 0), linewidth=1)
+plot(show_sma ? ema200 : na, "EMA 200", color=color.new(#ff0000, 0), linewidth=2)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// CANDLESTICK PATTERN DETECTION (Video 2)
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Pattern variables
+var int pattern_score = 0
+var string pattern_name = ""
+
+// Engulfing Pattern
+bullish_engulfing = (close > open) and (close[1] < open[1]) and (close > open[1]) and (open < close[1]) and (close - open > open[1] - close[1])
+bearish_engulfing = (close < open) and (close[1] > open[1]) and (close < open[1]) and (open > close[1]) and (open - close > close[1] - open[1])
+
+// Hammer Pattern (lower wick > 2x body)
+body_size = math.abs(close - open)
+lower_wick = math.min(open, close) - low
+upper_wick = high - math.max(open, close)
+
+hammer = (lower_wick > body_size * 2) and (upper_wick < body_size * 0.5) and (body_size > 0)
+shooting_star = (upper_wick > body_size * 2) and (lower_wick < body_size * 0.5) and (body_size > 0)
+
+// Doji (very small body)
+doji = body_size < (high - low) * 0.1 and (high - low) > 0
+
+// Momentum Candle (2-3x previous candle size)
+prev_candle_size = high[1] - low[1]
+current_candle_size = high - low
+momentum_bull = (close > open) and (current_candle_size > prev_candle_size * 2) and (close - open > body_size)
+momentum_bear = (close < open) and (current_candle_size > prev_candle_size * 2) and (open - close > body_size)
+
+// Marubozu (no wicks)
+bullish_marubozu = (close > open) and (high == close) and (low == open)
+bearish_marubozu = (close < open) and (high == open) and (low == close)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// FAIR VALUE GAP DETECTION (Video 3 - Smart Money Concepts)
+// ═════════════════════════════════════════════════════════════════════════════
+
+// FVG Bullish: Current candle low > previous candle high
+gap_up = low > high[2] and low[1] > high[2]
+// FVG Bearish: Current candle high < previous candle low  
+gap_down = high < low[2] and high[1] < low[2]
+
+// FVG levels
+var float fvg_top = na
+var float fvg_bottom = na
+var int fvg_bars = 0
+
+if gap_up
+    fvg_top := high[1]
+    fvg_bottom := low
+    fvg_bars := bar_index[1]
+    
+if gap_down
+    fvg_top := high
+    fvg_bottom := low[1]
+    fvg_bars := bar_index[1]
+
+// Plot FVG
+if show_fvg and not na(fvg_top) and bar_index - fvg_bars < 50
+    box.new(bar_index - 20, fvg_top, bar_index, fvg_bottom, 
+         border_color=color.new(color.orange, 70), 
+         bgcolor=color.new(color.orange, 90))
+
+// ═════════════════════════════════════════════════════════════════════════════
+// SUPPORT/RESISTANCE DETECTION
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Swing High/Low Detection
+pivot_high_10 = ta.pivothigh(high, 10, 10)
+pivot_low_10 = ta.pivotlow(low, 10, 10)
+
+// Track S/R levels
+var float resistance_level = na
+var float support_level = na
+
+if not na(pivot_high_10)
+    resistance_level := pivot_high_10
+    
+if not na(pivot_low_10)
+    support_level := pivot_low_10
+
+// Plot S/R levels
+plot(resistance_level, "Resistance", color=color.new(color.red, 0), style=plot.style_linebr)
+plot(support_level, "Support", color=color.new(color.green, 0), style=plot.style_linebr)
+
+// Price proximity to S/R (confluence scoring)
+near_support = support_level and (close - support_level) / close < 0.02
+near_resistance = resistance_level and (resistance_level - close) / close < 0.02
+
+// ═════════════════════════════════════════════════════════════════════════════
+// FIBONACCI RETRACEMENT CALCULATION
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Swing high/low for Fibonacci
+var float swing_high = high
+var float swing_low = low
+var bool new_swing = false
+
+if high > swing_high
+    swing_high := high
+    
+if low < swing_low
+    swing_low := low
+
+// Calculate Fibonacci levels
+fib_236 = swing_high - (swing_high - swing_low) * 0.236
+fib_382 = swing_high - (swing_high - swing_low) * 0.382
+fib_500 = swing_high - (swing_high - swing_low) * 0.500
+fib_618 = swing_high - (swing_high - swing_low) * 0.618
+
+// Price near Fibonacci level
+near_fib_618 = math.abs(close - fib_618) / close < 0.015
+
+// ═════════════════════════════════════════════════════════════════════════════
+// CONFLUENCE SCORING SYSTEM (Video 3 Framework)
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Initialize score
+score = 0
+trade_signal = ""
+signal_color = color.gray
+
+// Calculate trend direction
+ema_bullish = ema20 > ema50 and close > ema20
+ema_bearish = ema20 < ema50 and close < ema20
+
+// Score Components
+// 1. Pattern at Support/Resistance (+20)
+if bullish_engulfing and near_support
+    score += 20
+    pattern_name := "Bullish Engulfing at Support"
+    
+if bearish_engulfing and near_resistance
+    score += 20
+    pattern_name := "Bearish Engulfing at Resistance"
+
+// 2. Candlestick Pattern (+15)
+if hammer and near_support
+    score += 15
+    pattern_name := "Hammer at Support"
+    
+if shooting_star and near_resistance
+    score += 15
+    pattern_name := "Shooting Star at Resistance"
+
+if bullish_marubozu and ema_bullish
+    score += 15
+    pattern_name := "Bullish Marubozu in Uptrend"
+
+if bearish_marubozu and ema_bearish
+    score += 15
+    pattern_name := "Bearish Marubozu in Downtrend"
+
+if doji and (near_support or near_resistance)
+    score += 10
+    pattern_name := "Doji at Key Level"
+
+// 3. Momentum Candle (+15)
+if momentum_bull and ema_bullish
+    score += 15
+    pattern_name := "Momentum Candle (Breakout)"
+    
+if momentum_bear and ema_bearish
+    score += 15
+    pattern_name := "Momentum Candle (Breakdown)"
+
+// 4. Fibonacci Alignment (+10)
+if near_fib_618
+    score += 10
+
+// 5. Fair Value Gap (+10)
+if gap_up and ema_bullish
+    score += 10
+    
+if gap_down and ema_bearish
+    score += 10
+
+// 6. Trend Direction (+10)
+if ema_bullish and near_support
+    score += 10
+    
+if ema_bearish and near_resistance
+    score += 10
+
+// 7. Volume Confirmation (+10)
+// (Requires volume data - add if available)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// TRADE SIGNAL LOGIC
+// ═════════════════════════════════════════════════════════════════════════════
+
+// BUY Signal
+long_condition = score >= confluence_threshold and ema_bullish and (bullish_engulfing or hammer or momentum_bull or gap_up)
+
+// SELL Signal  
+short_condition = score >= confluence_threshold and ema_bearish and (bearish_engulfing or shooting_star or momentum_bear or gap_down)
+
+// Execute trades
+if long_condition
+    strategy.entry("LONG", strategy.long, comment="Crypto Long - Score: " + str.tostring(score))
+    
+if short_condition
+    strategy.entry("SHORT", strategy.short, comment="Crypto Short - Score: " + str.tostring(score))
+
+// ═════════════════════════════════════════════════════════════════════════════
+// ALERTS & WEBHOOKS
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Webhook message format for R2-D2
+webhook_message_long = '{"symbol": "' + syminfo.ticker + '", "side": "buy", "price": ' + str.tostring(close) + ', "score": ' + str.tostring(score) + ', "pattern": "' + pattern_name + '", "timeframe": "' + timeframe.period + '", "timestamp": "' + str.tostring(timenow) + '"}'
+
+webhook_message_short = '{"symbol": "' + syminfo.ticker + '", "side": "sell", "price": ' + str.tostring(close) + ', "score": ' + str.tostring(score) + ', "pattern": "' + pattern_name + '", "timeframe": "' + timeframe.period + '", "timestamp": "' + str.tostring(timenow) + '"}'
+
+// Alert conditions
+alertcondition(long_condition, title="CRYPTONIO - BUY Signal", message=webhook_message_long)
+alertcondition(short_condition, title="CRYPTONIO - SELL Signal", message=webhook_message_short)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// VISUALIZATION
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Pattern Labels
+if show_patterns
+    // Bullish patterns
+    if bullish_engulfing
+        label.new(bar_index, low, "BE", color=color.green, textcolor=color.white, size=size.small, style=label.style_label_up)
+    if hammer
+        label.new(bar_index, low, "H", color=color.green, textcolor=color.white, size=size.small, style=label.style_label_up)
+    if bullish_marubozu
+        label.new(bar_index, low, "MZ", color=color.green, textcolor=color.white, size=size.small, style=label.style_label_up)
+    if doji
+        label.new(bar_index, high, "D", color=color.gray, textcolor=color.white, size=size.small, style=label.style_label_down)
+    
+    // Bearish patterns
+    if bearish_engulfing
+        label.new(bar_index, high, "SE", color=color.red, textcolor=color.white, size=size.small, style=label.style_label_down)
+    if shooting_star
+        label.new(bar_index, high, "SS", color=color.red, textcolor=color.white, size=size.small, style=label.style_label_down)
+    if bearish_marubozu
+        label.new(bar_index, high, "MZ", color=color.red, textcolor=color.white, size=size.small, style=label.style_label_down)
+
+// Signal Background
+bgcolor(long_condition ? color.new(color.green, 85) : short_condition ? color.new(color.red, 85) : na)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// INFO PANEL
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Table for displaying score
+table_score = table.new(position=position.top_right, columns=2, rows=6, bgcolor=color.black, border_width=1)
+
+if barstate.islast
+    table.cell(table_score, 0, 0, "CRYPTONIO v1.0", text_color=color.white, text_size=size.normal)
+    table.cell(table_score, 0, 1, "Confluence Score:", text_color=color.gray)
+    table.cell(table_score, 1, 1, str.tostring(score), text_color=score >= 60 ? color.green : color.red, text_size=size.large)
+    table.cell(table_score, 0, 2, "Pattern:", text_color=color.gray)
+    table.cell(table_score, 1, 2, pattern_name, text_color=color.white)
+    table.cell(table_score, 0, 3, "Trend:", text_color=color.gray)
+    table.cell(table_score, 1, 3, ema_bullish ? "BULLISH" : ema_bearish ? "BEARISH" : "NEUTRAL", 
+         text_color=ema_bullish ? color.green : ema_bearish ? color.red : color.gray)
+    table.cell(table_score, 0, 4, "Near S/R:", text_color=color.gray)
+    table.cell(table_score, 1, 4, near_support ? "Support" : near_resistance ? "Resistance" : "No", text_color=color.white)
+    table.cell(table_score, 0, 5, "Signal:", text_color=color.gray)
+    table.cell(table_score, 1, 5, long_condition ? "📈 LONG" : short_condition ? "📉 SHORT" : "—", 
+         text_color=long_condition ? color.green : short_condition ? color.red : color.gray, text_size=size.large)
+
+// ═════════════════════════════════════════════════════════════════════════════
+// R2-D2 INTEGRATION NOTES
+// ═════════════════════════════════════════════════════════════════════════════
+//
+// This Pine Script sends webhook alerts to R2-D2 for execution.
+// Setup:
+// 1. Create alert in TradingView
+// 2. Select webhook URL (your dusty-bridge endpoint)
+// 3. Alert triggers → POST to webhook → R2-D2 processes → Binance.US execution
+//
+// Example webhook flow:
+// TradingView → dusty-bridge:9001/webhook → R2-D2 validation → Binance.US API → Trade executed
+//
+// Confluence components tracked:
+// - Patterns: Engulfing, Hammer, Shooting Star, Marubozu, Doji, Momentum
+// - Levels: Support/Resistance, Fibonacci 0.618
+// - Trends: EMA 20/50/200 alignment
+// - Smart Money: Fair Value Gaps (FVG)
+// - Volume: (Add volume confirmation if desired)
+//
+// Score weights (from Video 3):
+// - Pattern at S/R: 20 pts
+// - Pattern detected: 15 pts
+// - Momentum candle: 15 pts
+// - Fibonacci alignment: 10 pts
+// - FVG: 10 pts
+// - Trend direction: 10 pts
+// - Volume: 10 pts (optional)
+//
+// Trade threshold: 60+ points
+//
+// ═════════════════════════════════════════════════════════════════════════════════
