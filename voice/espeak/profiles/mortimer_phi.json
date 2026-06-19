@@ -1,0 +1,11 @@
+{
+  "name": "MORTIMER_PHI",
+  "description": "Mortimer voice - Golden Ratio modulated",
+  "formula": "Speed = φ × 100, Pitch = (φ/π) × 100, Amplitude = φ × 70, Keytoning = φ × 3",
+  "phi": 1.6180339887,
+  "voice": "en-us+m3",
+  "speed": 161,
+  "pitch": 51,
+  "amplitude": 113,
+  "keytoning": 4
+}
