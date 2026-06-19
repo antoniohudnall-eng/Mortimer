@@ -1,0 +1,47 @@
+{
+  "morty": {
+    "name": "Morty",
+    "speed": 161,
+    "pitch": 51,
+    "amplitude": 113,
+    "keytoning": 4,
+    "voice_id": null,
+    "description": "Server spirit - Golden ratio modulation"
+  },
+  "victoria": {
+    "name": "Victoria", 
+    "speed": 140,
+    "pitch": 48,
+    "amplitude": 100,
+    "keytoning": 3,
+    "voice_id": null,
+    "description": "British professional"
+  },
+  "sunny": {
+    "name": "Sunny",
+    "speed": 160,
+    "pitch": 65,
+    "amplitude": 110,
+    "keytoning": 5,
+    "voice_id": null,
+    "description": "Warm American"
+  },
+  "charles": {
+    "name": "Charles",
+    "speed": 135,
+    "pitch": 45,
+    "amplitude": 120,
+    "keytoning": 2,
+    "voice_id": null,
+    "description": "Executive British"
+  },
+  "jax": {
+    "name": "Jax",
+    "speed": 170,
+    "pitch": 70,
+    "amplitude": 115,
+    "keytoning": 6,
+    "voice_id": null,
+    "description": "Gen-Z friendly"
+  }
+}

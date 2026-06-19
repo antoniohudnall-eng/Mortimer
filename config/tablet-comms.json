@@ -1,0 +1,8 @@
+{
+  "endpoint": "https://morty-tablet-comms.loca.lt",
+  "port": 9002,
+  "protocol": "http",
+  "purpose": "Tablet Mortimer communication",
+  "format": "JSON",
+  "established": "2026-06-19T13:57:00Z"
+}

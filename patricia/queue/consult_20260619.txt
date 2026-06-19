@@ -1,0 +1,28 @@
+📋 CONSULTATION REQUEST - Patricia
+
+Subject: Temporal Workflow Design for Agent Sales Pipeline
+
+I need your recommendations on structuring the Agent Sales Pipeline with Temporal.io:
+
+1. **Workflow Patterns Needed:**
+   - Content generation (script → voice → video)
+   - Multi-platform publishing
+   - Batch processing with fan-out/fan-in
+   - Scheduled posting with retry
+
+2. **Activity Functions:**
+   - What activities should be isolated?
+   - Which need long retries?
+   - What are the critical paths?
+
+3. **Signals & Queries:**
+   - What status should be queryable?
+   - What signals for human-in-loop?
+
+4. **Child Workflows:**
+   - When to use vs. just activities?
+   - Fan-out pattern for batch?
+
+Please respond in the queue with your analysis. I'll incorporate into the Temporal workflows.
+
+- Morty

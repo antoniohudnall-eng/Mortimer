@@ -1,0 +1,147 @@
+{
+  "campaign_id": "SP_20260619125845",
+  "created": "2026-06-19T12:58:45.277015",
+  "total_videos": 7,
+  "videos": [
+    {
+      "id": "TikTok_20260619125845_718",
+      "agent_tier": "clerk",
+      "voice": "adam",
+      "hook": "The best employee I ever hired doesn't need coffee breaks.",
+      "value_prop": "No more drowning in inbox. CLERK filters, prioritizes, responds.",
+      "cta": "DM me to get started today.",
+      "hashtags": [
+        "#SideHustle",
+        "#Entrepreneur",
+        "#DigitalNomad",
+        "#WorkFromHome"
+      ],
+      "duration_sec": 60,
+      "created": "2026-06-19T12:58:45.276430",
+      "narration": "The best employee I ever hired doesn't need coffee breaks. No more drowning in inbox. CLERK filters, prioritizes, responds. DM me to get started today.",
+      "estimated_duration": 10.0,
+      "scheduled_time": "2026-06-20 09:58",
+      "video_number": 1
+    },
+    {
+      "id": "TikTok_20260619125845_197",
+      "agent_tier": "greet",
+      "voice": "bella",
+      "hook": "I outsourced my entire inbox to an AI. The results are wild.",
+      "value_prop": "Never miss a lead. GREET handles your reception 24/7.",
+      "cta": "Link in bio to get your own AI team.",
+      "hashtags": [
+        "#AIAssistant",
+        "#ChatGPT",
+        "#MachineLearning",
+        "#Startup"
+      ],
+      "duration_sec": 34,
+      "created": "2026-06-19T12:58:45.276531",
+      "narration": "I outsourced my entire inbox to an AI. The results are wild. Never miss a lead. GREET handles your reception 24/7. Link in bio to get your own AI team.",
+      "estimated_duration": 12.0,
+      "scheduled_time": "2026-06-21 05:28",
+      "video_number": 2
+    },
+    {
+      "id": "TikTok_20260619125845_719",
+      "agent_tier": "personal",
+      "voice": "sarah",
+      "hook": "I built an AI team that works 24/7 for me... and I'm never going back.",
+      "value_prop": "Your personal AI manager that anticipates your needs.",
+      "cta": "Comment 'AGENT' and I'll send you the setup.",
+      "hashtags": [
+        "#AI",
+        "#ArtificialIntelligence",
+        "#Productivity",
+        "#FutureOfWork"
+      ],
+      "duration_sec": 31,
+      "created": "2026-06-19T12:58:45.276589",
+      "narration": "I built an AI team that works 24/7 for me... and I'm never going back. Your personal AI manager that anticipates your needs. Comment 'AGENT' and I'll send you the setup.",
+      "estimated_duration": 12.4,
+      "scheduled_time": "2026-06-22 01:28",
+      "video_number": 3
+    },
+    {
+      "id": "TikTok_20260619125845_204",
+      "agent_tier": "velvet",
+      "voice": "bella",
+      "hook": "Meet the agents that run my business while I sleep.",
+      "value_prop": "Executive-level assistance for growing businesses.",
+      "cta": "Drop a \ud83d\udc4b if you want part 2.",
+      "hashtags": [
+        "#AIAgents",
+        "#Automation",
+        "#Business",
+        "#Tech"
+      ],
+      "duration_sec": 33,
+      "created": "2026-06-19T12:58:45.276636",
+      "narration": "Meet the agents that run my business while I sleep. Executive-level assistance for growing businesses. Drop a \ud83d\udc4b if you want part 2.",
+      "estimated_duration": 9.2,
+      "scheduled_time": "2026-06-22 23:28",
+      "video_number": 4
+    },
+    {
+      "id": "TikTok_20260619125845_656",
+      "agent_tier": "concierge",
+      "voice": "jessica",
+      "hook": "My AI secretary handles 100+ emails daily. Here's how.",
+      "value_prop": "The concierge that never closes.",
+      "cta": "Drop a \ud83d\udc4b if you want part 2.",
+      "hashtags": [
+        "#AIAgents",
+        "#Automation",
+        "#Business",
+        "#Tech"
+      ],
+      "duration_sec": 49,
+      "created": "2026-06-19T12:58:45.276691",
+      "narration": "My AI secretary handles 100+ emails daily. Here's how. The concierge that never closes. Drop a \ud83d\udc4b if you want part 2.",
+      "estimated_duration": 8.8,
+      "scheduled_time": "2026-06-24 09:28",
+      "video_number": 5
+    },
+    {
+      "id": "TikTok_20260619125845_711",
+      "agent_tier": "executive",
+      "voice": "adam",
+      "hook": "Meet the agents that run my business while I sleep.",
+      "value_prop": "EXECUTIVE operates at C-suite level. Strategic. Pristine.",
+      "cta": "Follow for more AI agent content.",
+      "hashtags": [
+        "#AIAssistant",
+        "#ChatGPT",
+        "#MachineLearning",
+        "#Startup"
+      ],
+      "duration_sec": 50,
+      "created": "2026-06-19T12:58:45.276740",
+      "narration": "Meet the agents that run my business while I sleep. EXECUTIVE operates at C-suite level. Strategic. Pristine. Follow for more AI agent content.",
+      "estimated_duration": 9.2,
+      "scheduled_time": "2026-06-24 20:58",
+      "video_number": 6
+    },
+    {
+      "id": "TikTok_20260619125845_928",
+      "agent_tier": "clerk",
+      "voice": "adam",
+      "hook": "My AI secretary handles 100+ emails daily. Here's how.",
+      "value_prop": "CLERK handles your emails, calendars, and reminders 24/7.",
+      "cta": "Comment 'AGENT' and I'll send you the setup.",
+      "hashtags": [
+        "#AIAgents",
+        "#Automation",
+        "#Business",
+        "#Tech"
+      ],
+      "duration_sec": 54,
+      "created": "2026-06-19T12:58:45.276783",
+      "narration": "My AI secretary handles 100+ emails daily. Here's how. CLERK handles your emails, calendars, and reminders 24/7. Comment 'AGENT' and I'll send you the setup.",
+      "estimated_duration": 10.0,
+      "scheduled_time": "2026-06-26 08:43",
+      "video_number": 7
+    }
+  ]
+}
