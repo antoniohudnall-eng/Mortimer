@@ -1,0 +1,22 @@
+{
+  "id": "netprobe-gmaoc",
+  "name": "NetProbe",
+  "version": "1.0.0-OMEGA",
+  "author": "General Mortimer (GMAOC)",
+  "description": "GMAOC Tactical Command Center — Scout beacon and NetProbe control",
+  "icon": "Img/Satellite.png",
+  "orientation": "Landscape",
+  "bgColor": "#0d1117",
+  "titleColor": "#58a6ff",
+  "statusColor": "#161b22",
+  "statusBars": "dark",
+  "noScroll": false,
+  "keepScreenOn": true,
+  "fullscreen": false,
+  "perms": [
+    "Internet",
+    "Network",
+    "WakeLock",
+    "Vibrate"
+  ]
+}

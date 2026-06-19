@@ -1,0 +1,35 @@
+// Generate Satellite icon programmatically
+// Run this in DroidScript to create Img/Satellite.png
+
+// Create 128x128 canvas
+var canvas = app.CreateImage(null, 0.3, 0.3);
+
+// Clear to transparent
+canvas.Clear("#00000000");
+
+// Draw satellite (simple representation)
+var ctx = canvas.GetContext();
+
+// Satellite body (center)
+ctx.fillStyle = "#58a6ff";
+ctx.beginPath();
+ctx.arc(64, 64, 20, 0, 2 * Math.PI);
+ctx.fill();
+
+// Solar panels (left and right)
+ctx.fillStyle = "#238636";
+ctx.fillRect(15, 55, 40, 18);  // Left panel
+ctx.fillRect(73, 55, 40, 18);  // Right panel
+
+// Dish antenna
+canvas.DrawLine(64, 44, 64, 25, "#c9d1d9", 3);
+canvas.DrawCircle(64, 22, 6, "#c9d1d9", 0, "#c9d1d9");
+
+// Signal waves
+canvas.DrawArc(74, 22, 10, 220, 320, "#a371f7", 2);
+canvas.DrawArc(74, 22, 16, 220, 320, "#a371f7", 2);
+
+// Save
+canvas.Save("Img/Satellite.png");
+
+app.ShowPopup("Satellite icon created!");
