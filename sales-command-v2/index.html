@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSD Command Center v2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 { font-size: 32px; margin-bottom: 8px; }
+        .subtitle { color: #888; font-size: 14px; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .card {
+            background: #1a1a2e;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        
+        .card h2 {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .stat:last-child { border-bottom: none; }
+        .stat-label { color: #aaa; }
+        .stat-value { font-weight: 600; }
+        
+        .highlight { color: #00d4ff; font-size: 28px; font-weight: 700; }
+        .orange { color: #ff7a00; }
+        .green { color: #22c55e; }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-live { background: rgba(34,197,94,0.2); color: #22c55e; }
+        
+        .refresh-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .refresh-btn:hover { background: #00b8e6; }
+        
+        .footer {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #666;
+            font-size: 12px;
+        }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { color: #888; font-size: 11px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🏭 PSD Command Center</h1>
+            <p class="subtitle">Performance Supply Depot — Unified Dashboard v2</p>
+        </header>
+        
+        <!-- Overview -->
+        <div class="grid">
+            <div class="card">
+                <h2>💰 Revenue</h2>
+                <div class="stat">
+                    <span class="stat-label">PSD Revenue</span>
+                    <span class="stat-value highlight">$1,804,820</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Agent Sales</span>
+                    <span class="stat-value green">$1,667</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Collections</span>
+                    <span class="stat-value orange">$25,330</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>👥 Leads</h2>
+                <div class="stat">
+                    <span class="stat-label">DepotChaos CRM</span>
+                    <span class="stat-value">11,578</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">TikTok Pipeline</span>
+                    <span class="stat-value">8,920</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total</span>
+                    <span class="stat-value highlight">20,498</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>📊 Status</h2>
+                <div class="stat">
+                    <span class="stat-label">DepotChaos</span>
+                    <span class="badge badge-live">● Live</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Collections</span>
+                    <span class="badge badge-live">● Live</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Agent Sales</span>
+                    <span class="badge badge-live">● Live</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PSD Details -->
+        <div class="grid">
+            <div class="card">
+                <h2>🏭 Performance Supply Depot</h2>
+                <div class="stat">
+                    <span class="stat-label">Customers</span>
+                    <span class="stat-value">501</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Avg Monthly</span>
+                    <span class="stat-value">$3,619</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Forecast 2026</span>
+                    <span class="stat-value">$18,055</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>📦 DepotChaos CRM</h2>
+                <div class="stat">
+                    <span class="stat-label">Intelligence</span>
+                    <span class="stat-value">74,521</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">New Today</span>
+                    <span class="stat-value">409</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Conversions</span>
+                    <span class="stat-value green">3</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>💰 Collections</h2>
+                <div class="stat">
+                    <span class="stat-label">Overdue</span>
+                    <span class="stat-value orange">12</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Unpaid</span>
+                    <span class="stat-value">23</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Outstanding</span>
+                    <span class="stat-value orange">$18,954</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Agent Sales -->
+        <div class="card">
+            <h2>🤖 Agent Sales (TikTok)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Agent</th>
+                        <th>Price</th>
+                        <th>Sales</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>📋 CLERK</td><td>$97</td><td>2</td><td>$194</td></tr>
+                    <tr><td>🤝 GREET</td><td>$147</td><td>1</td><td>$147</td></tr>
+                    <tr><td>👤 PERSONAL</td><td>$197</td><td>4</td><td>$788</td></tr>
+                    <tr><td>🎩 VELVET</td><td>$247</td><td>1</td><td>$247</td></tr>
+                    <tr><td>🛎️ CONCIERGE</td><td>$297</td><td>0</td><td>$0</td></tr>
+                    <tr><td>👑 EXECUTIVE</td><td>$497</td><td>0</td><td>$0</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Top Overdue -->
+        <div class="card" style="margin-top: 24px;">
+            <h2>🚨 Top Overdue Accounts</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Invoice</th>
+                        <th>Days</th>
+                        <th>Amount</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody id="overdue-tbody">
+                    <tr><td colspan="5">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <footer class="footer">
+            <p>PSD Command Center v2 — Powered by Mortimer (SEED3)</p>
+            <p style="margin-top: 8px;">0x7244d8C20394CC11D54b2583Fb813B3EB8B72f36</p>
+        </footer>
+    </div>
+    
+    <button class="refresh-btn" onclick="loadData()">🔄 Refresh</button>
+    
+    <script>
+        async function loadCollections() {
+            try {
+                const resp = await fetch('https://psdepot.com/collections/api');
+                const text = await resp.text();
+                const data = JSON.parse(text);
+                
+                const overdue = data.invoices.filter(i => i.status === 'Overdue').slice(0, 10);
+                const tbody = document.getElementById('overdue-tbody');
+                
+                tbody.innerHTML = overdue.map(inv => 
+                    `<tr>
+                        <td>${inv.customer}</td>
+                        <td>${inv.invoice}</td>
+                        <td style="color: ${inv.days > 30 ? '#ef4444' : '#ff7a00'};">${inv.days}d</td>
+                        <td style="color: #00d4ff;">$${inv.amount.toFixed(2)}</td>
+                        <td>${inv.phone || 'N/A'}</td>
+                    </tr>`
+                ).join('');
+            } catch (e) {
+                document.getElementById('overdue-tbody').innerHTML = 
+                    '<tr><td colspan="5" style="color:#ef4444;">Failed to load: ' + e.message + '</td></tr>';
+            }
+        }
+        
+        loadCollections();
+    </script>
+</body>
+</html>
