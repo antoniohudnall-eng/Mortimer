@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEED3 COMMAND CENTER</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; overflow: hidden; }
+        #container { width: 100vw; height: 100vh; }
+        #hud { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
+        .hud-panel { position: absolute; background: rgba(0, 20, 0, 0.85); border: 2px solid #0f0; padding: 15px; pointer-events: auto; }
+        #header { top: 10px; left: 50%; transform: translateX(-50%); text-align: center; font-size: 24px; text-shadow: 0 0 10px #0f0; }
+        #stats { top: 80px; left: 10px; font-size: 14px; }
+        #threats { top: 80px; right: 10px; max-height: 75vh; overflow-y: auto; font-size: 12px; max-width: 280px; }
+        #controls { bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
+        #agent-panel { bottom: 60px; left: 10px; max-width: 200px; font-size: 11px; }
+        #schedule-panel { bottom: 60px; right: 10px; max-width: 250px; font-size: 11px; }
+        button { background: #0f0; color: #000; border: none; padding: 8px 15px; font-family: 'Courier New', monospace; font-weight: bold; cursor: pointer; }
+        button:hover { background: #0a0; box-shadow: 0 0 15px #0f0; }
+        .threat-item { padding: 5px; margin: 3px 0; border-left: 3px solid #f00; background: rgba(255,0,0,0.1); }
+        .threat-item.high { border-left-color: #f00; }
+        .threat-item.medium { border-left-color: #ff0; }
+        .agent-item { padding: 3px; margin: 2px 0; border: 1px solid #0f0; }
+        #clock { position: fixed; top: 10px; right: 10px; font-size: 18px; z-index: 101; }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <div id="hud">
+        <div id="header" class="hud-panel">🖥️ SEED3 COMMAND CENTER<br><span style="font-size:14px;">MORTY - C3 - GENERAL OF THE FORCES</span></div>
+        <div id="stats" class="hud-panel"><div>📊 PROBE STATUS</div><div>──────────────</div><div>TOTAL: <span id="total-probes">0</span></div><div>ACTIVE: <span id="active-probes">0</span></div><div>THREATS: <span id="total-threats">0</span></div><div>──────────────</div><div>🛡️ DEFENSE: ACTIVE</div><div>📡 COMMS: ONLINE</div></div>
+        <div id="threats" class="hud-panel"><div>🚨 TOP THREATS</div><div>──────────────</div><div id="threat-list"></div></div>
+        <div id="agent-panel" class="hud-panel"><div>👥 SEED3 LEADERS</div><div>──────────────</div><div class="agent-item">🛡️ QORA - CEO</div><div class="agent-item">⚙️ PATRICIA - OPS</div><div class="agent-item">📞 PULP - SALES</div><div class="agent-item">🏗️ STACKTRACE</div><div class="agent-item">🤖 C3PO - DROIDS</div><div class="agent-item">🎨 VELUM - MKT</div><div class="agent-item">💎 CRYPTONIO</div><div class="agent-item">🔮 MORTY - CMD</div></div>
+        <div id="schedule-panel" class="hud-panel"><div>📅 TODAY'S SCHEDULE</div><div>──────────────</div><div id="schedule-list"></div></div>
+        <div id="controls" class="hud-panel"><button onclick="rotateGlobe()">ROTATE</button><button onclick="stopRotation()">STOP</button><button onclick="focusThreats()">THREATS</button><button onclick="resetView()">RESET</button><button onclick="toggleLabels()">LABELS</button></div>
+    </div>
+    <div id="clock"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+const probeData = {"probes": [{"ip": "104.236.226.236", "location": "New York, US", "lat": 40.7128, "lon": -74.006, "threats": 45}, {"ip": "134.209.193.123", "location": "San Francisco, US", "lat": 37.7749, "lon": -122.4194, "threats": 23}, {"ip": "134.209.221.90", "location": "London, UK", "lat": 51.5074, "lon": -0.1278, "threats": 67}, {"ip": "137.184.25.37", "location": "Frankfurt, DE", "lat": 50.1109, "lon": 8.6821, "threats": 12}, {"ip": "137.184.43.136", "location": "Amsterdam, NL", "lat": 52.3676, "lon": 4.9041, "threats": 34}, {"ip": "138.197.102.64", "location": "Toronto, CA", "lat": 43.6532, "lon": -79.3832, "threats": 8}, {"ip": "138.197.168.7", "location": "Singapore, SG", "lat": 1.3521, "lon": 103.8198, "threats": 156}, {"ip": "138.68.173.67", "location": "Bangalore, IN", "lat": 12.9716, "lon": 77.5946, "threats": 89}, {"ip": "138.68.179.165", "location": "Sydney, AU", "lat": -33.8688, "lon": 151.2093, "threats": 21}, {"ip": "138.68.183.56", "location": "Tokyo, JP", "lat": 35.6762, "lon": 139.6503, "threats": 44}, {"ip": "142.93.167.120", "location": "Seoul, KR", "lat": 37.5665, "lon": 126.978, "threats": 27}, {"ip": "142.93.177.162", "location": "Paris, FR", "lat": 48.8566, "lon": 2.3522, "threats": 15}, {"ip": "142.93.35.35", "location": "Chicago, US", "lat": 41.8781, "lon": -87.6298, "threats": 52}, {"ip": "143.110.222.3", "location": "Dallas, US", "lat": 32.7767, "lon": -96.797, "threats": 19}, {"ip": "143.198.8.121", "location": "Miami, US", "lat": 25.7617, "lon": -80.1918, "threats": 33}, {"ip": "152.42.201.153", "location": "Seattle, US", "lat": 47.6062, "lon": -122.3321, "threats": 11}, {"ip": "157.230.216.250", "location": "Los Angeles, US", "lat": 34.0522, "lon": -118.2437, "threats": 28}, {"ip": "157.230.3.195", "location": "Mumbai, IN", "lat": 19.076, "lon": 72.8777, "threats": 71}, {"ip": "157.245.145.241", "location": "Dubai, UAE", "lat": 25.2048, "lon": 55.2708, "threats": 41}, {"ip": "159.203.139.3", "location": "S\u00e3o Paulo, BR", "lat": -23.5505, "lon": -46.6333, "threats": 16}, {"ip": "159.223.157.83", "location": "Johannesburg, ZA", "lat": -26.2041, "lon": 28.0473, "threats": 9}, {"ip": "159.65.172.31", "location": "Toronto, CA", "lat": 43.651, "lon": -79.3832, "threats": 23}, {"ip": "161.35.83.170", "location": "Mexico City, MX", "lat": 19.4326, "lon": -99.1332, "threats": 14}, {"ip": "162.243.27.167", "location": "Boston, US", "lat": 42.3601, "lon": -71.0589, "threats": 37}, {"ip": "162.243.74.50", "location": "Atlanta, US", "lat": 33.749, "lon": -84.388, "threats": 25}, {"ip": "164.92.133.4", "location": "Phoenix, US", "lat": 33.4484, "lon": -112.074, "threats": 18}, {"ip": "164.92.142.205", "location": "Denver, US", "lat": 39.7392, "lon": -104.9903, "threats": 31}, {"ip": "165.22.237.1", "location": "Berlin, DE", "lat": 52.52, "lon": 13.405, "threats": 22}, {"ip": "165.227.215.136", "location": "Stockholm, SE", "lat": 59.3293, "lon": 18.0686, "threats": 7}, {"ip": "165.227.72.35", "location": "Vienna, AT", "lat": 48.2082, "lon": 16.3738, "threats": 13}, {"ip": "165.245.143.157", "location": "Warsaw, PL", "lat": 52.2297, "lon": 21.0122, "threats": 19}, {"ip": "165.245.177.151", "location": "Prague, CZ", "lat": 50.0755, "lon": 14.4378, "threats": 8}, {"ip": "167.71.201.8", "location": "Zurich, CH", "lat": 47.3769, "lon": 8.5417, "threats": 11}, {"ip": "167.71.46.254", "location": "Helsinki, FI", "lat": 60.1699, "lon": 24.9384, "threats": 6}, {"ip": "170.64.137.250", "location": "Melbourne, AU", "lat": -37.8136, "lon": 144.9631, "threats": 17}, {"ip": "170.64.144.29", "location": "Jakarta, ID", "lat": -6.2088, "lon": 106.8456, "threats": 43}, {"ip": "170.64.151.26", "location": "Bangkok, TH", "lat": 13.7563, "lon": 100.5018, "threats": 29}, {"ip": "170.64.155.44", "location": "Kuala Lumpur, MY", "lat": 3.139, "lon": 101.6869, "threats": 24}, {"ip": "170.64.213.42", "location": "Hong Kong, HK", "lat": 22.3193, "lon": 114.1694, "threats": 62}, {"ip": "170.64.218.126", "location": "Taipei, TW", "lat": 25.033, "lon": 121.5654, "threats": 35}, {"ip": "170.64.228.51", "location": "Manila, PH", "lat": 14.5995, "lon": 120.9842, "threats": 38}, {"ip": "172.214.44.5", "location": "Tel Aviv, IL", "lat": 32.0853, "lon": 34.7818, "threats": 21}, {"ip": "174.138.93.146", "location": "Lisbon, PT", "lat": 38.7223, "lon": -9.1393, "threats": 12}, {"ip": "178.128.106.202", "location": "Madrid, ES", "lat": 40.4168, "lon": -3.7038, "threats": 18}, {"ip": "178.128.252.245", "location": "Rome, IT", "lat": 41.9028, "lon": 12.4964, "threats": 15}, {"ip": "178.62.211.65", "location": "Moscow, RU", "lat": 55.7558, "lon": 37.6173, "threats": 94}, {"ip": "178.62.233.87", "location": "Singapore, SG", "lat": 1.3521, "lon": 103.8198, "threats": 302}, {"ip": "188.166.75.35", "location": "Jakarta, ID", "lat": -6.1751, "lon": 106.865, "threats": 47}, {"ip": "206.189.136.233", "location": "Lagos, NG", "lat": 6.5244, "lon": 3.3792, "threats": 8}, {"ip": "207.154.248.17", "location": "Cairo, EG", "lat": 30.0444, "lon": 31.2357, "threats": 19}, {"ip": "4.210.177.136", "location": "Paris, FR", "lat": 48.8566, "lon": 2.3522, "threats": 26}, {"ip": "52.154.132.165", "location": "Houston, US", "lat": 29.7604, "lon": -95.3698, "threats": 33}, {"ip": "52.159.247.161", "location": "Detroit, US", "lat": 42.3314, "lon": -83.0458, "threats": 21}, {"ip": "64.225.17.163", "location": "Portland, US", "lat": 45.5152, "lon": -122.6784, "threats": 14}, {"ip": "64.227.186.99", "location": "Minneapolis, US", "lat": 44.9778, "lon": -93.265, "threats": 27}]};
+    </script>
+    <script>
+        let scene, camera, renderer, globe, probes = [], labels = [], isRotating = true, showLabels = true;
+        
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000510);
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 3;
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('container').appendChild(renderer.domElement);
+            
+            scene.add(new THREE.AmbientLight(0x404040, 0.5));
+            const dir = new THREE.DirectionalLight(0xffffff, 1);
+            dir.position.set(5, 3, 5);
+            scene.add(dir);
+            
+            createEarth();
+            createStars();
+            createProbes();
+            updateHUD();
+            updateSchedule();
+            updateClock();
+            setInterval(() => { updateClock(); updateSchedule(); }, 1000);
+            animate();
+        }
+        
+        function createEarth() {
+            const geo = new THREE.SphereGeometry(1, 64, 64);
+            const canvas = document.createElement('canvas');
+            canvas.width = 2048; canvas.height = 1024;
+            const ctx = canvas.getContext('2d');
+            const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            g.addColorStop(0, '#001030'); g.addColorStop(0.5, '#001850'); g.addColorStop(1, '#001030');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)';
+            for(let i=0; i<=20; i++) { ctx.beginPath(); ctx.moveTo(0, i/20*canvas.height); ctx.lineTo(canvas.width, i/20*canvas.height); ctx.stroke(); }
+            for(let i=0; i<=40; i++) { ctx.beginPath(); ctx.moveTo(i/40*canvas.width, 0); ctx.lineTo(i/40*canvas.width, canvas.height); ctx.stroke(); }
+            ctx.fillStyle = 'rgba(0, 100, 50, 0.3)';
+            ctx.beginPath(); ctx.ellipse(400, 300, 200, 150, 0, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(600, 600, 100, 180, 0.3, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(1100, 400, 150, 200, 0, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(1500, 350, 300, 200, 0, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(1700, 650, 100, 80, 0, 0, Math.PI*2); ctx.fill();
+            
+            globe = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true, opacity: 0.9 }));
+            scene.add(globe);
+            
+            const atmoGeo = new THREE.SphereGeometry(1.02, 64, 64);
+            const atmo = new THREE.Mesh(atmoGeo, new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.1, side: THREE.BackSide }));
+            scene.add(atmo);
+        }
+        
+        function createStars() {
+            const geo = new THREE.BufferGeometry();
+            const verts = [];
+            for(let i=0; i<5000; i++) { verts.push((Math.random()-0.5)*100, (Math.random()-0.5)*100, (Math.random()-0.5)*100); }
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+            scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 })));
+        }
+        
+        function latLonToVec(lat, lon, r) {
+            const phi = (90-lat)*(Math.PI/180), theta = (lon+180)*(Math.PI/180);
+            return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+        }
+        
+        function createProbes() {
+            [...probeData.probes].sort((a,b)=>b.threats-a.threats).forEach(probe => {
+                const pos = latLonToVec(probe.lat, probe.lon, 1.01);
+                const size = Math.min(0.05 + probe.threats/3000, 0.15);
+                const color = probe.threats>100 ? 0xff0000 : probe.threats>50 ? 0xffff00 : 0x00ff00;
+                const marker = new THREE.Mesh(new THREE.SphereGeometry(size, 16, 16), new THREE.MeshBasicMaterial({ color }));
+                marker.position.copy(pos); marker.userData = probe;
+                marker.add(new THREE.Mesh(new THREE.SphereGeometry(size*2, 16, 16), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.3 })));
+                
+                const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), pos.clone().multiplyScalar(0.95)]), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.5 }));
+                scene.add(line);
+                scene.add(marker);
+                probes.push(marker);
+                if(showLabels) createLabel(probe, pos);
+            });
+        }
+        
+        function createLabel(probe, pos) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(0,0,0,0.8)'; ctx.fillRect(0,0,256,64);
+            ctx.strokeStyle = probe.threats>100?'#ff0000':'#00ff00'; ctx.lineWidth=2; ctx.strokeRect(0,0,256,64);
+            ctx.fillStyle='#fff'; ctx.font='bold 14px Courier New'; ctx.fillText(probe.ip.substring(0,15), 10, 25);
+            ctx.fillStyle='#0f0'; ctx.font='12px Courier New'; ctx.fillText(probe.location.substring(0,20), 10, 45);
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true }));
+            sprite.position.copy(pos.clone().multiplyScalar(1.15));
+            sprite.scale.set(0.3, 0.075, 1);
+            scene.add(sprite);
+            labels.push(sprite);
+        }
+        
+        function updateHUD() {
+            document.getElementById('total-probes').textContent = probeData.probes.length;
+            document.getElementById('active-probes').textContent = probeData.probes.length;
+            document.getElementById('total-threats').textContent = probeData.probes.reduce((a,b)=>a+b.threats,0);
+            document.getElementById('threat-list').innerHTML = [...probeData.probes].sort((a,b)=>b.threats-a.threats).slice(0,10).map(t=>`<div class="threat-item ${t.threats>100?'high':'medium'}">${t.ip}<br>${t.location}<br>Attempts: ${t.threats}</div>`).join('');
+        }
+        
+        function updateSchedule() {
+            const h = new Date().getHours();
+            const schedule = [
+                { h: 6, task: '🌅 Wake checks - All systems' },
+                { h: 7, task: '📊 Morning brief - Patricia' },
+                { h: 8, task: '📞 Sales push - PULP' },
+                { h: 9, task: '💼 Client outreach' },
+                { h: 10, task: '🔧 Tech sync - STACKTRACE' },
+                { h: 11, task: '🎨 Content push - VELUM' },
+                { h: 12, task: '📈 Midday review' },
+                { h: 13, task: '💎 Crypto check - CRYPTONIO' },
+                { h: 14, task: '🛡️ Security scan - C3PO' },
+                { h: 15, task: '📞 Follow-ups - JANE' },
+                { h: 16, task: '🎮 Game dev - NOG' },
+                { h: 17, task: '📊 End day prep' },
+                { h: 18, task: '🛡️ Night watch - R2D2' },
+                { h: 22, task: '💤 Standby mode' }
+            ];
+            const current = schedule.find(s => h >= s.h) || schedule[0];
+            document.getElementById('schedule-list').innerHTML = schedule.slice(0,6).map(s => `<div style="opacity:${s.h<=h?'1':'0.4'}">${s.h}:00 - ${s.task}</div>`).join('');
+        }
+        
+        function updateClock() { document.getElementById('clock').textContent = new Date().toLocaleString('en-US',{hour12:false}); }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            if(isRotating) { globe.rotation.y += 0.001; }
+            renderer.render(scene, camera);
+        }
+        
+        function rotateGlobe() { isRotating = true; }
+        function stopRotation() { isRotating = false; }
+        function focusThreats() { camera.position.set(2, 1, 2); }
+        function resetView() { camera.position.set(0, 0, 3); isRotating = true; }
+        function toggleLabels() { showLabels = !showLabels; labels.forEach(l=>l.visible=showLabels); }
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+        init();
+    </script>
+</body>
+</html>

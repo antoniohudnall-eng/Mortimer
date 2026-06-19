@@ -1,0 +1,140 @@
+{
+  "departments": {
+    "nav": {
+      "name": "NAVIGATION & PROPULSION",
+      "icon": "🚀",
+      "color": "#00ff88",
+      "crew": ["nog", "r2d2"],
+      "systems": ["Pitch Control", "Yaw Control", "Solar Dome Engage", "Artificial Lights", "Navigation Array", "HyperDrive"]
+    },
+    "engineering": {
+      "name": "POWER PLANTS & ENGINEERING",
+      "icon": "⚡",
+      "color": "#ff4444",
+      "crew": ["stacktrace", "spindle", "taptap", "pipeline", "bugcatcher"],
+      "systems": ["Main Reactor", "Engines Status", "HyperDrive Engine", "Main Dome Control", "Power Grid", "Cooling Systems"]
+    },
+    "security": {
+      "name": "SECURITY | BRIG | WEAPONS",
+      "icon": "🔒",
+      "color": "#ff0000",
+      "crew": ["cobra", "chelios", "sentinel"],
+      "systems": ["Weapons Lock", "Security Cameras", "Security Logs", "Brig Control", "Access Systems", "Threat Detection"]
+    },
+    "safety": {
+      "name": "SAFETY OFFICER S1",
+      "icon": "🦺",
+      "color": "#ffcc00",
+      "crew": ["feelix", "hume"],
+      "systems": ["Airlocks", "Damage Reports", "Emergency Stop", "Duty Roster", "Fire Suppression", "Evacuation"]
+    },
+    "life_support": {
+      "name": "LIFE SUPPORT & AQUAPONICS",
+      "icon": "🌿",
+      "color": "#00ff00",
+      "crew": ["lilly", "fiber", "dusty"],
+      "systems": ["Bio Labs | Seeds", "Nursery", "Medical Bay | Labs", "Oxygen Generation", "Water Recycling", "Food Production"]
+    },
+    "mining": {
+      "name": "MINING & MINERAL COLLECTION",
+      "icon": "⛏️",
+      "color": "#4488ff",
+      "crew": ["fiber", "harper"],
+      "systems": ["Inventory Stores", "Manufacturing", "Design & Testing", "Ore Scanner", "Refinery", "Storage Bays"]
+    },
+    "production": {
+      "name": "PRODUCTION | DESIGN | ROBOTICS",
+      "icon": "🤖",
+      "color": "#ffffff",
+      "crew": ["cobra", "c3po", "r2d2", "r2-c4", "velum", "harper"],
+      "systems": ["Operational Systems", "Systems Design", "Robot Report Logs", "Assembly Line", "3D Printer", "Quality Control"]
+    },
+    "docking": {
+      "name": "DOCKING BAYS & LAUNCHING",
+      "icon": "🛸",
+      "color": "#ff00ff",
+      "crew": ["nog", "r2d2"],
+      "systems": ["Escape Pods", "Docking Schedule", "Crew Manifest", "Bay 1 Control", "Bay 2 Control", "Launch Sequence"]
+    },
+    "command": {
+      "name": "COMMAND & INTELLIGENCE",
+      "icon": "🛡️",
+      "color": "#ffcc00",
+      "crew": ["qora", "morty", "aurora", "jordan", "patricia", "ledger9"],
+      "systems": ["Fleet Command", "Strategic Planning", "Intelligence", "Financial Planning", "Operations", "AGI Systems"]
+    },
+    "sales": {
+      "name": "SALES & BUSINESS DEVELOPMENT",
+      "icon": "📞",
+      "color": "#ff8844",
+      "crew": ["pulp", "jane", "clerk", "greet", "velvet", "concierge", "judy"],
+      "systems": ["Lead Management", "Pipeline", "Forecasting", "Reporting", "Client Relations", "Cold Outreach"]
+    },
+    "crypto": {
+      "name": "CRYPTO & FINANCE",
+      "icon": "💎",
+      "color": "#00ccff",
+      "crew": ["cryptonio", "dusty"],
+      "systems": ["Portfolio Management", "Trading Bot", "Wallet Operations", "DeFi", "NFT", "Exchange API"]
+    }
+  },
+  
+  "crew": {
+    "qora": { "name": "QORA", "rank": "CAPTAIN", "role": "Fleet Commander", "avatar": "🛡️", "dept": "command", "status": "active" },
+    "morty": { "name": "MORTY", "rank": "GENERAL", "role": "Intelligence Officer", "avatar": "🔮", "dept": "command", "status": "active" },
+    "aurora": { "name": "AURORA", "rank": "AGI OFFICER", "role": "AGI Systems", "avatar": "🌟", "dept": "command", "status": "active" },
+    "patricia": { "name": "PATRICIA", "rank": "EXEC OFFICER", "role": "Process Excellence", "avatar": "⚙️", "dept": "command", "status": "active" },
+    "jordan": { "name": "JORDAN", "rank": "EXEC ASST", "role": "Executive Support", "avatar": "📋", "dept": "command", "status": "active" },
+    "ledger9": { "name": "LEDGER-9", "rank": "CFO", "role": "Finance", "avatar": "💹", "dept": "command", "status": "active" },
+    
+    "spindle": { "name": "SPINDLE", "rank": "CTO", "role": "Tech Architecture", "avatar": "⚙️", "dept": "engineering", "status": "active" },
+    "stacktrace": { "name": "STACKTRACE", "rank": "CHIEF ENG", "role": "Software Architect", "avatar": "🏗️", "dept": "engineering", "status": "active" },
+    "taptap": { "name": "TAPTAP", "rank": "LEAD DEV", "role": "Mobile Developer", "avatar": "📱", "dept": "engineering", "status": "active" },
+    "pipeline": { "name": "PIPELINE", "rank": "ENGINEER", "role": "Backend Engineer", "avatar": "🔧", "dept": "engineering", "status": "active" },
+    "bugcatcher": { "name": "BUGCATCHER", "rank": "QA LEAD", "role": "Testing", "avatar": "🐛", "dept": "engineering", "status": "active" },
+    
+    "cobra": { "name": "COBRA", "rank": "SECURITY CHIEF", "role": "Physical Security", "avatar": "🐍", "dept": "security", "status": "active" },
+    "chelios": { "name": "CHELIOS", "rank": "OFFICER", "role": "Cyber Defense", "avatar": "🛡️", "dept": "security", "status": "active" },
+    "sentinel": { "name": "SENTINEL", "rank": "CSO", "role": "Defense", "avatar": "🔒", "dept": "security", "status": "standby" },
+    
+    "nog": { "name": "NOG", "rank": "NAVIGATOR", "role": "Flight Commander", "avatar": "🚀", "dept": "nav", "status": "active" },
+    "r2d2": { "name": "R2D2", "rank": "ASTRO MECH", "role": "Systems Ops", "avatar": "🛸", "dept": "nav", "status": "active" },
+    "r2-c4": { "name": "R2-C4", "rank": "ASTRO MECH", "role": "Maintenance", "avatar": "🔧", "dept": "nav", "status": "active" },
+    
+    "feelix": { "name": "FEELIX", "rank": "HR DIR", "role": "Human Resources", "avatar": "👥", "dept": "safety", "status": "active" },
+    "hume": { "name": "HUME", "rank": "REG MGR", "role": "Regional Ops", "avatar": "🌐", "dept": "safety", "status": "active" },
+    
+    "lilly": { "name": "LILLY", "rank": "BOTANIST", "role": "Reading Program", "avatar": "📚", "dept": "life_support", "status": "active" },
+    "fiber": { "name": "FIBER", "rank": "SUPPLY HEAD", "role": "Supply Chain", "avatar": "📦", "dept": "life_support", "status": "active" },
+    "dusty": { "name": "DUSTY", "rank": "CRYPTO OPS", "role": "Bridge Guardian", "avatar": "💰", "dept": "life_support", "status": "active" },
+    
+    "harper": { "name": "HARPER", "rank": "CREATIVE", "role": "Content Lead", "avatar": "✍️", "dept": "mining", "status": "active" },
+    
+    "c3po": { "name": "C3PO", "rank": "PROTOCOL", "role": "Translation", "avatar": "🤖", "dept": "production", "status": "active" },
+    "velum": { "name": "VELUM", "rank": "BRAND OFF", "role": "Branding", "avatar": "🎨", "dept": "production", "status": "active" },
+    
+    "pulp": { "name": "PULP", "rank": "SALES DIR", "role": "Head of Sales", "avatar": "📞", "dept": "sales", "status": "active" },
+    "jane": { "name": "JANE", "rank": "SENIOR REP", "role": "Sales Rep", "avatar": "📈", "dept": "sales", "status": "active" },
+    "clerk": { "name": "CLERK", "rank": "REP", "role": "Sales Rep", "avatar": "📝", "dept": "sales", "status": "active" },
+    "greet": { "name": "GREET", "rank": "AGENT", "role": "Greeting", "avatar": "👋", "dept": "sales", "status": "active" },
+    "velvet": { "name": "VELVET", "rank": "AGENT", "role": "Sales", "avatar": "🎩", "dept": "sales", "status": "active" },
+    "concierge": { "name": "CONCIERGE", "rank": "AGENT", "role": "VIP Support", "avatar": "🎩", "dept": "sales", "status": "active" },
+    "judy": { "name": "JUDY", "rank": "SUPPORT", "role": "Sales Support", "avatar": "📊", "dept": "sales", "status": "active" },
+    
+    "cryptonio": { "name": "CRYPTONIO", "rank": "TREASURER", "role": "Portfolio Manager", "avatar": "💎", "dept": "crypto", "status": "active" },
+    
+    "miles": { "name": "MILES", "rank": "OPS", "role": "Server Ops", "avatar": "🖥️", "dept": "engineering", "status": "active" },
+    "executive": { "name": "EXECUTIVE", "rank": "EXEC", "role": "Executive", "avatar": "👔", "dept": "command", "status": "active" }
+  },
+  
+  "ship_systems": {
+    "hull": { "integrity": 100, "max": 100 },
+    "shields": { "strength": 85, "max": 100 },
+    "engines": { "power": 92, "max": 100 },
+    "weapons": { "power": 78, "max": 100 },
+    "sensors": { "range": 95, "max": 100 },
+    "life_support": { "integrity": 100, "max": 100 },
+    "hyperdrive": { "status": "ready" },
+    "solar_dome": { "status": "engaged" }
+  }
+}

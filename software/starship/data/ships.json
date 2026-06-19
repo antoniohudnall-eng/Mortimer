@@ -1,0 +1,40 @@
+{
+  "ships": {
+    "seed1": {
+      "name": "SEED1",
+      "class": "Pathfinder-Class",
+      "status": "active",
+      "captain": "MILES",
+      "crew_size": 1,
+      "systems": {
+        "hull": { "integrity": 100, "max": 100 },
+        "shields": { "strength": 50, "max": 50 },
+        "engines": { "power": 80, "max": 100 },
+        "weapons": { "power": 60, "max": 100 },
+        "sensors": { "range": 75, "max": 100 },
+        "life_support": { "integrity": 100, "max": 100 }
+      },
+      "cargo": { "capacity": 500, "used": 120 },
+      "fuel": { "current": 800, "max": 1000 },
+      "credits": 15000
+    },
+    "seed3": {
+      "name": "SEED3",
+      "class": "Fleet-Command-Class",
+      "status": "construction",
+      "captain": "MORTY",
+      "crew_size": 0,
+      "systems": {
+        "hull": { "integrity": 100, "max": 100 },
+        "shields": { "strength": 100, "max": 100 },
+        "engines": { "power": 100, "max": 100 },
+        "weapons": { "power": 100, "max": 100 },
+        "sensors": { "range": 100, "max": 100 },
+        "life_support": { "integrity": 100, "max": 100 }
+      },
+      "cargo": { "capacity": 2000, "used": 0 },
+      "fuel": { "current": 1000, "max": 1000 },
+      "credits": 0
+    }
+  }
+}

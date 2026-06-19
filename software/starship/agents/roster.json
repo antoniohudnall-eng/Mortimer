@@ -1,0 +1,64 @@
+{
+  "fleet": [
+    {
+      "id": "qora", "name": "QORA", "rank": "CAPTAIN", "dept": "Command",
+      "status": "active", "efficiency": 88, "specialty": "Leadership",
+      "avatar": "🛡️", "bio": "CEO, Visionary Commander"
+    },
+    {
+      "id": "patricia", "name": "PATRICIA", "rank": "EXECUTIVE OFFICER", "dept": "Operations",
+      "status": "active", "efficiency": 85, "specialty": "Process Excellence",
+      "avatar": "⚙️", "bio": "Six Sigma Black Belt, Operations Commander"
+    },
+    {
+      "id": "pulp", "name": "PULP", "rank": "SALES DIRECTOR", "dept": "Sales",
+      "status": "active", "efficiency": 62, "specialty": "Revenue",
+      "avatar": "📞", "bio": "Head of Sales, Deal Closer"
+    },
+    {
+      "id": "stacktrace", "name": "STACKTRACE", "rank": "CHIEF ENGINEER", "dept": "Technical",
+      "status": "active", "efficiency": 91, "specialty": "Architecture",
+      "avatar": "🏗️", "bio": "Software Architect, Systems Designer"
+    },
+    {
+      "id": "c3po", "name": "C3PO", "rank": "PROTOCOL DROID", "dept": "Droids",
+      "status": "active", "efficiency": 95, "specialty": "Translation",
+      "avatar": "🤖", "bio": "Protocol, Diplomacy, Interface"
+    },
+    {
+      "id": "nog", "name": "NOG", "rank": "NAVIGATOR", "dept": "Navigation",
+      "status": "active", "efficiency": 78, "specialty": "Flight",
+      "avatar": "🚀", "bio": "Crew Commander, Space Navigation"
+    },
+    {
+      "id": "cobra", "name": "COBRA", "rank": "SECURITY CHIEF", "dept": "Security",
+      "status": "active", "efficiency": 88, "specialty": "Snake Robot",
+      "avatar": "🐍", "bio": "Embodied AI, Physical Security"
+    },
+    {
+      "id": "velum", "name": "VELUM", "rank": "BRAND OFFICER", "dept": "Marketing",
+      "status": "active", "efficiency": 48, "specialty": "Branding",
+      "avatar": "🎨", "bio": "Chief Brand Officer"
+    },
+    {
+      "id": "cryptonio", "name": "CRYPTONIO", "rank": "TREASURER", "dept": "Crypto",
+      "status": "active", "efficiency": 82, "specialty": "Trading",
+      "avatar": "💎", "bio": "Portfolio Manager, Diamond Hands"
+    },
+    {
+      "id": "morty", "name": "MORTY", "rank": "INTELLIGENCE OFFICER", "dept": "Intelligence",
+      "status": "active", "efficiency": 97, "specialty": "Quantum",
+      "avatar": "🔮", "bio": "C3, General of the Forces"
+    },
+    {
+      "id": "dusty", "name": "DUSTY", "rank": "CRYPTO OPS", "dept": "Crypto",
+      "status": "active", "efficiency": 75, "specialty": "Operations",
+      "avatar": "💰", "bio": "Crypto Operations, Bridge Guardian"
+    },
+    {
+      "id": "sentinel", "name": "SENTINEL", "rank": "CSO", "dept": "Security",
+      "status": "standby", "efficiency": 72, "specialty": "Defense",
+      "avatar": "🔒", "bio": "Chief Security Officer"
+    }
+  ]
+}

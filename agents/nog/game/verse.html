@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 NOG VERSE - Browser Edition</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; overflow: hidden; }
+        
+        .container { display: flex; height: 100vh; }
+        
+        /* Galaxy Map */
+        .galaxy-map {
+            flex: 1;
+            position: relative;
+        }
+        canvas { display: block; }
+        
+        /* Side Panel */
+        .panel {
+            width: 350px;
+            background: rgba(0,20,0,0.9);
+            border-left: 2px solid #0f0;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .panel h2 {
+            color: #0ff;
+            border-bottom: 1px solid #0f0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .panel h3 {
+            color: #ff0;
+            margin: 15px 0 10px;
+        }
+        
+        .info-box {
+            background: rgba(0,50,0,0.5);
+            border: 1px solid #0a0;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        
+        .info-box span { color: #0ff; }
+        
+        .star-info {
+            background: rgba(0,100,100,0.3);
+            border: 1px solid #0ff;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .planet-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .planet-item {
+            background: rgba(0,50,50,0.5);
+            padding: 8px;
+            margin: 5px 0;
+            border-left: 3px solid #0ff;
+            cursor: pointer;
+        }
+        
+        .planet-item:hover { background: rgba(0,100,100,0.5); }
+        
+        .planet-item.colonized { border-color: #ff0; }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: rgba(0,100,0,0.7);
+            border: 2px solid #0f0;
+            color: #0f0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn:hover { background: #0f0; color: #000; }
+        
+        .btn-danger { border-color: #f00; color: #f00; }
+        .btn-danger:hover { background: #f00; color: #fff; }
+        
+        .btn-primary { border-color: #0ff; color: #0ff; }
+        .btn-primary:hover { background: #0ff; color: #000; }
+        
+        /* Universe Type Banner */
+        .universe-banner {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            border: 2px solid #f0f;
+            padding: 10px 30px;
+            font-size: 18px;
+            color: #f0f;
+            z-index: 100;
+        }
+        
+        /* Coordinates */
+        .coords {
+            position: fixed;
+            top: 60px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid #0f0;
+            padding: 10px;
+            font-size: 14px;
+            z-index: 100;
+        }
+        
+        /* Black Hole Warning */
+        .blackhole-warning {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.95);
+            border: 3px solid #f00;
+            padding: 30px;
+            text-align: center;
+            z-index: 200;
+            display: none;
+        }
+        
+        .blackhole-warning h2 { color: #f00; font-size: 24px; }
+        .blackhole-warning p { margin: 15px 0; color: #ff0; }
+        
+        /* Race Selection */
+        .race-select {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin: 10px 0;
+        }
+        
+        .race-btn {
+            padding: 8px;
+            background: rgba(0,50,0,0.5);
+            border: 1px solid #0a0;
+            color: #0f0;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        .race-btn:hover, .race-btn.selected {
+            background: #0f0;
+            color: #000;
+        }
+        
+        /* Class Selection */
+        .class-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+        }
+        
+        .class-btn {
+            padding: 5px;
+            background: rgba(0,30,0,0.5);
+            border: 1px solid #030;
+            color: #0f0;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        .class-btn:hover { background: #030; }
+    </style>
+</head>
+<body>
+    <div class="universe-banner" id="universeType">🌌 INFINITE UNIVERSE</div>
+    
+    <div class="coords" id="coords">
+        📍 POSITION<br>
+        X: <span id="coordX">50</span><br>
+        Y: <span id="coordY">50</span><br>
+        Z: <span id="coordZ">1</span>
+    </div>
+    
+    <div class="container">
+        <div class="galaxy-map">
+            <canvas id="galaxy"></canvas>
+        </div>
+        
+        <div class="panel" id="panel">
+            <h2>🌌 NOG VERSE</h2>
+            
+            <div class="info-box">
+                <b>VERSE TYPE:</b> <span id="verseType">Infinite</span><br>
+                <b>SEED:</b> <span id="verseSeed">0</span><br>
+                <b>GRID:</b> <span>100 × 100 × 3</span>
+            </div>
+            
+            <h3>👽 SELECT RACE</h3>
+            <div class="race-select" id="raceSelect"></div>
+            
+            <h3>⚔️ SELECT CLASS</h3>
+            <div class="class-list" id="classSelect"></div>
+            
+            <h3>📍 CURRENT STAR</h3>
+            <div class="star-info" id="starInfo">
+                Click a star to explore
+            </div>
+            
+            <h3>🕳️ BLACK HOLES</h3>
+            <div class="info-box" id="blackHoles">
+                Scanning...
+            </div>
+            
+            <h3>🎒 INVENTORY</h3>
+            <div class="info-box" id="inventory">
+                Credits: <span id="credits">100</span><br>
+                AEP: <span id="aep">0</span><br>
+                Artifacts: <span id="artifacts">0</span>
+            </div>
+            
+            <h3>📊 STATS</h3>
+            <div class="info-box" id="stats">
+                Kills: <span id="kills">0</span><br>
+                Planets Colonized: <span id="colonized">0</span><br>
+                Rank: <span id="rank">Novice</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="zoomIn()">🔍+</button>
+        <button class="btn" onclick="zoomOut()">🔍-</button>
+        <button class="btn" onclick="changeLayer()">📊 LAYER</button>
+        <button class="btn btn-danger" onclick="enterWarp()">🕳️ WARP</button>
+        <button class="btn btn-primary" onclick="colonize()">🏴 COLONIZE</button>
+    </div>
+    
+    <div class="blackhole-warning" id="blackholeWarning">
+        <h2>⚠️ SINGULARITY DETECTED</h2>
+        <p id="blackholeInfo">Entering black hole...</p>
+        <p id="blackholeDest">Destination: Unknown</p>
+        <button class="btn btn-danger" onclick="confirmWarp()">ENTER</button>
+        <button class="btn" onclick="cancelWarp()">CANCEL</button>
+    </div>
+    
+    <script src="js/verse/Verse.js"></script>
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('galaxy');
+        const ctx = canvas.getContext('2d');
+        let W, H;
+        
+        function resize() {
+            const panel = document.querySelector('.panel');
+            W = canvas.width = window.innerWidth - panel.offsetWidth;
+            H = canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+        
+        // Game state
+        const state = {
+            verse: null,
+            player: {
+                x: 50, y: 50, z: 1,
+                race: 'HUMAN',
+                class: 'Space Marine',
+                credits: 100,
+                aep: 0,
+                artifacts: 0,
+                kills: 0,
+                colonized: 0,
+                rank: 'Novice',
+                killsToRank: [0, 25, 50, 100, 200, 400, 800, 1600, 3200, 6400]
+            },
+            currentStar: null,
+            zoom: 1,
+            hoveredStar: null
+        };
+        
+        // Initialize verse
+        function initVerse() {
+            state.verse = new Verse(Date.now());
+            document.getElementById('universeType').textContent = `🌌 ${state.verse.typeNames[state.verse.type].toUpperCase()} UNIVERSE`;
+            document.getElementById('verseType').textContent = state.verse.typeNames[state.verse.type];
+            document.getElementById('verseSeed').textContent = state.verse.seed;
+            updateCoords();
+            updateBlackHoles();
+        }
+        
+        // Generate race buttons
+        function initRaces() {
+            const container = document.getElementById('raceSelect');
+            Object.entries(NOGBeings.RACES).forEach(([key, race]) => {
+                const btn = document.createElement('button');
+                btn.className = 'race-btn' + (key === 'HUMAN' ? ' selected' : '');
+                btn.textContent = race.name;
+                btn.onclick = () => selectRace(key, btn);
+                container.appendChild(btn);
+            });
+        }
+        
+        // Generate class buttons
+        function initClasses() {
+            const container = document.getElementById('classSelect');
+            NOGBeings.CLASSES.forEach(cls => {
+                const btn = document.createElement('button');
+                btn.className = 'class-btn';
+                btn.textContent = cls.name;
+                btn.onclick = () => selectClass(cls.name);
+                container.appendChild(btn);
+            });
+        }
+        
+        function selectRace(key, btn) {
+            state.player.race = key;
+            document.querySelectorAll('.race-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+        
+        function selectClass(name) {
+            state.player.class = name;
+        }
+        
+        // Draw galaxy
+        function draw() {
+            ctx.fillStyle = '#050510';
+            ctx.fillRect(0, 0, W, H);
+            
+            const gridX = Math.floor(W / state.zoom / 10);
+            const gridY = Math.floor(H / state.zoom / 10);
+            
+            // Draw stars
+            for (let x = 0; x < gridX; x++) {
+                for (let y = 0; y < gridY; y++) {
+                    const worldX = x * 10 + (state.player.x % 10);
+                    const worldY = y * 10 + (state.player.y % 10);
+                    
+                    const star = state.verse.getStarAt(worldX, worldY, state.player.z);
+                    const sx = (x * 10 * state.zoom) % W;
+                    const sy = (y * 10 * state.zoom) % H;
+                    
+                    // Color based on star type
+                    ctx.fillStyle = star.color;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, Math.max(2, star.sunSize) * state.zoom, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Glow for suns
+                    if (star.sunSize > 0) {
+                        const grd = ctx.createRadialGradient(sx, sy, 0, sx, sy, star.sunSize * 10 * state.zoom);
+                        grd.addColorStop(0, star.color + '44');
+                        grd.addColorStop(1, 'transparent');
+                        ctx.fillStyle = grd;
+                        ctx.beginPath();
+                        ctx.arc(sx, sy, star.sunSize * 10 * state.zoom, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+            
+            // Draw black holes
+            state.verse.blackHoles.forEach(bh => {
+                if (bh.z === state.player.z) {
+                    const sx = ((bh.x / 100) * W * state.zoom) % W;
+                    const sy = ((bh.y / 100) * H * state.zoom) % H;
+                    
+                    // Black hole with ring
+                    ctx.fillStyle = '#000';
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, 15 * state.zoom, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.strokeStyle = '#f00';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, 20 * state.zoom, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '10px';
+                    ctx.fillText(`BH-${bh.size}`, sx - 15, sy - 20);
+                }
+            });
+            
+            // Draw player position
+            ctx.fillStyle = '#0f0';
+            ctx.beginPath();
+            ctx.arc(W/2, H/2, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Player glow
+            const grd = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, 20);
+            grd.addColorStop(0, '#0f04');
+            grd.addColorStop(1, 'transparent');
+            ctx.fillStyle = grd;
+            ctx.beginPath();
+            ctx.arc(W/2, H/2, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Layer indicator
+            ctx.fillStyle = '#fff';
+            ctx.font = '14px';
+            ctx.fillText(`LAYER ${state.player.z}/3`, 10, H - 20);
+        }
+        
+        // Handle clicks
+        canvas.addEventListener('click', e => {
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            const my = e.clientY - rect.top;
+            
+            const gridX = Math.floor((mx / state.zoom) / 10);
+            const gridY = Math.floor((my / state.zoom) / 10);
+            
+            state.player.x = Math.max(0, Math.min(99, gridX * 10 + 5));
+            state.player.y = Math.max(0, Math.min(99, gridY * 10 + 5));
+            
+            updateCoords();
+            showStarInfo();
+            draw();
+        });
+        
+        // Movement
+        document.addEventListener('keydown', e => {
+            const speed = 5;
+            if (e.key === 'ArrowUp' || e.key === 'w') state.player.y = Math.max(0, state.player.y - speed);
+            if (e.key === 'ArrowDown' || e.key === 's') state.player.y = Math.min(99, state.player.y + speed);
+            if (e.key === 'ArrowLeft' || e.key === 'a') state.player.x = Math.max(0, state.player.x - speed);
+            if (e.key === 'ArrowRight' || e.key === 'd') state.player.x = Math.min(99, state.player.x + speed);
+            
+            updateCoords();
+            showStarInfo();
+            draw();
+        });
+        
+        function updateCoords() {
+            document.getElementById('coordX').textContent = state.player.x;
+            document.getElementById('coordY').textContent = state.player.y;
+            document.getElementById('coordZ').textContent = state.player.z;
+        }
+        
+        function showStarInfo() {
+            const star = state.verse.getStarAt(state.player.x, state.player.y, state.player.z);
+            state.currentStar = star;
+            
+            let html = `<b>${star.name}</b><br>`;
+            html += `Type: ${star.type}<br>`;
+            html += `Gravity: ${star.gravity}x<br>`;
+            html += `Planets: ${star.planets.length}<br>`;
+            html += `Gas Giants: ${star.gasGiants.length}<br>`;
+            html += `Asteroids: ${star.asteroids.length}<br>`;
+            
+            if (star.planets.length > 0) {
+                html += `<br><b>Planets:</b><div class="planet-list">`;
+                star.planets.forEach((p, i) => {
+                    html += `<div class="planet-item${p.colonized ? ' colonized' : ''}" onclick="showPlanet(${i})">
+                        ${i+1}. ${p.type} ${p.life ? '🌱' : ''} ${p.colonized ? '🏴' : ''}
+                    </div>`;
+                });
+                html += `</div>`;
+            }
+            
+            document.getElementById('starInfo').innerHTML = html;
+        }
+        
+        function showPlanet(index) {
+            const planet = state.currentStar.planets[index];
+            alert(`${planet.type}\n\nHabitable: ${planet.inHabitableZone ? 'Yes' : 'No'}\nLife: ${planet.life ? 'Yes' : 'No'}\nMoons: ${planet.moons}\nResources: ${planet.resources.join(', ')}`);
+        }
+        
+        function updateBlackHoles() {
+            let html = '';
+            state.verse.blackHoles.forEach((bh, i) => {
+                const sameLayer = bh.z === state.player.z;
+                html += `<div style="margin: 5px 0; ${sameLayer ? 'color:#f00;' : 'opacity:0.5;'}">
+                    🕳️ ${bh.sizeNames[bh.size]} (${bh.x.toFixed(0)}, ${bh.y.toFixed(0)}, ${bh.z})
+                </div>`;
+            });
+            document.getElementById('blackHoles').innerHTML = html || 'No black holes in this layer';
+        }
+        
+        function zoomIn() { state.zoom = Math.min(5, state.zoom + 0.5); draw(); }
+        function zoomOut() { state.zoom = Math.max(0.5, state.zoom - 0.5); draw(); }
+        
+        function changeLayer() {
+            state.player.z = state.player.z % 3 + 1;
+            updateCoords();
+            updateBlackHoles();
+            draw();
+        }
+        
+        function enterWarp() {
+            const bh = state.verse.getBlackHoleAt(state.player.x, state.player.y, state.player.z);
+            if (bh) {
+                document.getElementById('blackholeWarning').style.display = 'block';
+                const dests = { 1: ['Bubble Universe', 'Daughter Universe'],
+                               2: ['Daughter Universe', 'Parallel Universe'],
+                               3: ['Under Verse', 'Mathematical Universe'] };
+                document.getElementById('blackholeDest').textContent = 
+                    'Possible destinations: ' + dests[bh.size].join(', ');
+                document.getElementById('blackholeInfo').textContent = 
+                    `${bh.sizeNames[bh.size]} Black Hole detected!`;
+            } else {
+                alert('No black hole nearby. Travel to a black hole location first.');
+            }
+        }
+        
+        function confirmWarp() {
+            // Create new verse
+            state.verse = new Verse(Date.now());
+            document.getElementById('universeType').textContent = `🌌 ${state.verse.typeNames[state.verse.type].toUpperCase()} UNIVERSE`;
+            document.getElementById('verseType').textContent = state.verse.typeNames[state.verse.type];
+            document.getElementById('verseSeed').textContent = state.verse.seed;
+            
+            // Reset position
+            state.player.x = 50;
+            state.player.y = 50;
+            state.player.z = 1;
+            updateCoords();
+            updateBlackHoles();
+            
+            document.getElementById('blackholeWarning').style.display = 'none';
+            
+            // Warp effect
+            let frame = 0;
+            const warpInterval = setInterval(() => {
+                ctx.fillStyle = ['#000', '#fff', '#f0f', '#0ff', '#000'][frame % 5];
+                ctx.fillRect(0, 0, W, H);
+                frame++;
+                if (frame > 10) {
+                    clearInterval(warpInterval);
+                    draw();
+                }
+            }, 100);
+        }
+        
+        function cancelWarp() {
+            document.getElementById('blackholeWarning').style.display = 'none';
+        }
+        
+        function colonize() {
+            if (!state.currentStar || state.currentStar.planets.length === 0) {
+                alert('No planets to colonize!');
+                return;
+            }
+            
+            const habitable = state.currentStar.planets.filter(p => p.inHabitableZone);
+            if (habitable.length > 0 && state.player.credits >= 50) {
+                habitable[0].colonized = true;
+                habitable[0].governor = state.player.race;
+                state.player.credits -= 50;
+                state.player.colonized++;
+                document.getElementById('credits').textContent = state.player.credits;
+                document.getElementById('colonized').textContent = state.player.colonized;
+                showStarInfo();
+                alert(`Colony established on ${habitable[0].type}!`);
+            } else if (state.player.credits < 50) {
+                alert('Insufficient credits! Need 50.');
+            } else {
+                alert('No habitable planets available.');
+            }
+        }
+        
+        // Initialize
+        initVerse();
+        initRaces();
+        initClasses();
+        draw();
+        
+        // Game loop
+        setInterval(draw, 100);
+    </script>
+</body>
+</html>

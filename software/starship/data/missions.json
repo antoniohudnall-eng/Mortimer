@@ -1,0 +1,94 @@
+{
+  "missions": [
+    {
+      "id": "recruit_qora",
+      "name": "Recruit Captain QORA",
+      "description": "Establish command structure by recruiting QORA as Captain of SEED3",
+      "difficulty": "easy",
+      "rewards": { "crew": ["qora"], "credits": 1000 },
+      "requirements": ["credits", 500],
+      "status": "available"
+    },
+    {
+      "id": "shakedown",
+      "name": "Shakedown Cruise",
+      "description": "Test all systems on SEED3 in a controlled environment",
+      "difficulty": "easy",
+      "rewards": { "xp": 100, "credits": 500 },
+      "requirements": ["ship", "seed3"],
+      "status": "available"
+    },
+    {
+      "id": "first_contact",
+      "name": "First Contact",
+      "description": "Establish diplomatic relations with a new species",
+      "difficulty": "medium",
+      "rewards": { "xp": 250, "credits": 2000, "alliance": true },
+      "requirements": ["crew", "c3po", "crew", "aurora"],
+      "status": "locked"
+    },
+    {
+      "id": "asteroid_field",
+      "name": "Asteroid Mining",
+      "description": "Extract valuable minerals from an asteroid field",
+      "difficulty": "easy",
+      "rewards": { "resources": 500, "credits": 1000 },
+      "requirements": ["ship", "seed1"],
+      "status": "available"
+    },
+    {
+      "id": "patrol_sector",
+      "name": "Sector Patrol",
+      "description": "Patrol the sector and respond to distress calls",
+      "difficulty": "medium",
+      "rewards": { "xp": 200, "credits": 1500, "reputation": 10 },
+      "requirements": ["crew", "cobra", "crew", "sentinel"],
+      "status": "locked"
+    },
+    {
+      "id": "escort_mission",
+      "name": "VIP Escort",
+      "description": "Escort a VIP safely through hostile space",
+      "difficulty": "hard",
+      "rewards": { "xp": 500, "credits": 5000, "alliance": true },
+      "requirements": ["crew", "qora", "crew", "cobra", "ship", "seed3"],
+      "status": "locked"
+    },
+    {
+      "id": "build_crew",
+      "name": "Crew Assembly",
+      "description": "Assemble the core crew for SEED3 operations",
+      "difficulty": "easy",
+      "rewards": { "crew": ["patricia", "jordan"], "xp": 150 },
+      "requirements": ["credits", 2000],
+      "status": "available"
+    },
+    {
+      "id": "trade_run",
+      "name": "Trade Run Alpha",
+      "description": "Establish a trade route between friendly systems",
+      "difficulty": "easy",
+      "rewards": { "credits": 2500, "reputation": 15 },
+      "requirements": ["crew", "pulp", "crew", "fiber"],
+      "status": "locked"
+    },
+    {
+      "id": "derelict_rescue",
+      "name": "Derelict Recovery",
+      "description": "Investigate and salvage a derelict vessel",
+      "difficulty": "medium",
+      "rewards": { "resources": 1000, "credits": 3000, "tech": true },
+      "requirements": ["crew", "r2d2", "crew", "stacktrace"],
+      "status": "locked"
+    },
+    {
+      "id": "fleet_formation",
+      "name": "Fleet Command",
+      "description": "Establish command over multiple vessels",
+      "difficulty": "hard",
+      "rewards": { "fleet": ["seed1", "seed3"], "xp": 1000, "rank": "Admiral" },
+      "requirements": ["ship", "seed3", "crew", "morty", "crew", "qora"],
+      "status": "locked"
+    }
+  ]
+}

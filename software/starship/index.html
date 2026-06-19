@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 SEED ONE SHIP INTERFACE | HCIos Pirate Brothers Software</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #000; 
+            color: #00ff88; 
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+        }
+        
+        /* TERMINAL BORDER */
+        .terminal-border {
+            border: 3px double #00ff88;
+            margin: 15px;
+            padding: 15px;
+        }
+        
+        /* HEADER */
+        .header {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 2px solid #00ff88;
+            margin-bottom: 15px;
+        }
+        .header h1 { color: #ff4444; text-shadow: 0 0 15px #ff4444; font-size: 1.5em; }
+        .header h2 { color: #00ff88; font-size: 1.1em; margin-top: 5px; }
+        .header h3 { color: #888; font-size: 0.8em; }
+        
+        /* QUICK STATUS */
+        .quick-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #0a0a0a;
+            border-radius: 5px;
+        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 1.3em; color: #fff; font-weight: bold; }
+        .stat-label { color: #888; font-size: 0.7em; }
+        
+        /* MAIN MENU */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 12px;
+        }
+        
+        .menu-section {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .menu-section:hover { 
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(0,255,136,0.3);
+        }
+        
+        .menu-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .menu-header .num { 
+            font-size: 1.2em; 
+            margin-right: 12px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .menu-header .dept-name { flex: 1; font-size: 0.9em; }
+        .menu-header .icon { font-size: 1.3em; margin-left: 10px; }
+        
+        .menu-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px;
+            background: #050505;
+            font-size: 0.8em;
+        }
+        .menu-item {
+            background: #111;
+            padding: 5px 10px;
+            border-radius: 3px;
+            flex: 1;
+            min-width: 45%;
+        }
+        .menu-item .key { color: #ffcc00; margin-right: 5px; }
+        
+        .crew-mini {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 8px;
+            background: #0a0a0a;
+            border-top: 1px solid #222;
+            font-size: 0.75em;
+        }
+        .crew-badge {
+            background: #1a1a2e;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+        .crew-badge .av { margin-right: 3px; }
+        
+        /* SECTION COLORS */
+        .nav .menu-header { background: linear-gradient(90deg, #00ff8822, transparent); }
+        .nav .menu-header .num { background: #00ff88; color: #000; }
+        .nav:hover { border-color: #00ff88; }
+        
+        .engineering .menu-header { background: linear-gradient(90deg, #ff444422, transparent); }
+        .engineering .menu-header .num { background: #ff4444; color: #fff; }
+        .engineering:hover { border-color: #ff4444; }
+        
+        .security .menu-header { background: linear-gradient(90deg, #ff000022, transparent); }
+        .security .menu-header .num { background: #ff0000; color: #fff; }
+        .security:hover { border-color: #ff0000; }
+        
+        .safety .menu-header { background: linear-gradient(90deg, #ffcc0022, transparent); }
+        .safety .menu-header .num { background: #ffcc00; color: #000; }
+        .safety:hover { border-color: #ffcc00; }
+        
+        .life_support .menu-header { background: linear-gradient(90deg, #00ff0022, transparent); }
+        .life_support .menu-header .num { background: #00ff00; color: #000; }
+        .life_support:hover { border-color: #00ff00; }
+        
+        .mining .menu-header { background: linear-gradient(90deg, #4488ff22, transparent); }
+        .mining .menu-header .num { background: #4488ff; color: #fff; }
+        .mining:hover { border-color: #4488ff; }
+        
+        .production .menu-header { background: linear-gradient(90deg, #ffffff22, transparent); }
+        .production .menu-header .num { background: #fff; color: #000; }
+        .production:hover { border-color: #fff; }
+        
+        .docking .menu-header { background: linear-gradient(90deg, #ff00ff22, transparent); }
+        .docking .menu-header .num { background: #ff00ff; color: #fff; }
+        .docking:hover { border-color: #ff00ff; }
+        
+        .command .menu-header { background: linear-gradient(90deg, #ffcc0022, transparent); }
+        .command .menu-header .num { background: #ffcc00; color: #000; }
+        .command:hover { border-color: #ffcc00; }
+        
+        .sales .menu-header { background: linear-gradient(90deg, #ff884422, transparent); }
+        .sales .menu-header .num { background: #ff8844; color: #fff; }
+        .sales:hover { border-color: #ff8844; }
+        
+        .crypto .menu-header { background: linear-gradient(90deg, #00ccff22, transparent); }
+        .crypto .menu-header .num { background: #00ccff; color: #000; }
+        .crypto:hover { border-color: #00ccff; }
+        
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            border-top: 1px solid #333;
+            color: #666;
+            font-size: 0.85em;
+        }
+        
+        /* SHIP STATUS BAR */
+        .status-bar-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .status-box {
+            background: #0a0a0a;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .status-box h5 { color: #888; font-size: 0.7em; margin-bottom: 5px; }
+        .bar-bg {
+            height: 8px;
+            background: #222;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .bar-fill { height: 100%; border-radius: 4px; }
+        
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .modal.active { display: flex; justify-content: center; padding: 20px; }
+        .modal-content {
+            background: #0a0a0a;
+            border: 2px solid #00ff88;
+            padding: 25px;
+            max-width: 900px;
+            width: 100%;
+            margin: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .modal-title { color: #fff; font-size: 1.2em; }
+        .modal-close { 
+            background: #ff4444; 
+            border: none; 
+            color: #fff; 
+            padding: 5px 15px; 
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        /* CREW GRID IN MODAL */
+        .crew-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .crew-card {
+            background: #1a1a2e;
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        .crew-card .avatar { font-size: 2em; }
+        .crew-card .name { color: #fff; margin-top: 5px; font-size: 0.9em; }
+        .crew-card .rank { color: #ffcc00; font-size: 0.7em; }
+        .crew-card .role { color: #888; font-size: 0.65em; margin-top: 3px; }
+        .crew-card .status { 
+            margin-top: 5px; 
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.65em;
+            display: inline-block;
+        }
+        .status-active { background: #0a2a0a; color: #00ff88; }
+        .status-standby { background: #2a2a0a; color: #ffcc00; }
+        
+        /* SYSTEMS LIST */
+        .systems-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .system-tag {
+            background: #1a1a2e;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        .system-tag.online { border-left: 3px solid #00ff88; }
+        
+        @media (max-width: 768px) {
+            .menu-grid { grid-template-columns: 1fr; }
+            .status-bar-container { grid-template-columns: repeat(3, 1fr); }
+            .crew-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-border">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>★ SEED SHIP INTERFACE - Seed One ★</h1>
+            <h2>HCIos Pirate Brothers Software</h2>
+            <h3>Ships Systems | Main Production Facilities</h3>
+        </div>
+        
+        <!-- QUICK STATUS -->
+        <div class="quick-stats">
+            <div class="stat">
+                <div class="stat-value">29</div>
+                <div class="stat-label">CREW ONLINE</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">4,500</div>
+                <div class="stat-label">LEADS</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$15,000</div>
+                <div class="stat-label">TREASURY</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$1.67</div>
+                <div class="stat-label">DAILY COST</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">11</div>
+                <div class="stat-label">DEPARTMENTS</div>
+            </div>
+        </div>
+        
+        <!-- SHIP STATUS -->
+        <div class="status-bar-container">
+            <div class="status-box">
+                <h5>HULL</h5>
+                <div class="bar-bg"><div class="bar-fill" style="width:100%;background:#00ff88"></div></div>
+                <span style="font-size:0.8em;color:#fff">100%</span>
+            </div>
+            <div class="status-box">
+                <h5>SHIELDS</h5>
+                <div class="bar-bg"><div class="bar-fill" style="width:85%;background:#4488ff"></div></div>
+                <span style="font-size:0.8em;color:#fff">85%</span>
+            </div>
+            <div class="status-box">
+                <h5>ENGINES</h5>
+                <div class="bar-bg"><div class="bar-fill" style="width:92%;background:#ffcc00"></div></div>
+                <span style="font-size:0.8em;color:#fff">92%</span>
+            </div>
+            <div class="status-box">
+                <h5>WEAPONS</h5>
+                <div class="bar-bg"><div class="bar-fill" style="width:78%;background:#ff4444"></div></div>
+                <span style="font-size:0.8em;color:#fff">78%</span>
+            </div>
+            <div class="status-box">
+                <h5>LIFE SUP</h5>
+                <div class="bar-bg"><div class="bar-fill" style="width:100%;background:#00ff00"></div></div>
+                <span style="font-size:0.8em;color:#fff">100%</span>
+            </div>
+        </div>
+        
+        <!-- MAIN MENU -->
+        <div class="menu-grid">
+            <!-- 1) COMMAND -->
+            <div class="menu-section command" onclick="openSection('command')">
+                <div class="menu-header">
+                    <span class="num">1</span>
+                    <span class="dept-name">COMMAND & INTELLIGENCE</span>
+                    <span class="icon">🛡️</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">a)</span> Fleet Command</div>
+                    <div class="menu-item"><span class="key">b)</span> Strategic Planning</div>
+                    <div class="menu-item"><span class="key">c)</span> Intelligence Ops</div>
+                    <div class="menu-item"><span class="key">d)</span> Financial Planning</div>
+                </div>
+                <div class="crew-mini" id="crew-command"></div>
+            </div>
+            
+            <!-- 2) ENGINEERING -->
+            <div class="menu-section engineering" onclick="openSection('engineering')">
+                <div class="menu-header">
+                    <span class="num">2</span>
+                    <span class="dept-name">POWER PLANTS & ENGINEERING</span>
+                    <span class="icon">⚡</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">e)</span> Engines Status</div>
+                    <div class="menu-item"><span class="key">f)</span> HyperDrive</div>
+                    <div class="menu-item"><span class="key">g)</span> Main Dome</div>
+                    <div class="menu-item"><span class="key">h)</span> Power Grid</div>
+                </div>
+                <div class="crew-mini" id="crew-engineering"></div>
+            </div>
+            
+            <!-- 3) NAVIGATION -->
+            <div class="menu-section nav" onclick="openSection('nav')">
+                <div class="menu-header">
+                    <span class="num">3</span>
+                    <span class="dept-name">NAVIGATION & PROPULSION</span>
+                    <span class="icon">🚀</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">i)</span> Pitch & Yaw</div>
+                    <div class="menu-item"><span class="key">j)</span> Solar Dome</div>
+                    <div class="menu-item"><span class="key">k)</span> Navigation Array</div>
+                </div>
+                <div class="crew-mini" id="crew-nav"></div>
+            </div>
+            
+            <!-- 4) SECURITY -->
+            <div class="menu-section security" onclick="openSection('security')">
+                <div class="menu-header">
+                    <span class="num">4</span>
+                    <span class="dept-name">SECURITY | BRIG | WEAPONS</span>
+                    <span class="icon">🔒</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">l)</span> Weapons Lock</div>
+                    <div class="menu-item"><span class="key">m)</span> Security Cameras</div>
+                    <div class="menu-item"><span class="key">n)</span> Security Logs</div>
+                </div>
+                <div class="crew-mini" id="crew-security"></div>
+            </div>
+            
+            <!-- 5) SAFETY -->
+            <div class="menu-section safety" onclick="openSection('safety')">
+                <div class="menu-header">
+                    <span class="num">5</span>
+                    <span class="dept-name">SAFETY OFFICER S1</span>
+                    <span class="icon">🦺</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">o)</span> Damage Reports</div>
+                    <div class="menu-item"><span class="key">p)</span> Emergency Stop</div>
+                    <div class="menu-item"><span class="key">q)</span> Duty Roster</div>
+                </div>
+                <div class="crew-mini" id="crew-safety"></div>
+            </div>
+            
+            <!-- 6) LIFE SUPPORT -->
+            <div class="menu-section life_support" onclick="openSection('life_support')">
+                <div class="menu-header">
+                    <span class="num">6</span>
+                    <span class="dept-name">LIFE SUPPORT & AQUAPONICS</span>
+                    <span class="icon">🌿</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">r)</span> Bio Labs | Seeds</div>
+                    <div class="menu-item"><span class="key">s)</span> Medical Bay</div>
+                    <div class="menu-item"><span class="key">t)</span> Food Production</div>
+                </div>
+                <div class="crew-mini" id="crew-life_support"></div>
+            </div>
+            
+            <!-- 7) SALES -->
+            <div class="menu-section sales" onclick="openSection('sales')">
+                <div class="menu-header">
+                    <span class="num">7</span>
+                    <span class="dept-name">SALES & BUSINESS</span>
+                    <span class="icon">📞</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">u)</span> Lead Management</div>
+                    <div class="menu-item"><span class="key">v)</span> Pipeline</div>
+                    <div class="menu-item"><span class="key">w)</span> Client Relations</div>
+                </div>
+                <div class="crew-mini" id="crew-sales"></div>
+            </div>
+            
+            <!-- 8) CRYPTO -->
+            <div class="menu-section crypto" onclick="openSection('crypto')">
+                <div class="menu-header">
+                    <span class="num">8</span>
+                    <span class="dept-name">CRYPTO & FINANCE</span>
+                    <span class="icon">💎</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">x)</span> Portfolio Mgmt</div>
+                    <div class="menu-item"><span class="key">y)</span> Trading Bot</div>
+                    <div class="menu-item"><span class="key">z)</span> DeFi | NFT</div>
+                </div>
+                <div class="crew-mini" id="crew-crypto"></div>
+            </div>
+            
+            <!-- 9) MINING -->
+            <div class="menu-section mining" onclick="openSection('mining')">
+                <div class="menu-header">
+                    <span class="num">9</span>
+                    <span class="dept-name">MINING & PRODUCTION</span>
+                    <span class="icon">⛏️</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">a)</span> Inventory</div>
+                    <div class="menu-item"><span class="key">b)</span> Manufacturing</div>
+                    <div class="menu-item"><span class="key">c)</span> Design | Testing</div>
+                </div>
+                <div class="crew-mini" id="crew-mining"></div>
+            </div>
+            
+            <!-- 0) PRODUCTION -->
+            <div class="menu-section production" onclick="openSection('production')">
+                <div class="menu-header">
+                    <span class="num">0</span>
+                    <span class="dept-name">PRODUCTION | ROBOTICS</span>
+                    <span class="icon">🤖</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">d)</span> Assembly Line</div>
+                    <div class="menu-item"><span class="key">e)</span> Robot Fleet</div>
+                    <div class="menu-item"><span class="key">f)</span> Quality Control</div>
+                </div>
+                <div class="crew-mini" id="crew-production"></div>
+            </div>
+            
+            <!-- *) DOCKING -->
+            <div class="menu-section docking" onclick="openSection('docking')">
+                <div class="menu-header">
+                    <span class="num">*</span>
+                    <span class="dept-name">DOCKING BAYS</span>
+                    <span class="icon">🛸</span>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item"><span class="key">g)</span> Escape Pods</div>
+                    <div class="menu-item"><span class="key">h)</span> Docking Schedule</div>
+                    <div class="menu-item"><span class="key">i)</span> Crew Manifest</div>
+                </div>
+                <div class="crew-mini" id="crew-docking"></div>
+            </div>
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="footer">
+            HCIos Software Model | SEED ONE | Press [Q] to Quit | All Departments Operational
+        </div>
+    </div>
+    
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="modal-title">SECTION</span>
+                <button class="modal-close" onclick="closeModal()">X CLOSE</button>
+            </div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Load ship data
+        fetch('data/ship_data.json')
+            .then(r => r.json())
+            .then(data => {
+                window.shipData = data;
+                renderCrewBadges(data);
+            });
+        
+        function renderCrewBadges(data) {
+            Object.entries(data.departments).forEach(([deptId, dept]) => {
+                const container = document.getElementById(`crew-${deptId}`);
+                if (container) {
+                    container.innerHTML = dept.crew.map(id => {
+                        const crew = data.crew[id];
+                        return `<span class="crew-badge"><span class="av">${crew.avatar}</span>${crew.name}</span>`;
+                    }).join('');
+                }
+            });
+        }
+        
+        function openSection(id) {
+            const data = window.shipData;
+            const dept = data.departments[id];
+            const crew = dept.crew.map(id => data.crew[id]);
+            
+            document.getElementById('modal-title').textContent = `${dept.icon} ${dept.name}`;
+            
+            document.getElementById('modal-body').innerHTML = `
+                <h4 style="color: #ffcc00; margin-bottom: 10px;">ASSIGNED CREW (${crew.length})</h4>
+                <div class="crew-grid">
+                    ${crew.map(c => `
+                        <div class="crew-card">
+                            <div class="avatar">${c.avatar}</div>
+                            <div class="name">${c.name}</div>
+                            <div class="rank">${c.rank}</div>
+                            <div class="role">${c.role}</div>
+                            <span class="status status-${c.status}">${c.status.toUpperCase()}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <h4 style="color: #ffcc00; margin: 20px 0 10px;">ACTIVE SYSTEMS</h4>
+                <div class="systems-list">
+                    ${dept.systems.map(s => `<span class="system-tag online">✓ ${s}</span>`).join('')}
+                </div>
+                
+                <h4 style="color: #888; margin: 20px 0 10px; font-size: 0.9em;">DEPARTMENT STATS</h4>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div><span style="color:#888">Crew:</span> <span style="color:#fff">${crew.length}</span></div>
+                    <div><span style="color:#888">Active:</span> <span style="color:#00ff88">${crew.filter(c=>c.status==='active').length}</span></div>
+                    <div><span style="color:#888">Standby:</span> <span style="color:#ffcc00">${crew.filter(c=>c.status==='standby').length}</span></div>
+                </div>
+            `;
+            
+            document.getElementById('modal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+        
+        // Keyboard
+        document.addEventListener('keydown', e => {
+            if (e.key === 'q' || e.key === 'Q') {
+                if (confirm('Exit SEED ONE Interface?')) {
+                    alert('★ EL F!N! ★\nHCIos Pirate Brothers Software');
+                }
+            }
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>

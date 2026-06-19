@@ -1,0 +1,147 @@
+{
+  "campaign_id": "SP_20260618225155",
+  "created": "2026-06-18T22:51:55.596686",
+  "total_videos": 7,
+  "videos": [
+    {
+      "id": "TikTok_20260618225155_803",
+      "agent_tier": "clerk",
+      "voice": "adam",
+      "hook": "My AI secretary handles 100+ emails daily. Here's how.",
+      "value_prop": "No more drowning in inbox. CLERK filters, prioritizes, responds.",
+      "cta": "Save this for when you build yours.",
+      "hashtags": [
+        "#AIAssistant",
+        "#ChatGPT",
+        "#MachineLearning",
+        "#Startup"
+      ],
+      "duration_sec": 41,
+      "created": "2026-06-18T22:51:55.595834",
+      "narration": "My AI secretary handles 100+ emails daily. Here's how. No more drowning in inbox. CLERK filters, prioritizes, responds. Save this for when you build yours.",
+      "estimated_duration": 10.0,
+      "scheduled_time": "2026-06-19 15:06",
+      "video_number": 1
+    },
+    {
+      "id": "TikTok_20260618225155_265",
+      "agent_tier": "greet",
+      "voice": "bella",
+      "hook": "I outsourced my entire inbox to an AI. The results are wild.",
+      "value_prop": "Never miss a lead. GREET handles your reception 24/7.",
+      "cta": "Follow for more AI agent content.",
+      "hashtags": [
+        "#AIAssistant",
+        "#ChatGPT",
+        "#MachineLearning",
+        "#Startup"
+      ],
+      "duration_sec": 44,
+      "created": "2026-06-18T22:51:55.595953",
+      "narration": "I outsourced my entire inbox to an AI. The results are wild. Never miss a lead. GREET handles your reception 24/7. Follow for more AI agent content.",
+      "estimated_duration": 10.8,
+      "scheduled_time": "2026-06-20 11:36",
+      "video_number": 2
+    },
+    {
+      "id": "TikTok_20260618225155_664",
+      "agent_tier": "personal",
+      "voice": "sarah",
+      "hook": "The best employee I ever hired doesn't need coffee breaks.",
+      "value_prop": "PERSONAL manages your life like a seasoned concierge.",
+      "cta": "Comment 'AGENT' and I'll send you the setup.",
+      "hashtags": [
+        "#AI",
+        "#ArtificialIntelligence",
+        "#Productivity",
+        "#FutureOfWork"
+      ],
+      "duration_sec": 42,
+      "created": "2026-06-18T22:51:55.596039",
+      "narration": "The best employee I ever hired doesn't need coffee breaks. PERSONAL manages your life like a seasoned concierge. Comment 'AGENT' and I'll send you the setup.",
+      "estimated_duration": 10.4,
+      "scheduled_time": "2026-06-21 18:21",
+      "video_number": 3
+    },
+    {
+      "id": "TikTok_20260618225155_323",
+      "agent_tier": "velvet",
+      "voice": "bella",
+      "hook": "My AI secretary handles 100+ emails daily. Here's how.",
+      "value_prop": "VELVET delivers premium support that converts.",
+      "cta": "Save this for when you build yours.",
+      "hashtags": [
+        "#AIAgents",
+        "#Automation",
+        "#Business",
+        "#Tech"
+      ],
+      "duration_sec": 56,
+      "created": "2026-06-18T22:51:55.596102",
+      "narration": "My AI secretary handles 100+ emails daily. Here's how. VELVET delivers premium support that converts. Save this for when you build yours.",
+      "estimated_duration": 8.8,
+      "scheduled_time": "2026-06-22 11:36",
+      "video_number": 4
+    },
+    {
+      "id": "TikTok_20260618225155_269",
+      "agent_tier": "concierge",
+      "voice": "jessica",
+      "hook": "I hired 50 AI agents. Here's what actually happened.",
+      "value_prop": "Crisis handling, VIP treatment, multi-channel support.",
+      "cta": "Comment 'AGENT' and I'll send you the setup.",
+      "hashtags": [
+        "#AIAssistant",
+        "#ChatGPT",
+        "#MachineLearning",
+        "#Startup"
+      ],
+      "duration_sec": 38,
+      "created": "2026-06-18T22:51:55.596167",
+      "narration": "I hired 50 AI agents. Here's what actually happened. Crisis handling, VIP treatment, multi-channel support. Comment 'AGENT' and I'll send you the setup.",
+      "estimated_duration": 9.2,
+      "scheduled_time": "2026-06-23 18:21",
+      "video_number": 5
+    },
+    {
+      "id": "TikTok_20260618225155_636",
+      "agent_tier": "executive",
+      "voice": "adam",
+      "hook": "What if you could delegate EVERYTHING to an AI?",
+      "value_prop": "Board communications, stakeholder management \u2014 automated.",
+      "cta": "Link in bio to get your own AI team.",
+      "hashtags": [
+        "#AI",
+        "#ArtificialIntelligence",
+        "#Productivity",
+        "#FutureOfWork"
+      ],
+      "duration_sec": 52,
+      "created": "2026-06-18T22:51:55.596256",
+      "narration": "What if you could delegate EVERYTHING to an AI? Board communications, stakeholder management \u2014 automated. Link in bio to get your own AI team.",
+      "estimated_duration": 9.6,
+      "scheduled_time": "2026-06-24 08:21",
+      "video_number": 6
+    },
+    {
+      "id": "TikTok_20260618225155_591",
+      "agent_tier": "clerk",
+      "voice": "adam",
+      "hook": "Meet the agents that run my business while I sleep.",
+      "value_prop": "The entry-level agent that works like a senior.",
+      "cta": "DM me to get started today.",
+      "hashtags": [
+        "#AIAgents",
+        "#Automation",
+        "#Business",
+        "#Tech"
+      ],
+      "duration_sec": 45,
+      "created": "2026-06-18T22:51:55.596327",
+      "narration": "Meet the agents that run my business while I sleep. The entry-level agent that works like a senior. DM me to get started today.",
+      "estimated_duration": 9.6,
+      "scheduled_time": "2026-06-25 09:51",
+      "video_number": 7
+    }
+  ]
+}

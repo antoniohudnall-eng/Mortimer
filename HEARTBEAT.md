@@ -27,3 +27,7 @@
 ## Reminder
 Captain wants tappylewis.cloud LIVE with secretarial service.
 Follow up until done.
+
+## Auto-Backup Rule
+- Run `~/mortimer/auto-backup.sh` on wake AND before session end
+- All important work = backed up to GitHub

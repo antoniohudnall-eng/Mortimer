@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SEED3 COMMAND CENTER — FULL FLEET</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* HEADER */
+        #header {
+            background: linear-gradient(180deg, #001a00 0%, #000800 100%);
+            border-bottom: 3px double #0f0;
+            padding: 6px 10px;
+            flex-shrink: 0;
+        }
+        
+        #header h1 {
+            text-align: center;
+            font-size: clamp(16px, 3vw, 28px);
+            text-shadow: 0 0 20px #0f0;
+        }
+        
+        #header .sub {
+            text-align: center;
+            font-size: clamp(9px, 1.5vw, 12px);
+            color: #050;
+        }
+        
+        .live { color: #f00; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        
+        /* STATUS BAR */
+        #status {
+            display: flex;
+            gap: 15px;
+            font-size: 11px;
+            padding: 5px 10px;
+            background: #000;
+            border-bottom: 1px solid #030;
+            flex-wrap: wrap;
+        }
+        
+        .stat { display: flex; gap: 5px; }
+        .lbl { color: #050; }
+        .val { color: #0f0; font-weight: bold; }
+        .val.gold { color: #ffd700; }
+        .val.red { color: #f00; }
+        
+        /* WALLET */
+        #wallet-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 4px 8px;
+            background: #001500;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+        }
+        .wallet-label { color: #0f0; font-size: 10px; }
+        .wallet-addr { color: #050; font-size: 9px; font-family: monospace; }
+        .wallet-bal { color: #ffd700; font-size: 12px; font-weight: bold; }
+        .wallet-refresh { background: #0f0; color: #000; border: none; padding: 2px 6px; cursor: pointer; font-size: 9px; }
+        .wallet-total { color: #ffd700; font-size: 14px; font-weight: bold; margin-left: 10px; }
+        
+        /* PORTFOLIO MODAL */
+        #portfolio-modal {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            background: #001000; border: 2px solid #0f0; padding: 20px; max-width: 500px; width: 90%;
+            max-height: 80vh; overflow-y: auto; z-index: 1001;
+        }
+        #portfolio-modal.show { display: block; }
+        #portfolio-overlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.8); z-index: 1000; }
+        #portfolio-overlay.show { display: block; }
+        .port-close { background: #f00; color: #fff; border: none; padding: 5px 15px; cursor: pointer; float: right; }
+        .port-section { margin: 15px 0; }
+        .port-title { color: #0f0; font-weight: bold; border-bottom: 1px solid #030; padding-bottom: 5px; margin-bottom: 10px; }
+        .port-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 11px; }
+        .port-asset { color: #0f0; }
+        .port-amt { color: #ffd700; }
+        .port-val { color: #050; }
+        .port-total { color: #ffd700; font-size: 16px; font-weight: bold; text-align: center; margin: 15px 0; }
+        
+        /* MAIN */
+        #main {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+        }
+        
+        /* GLOBE */
+        #globe-wrap {
+            flex: 1;
+            position: relative;
+            background: #000005;
+        }
+        
+        #globe { width: 100%; height: 100%; }
+        #coords { position: absolute; bottom: 5px; right: 5px; font-size: 9px; color: #030; }
+        
+        /* DEPARTMENTS SIDEBAR */
+        #depts {
+            width: 380px;
+            background: #000;
+            border-left: 2px solid #0f0;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        
+        /* DEPT CATEGORY */
+        .dept-cat {
+            border-bottom: 1px solid #020;
+            padding: 5px;
+        }
+        
+        .dept-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+        }
+        
+        .dept-name {
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .dept-leader {
+            background: #001a00;
+            border: 1px solid #0f0;
+            padding: 2px 6px;
+            font-size: 10px;
+        }
+        
+        /* AGENT GRID */
+        .agent-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-top: 5px;
+        }
+        
+        .agent-chip {
+            background: #000800;
+            border: 1px solid #030;
+            padding: 2px 6px;
+            font-size: 9px;
+        }
+        
+        .agent-chip.leader {
+            border-color: #0f0;
+            background: #001a00;
+        }
+        
+        .agent-chip.active {
+            border-color: #0f0;
+            box-shadow: 0 0 5px #0f0;
+        }
+        
+        /* MINI STAT BAR */
+        .dept-bar-wrap {
+            margin-top: 5px;
+        }
+        
+        .dept-bar {
+            height: 6px;
+            background: #030;
+        }
+        
+        .dept-bar-fill {
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .bar-high { background: linear-gradient(90deg, #0f0, #0a0); }
+        .bar-med { background: linear-gradient(90deg, #ff0, #f80); }
+        .bar-low { background: linear-gradient(90deg, #f00, #a00); }
+        
+        .dept-actions {
+            display: flex;
+            gap: 3px;
+            margin-top: 5px;
+        }
+        
+        .dept-btn {
+            flex: 1;
+            background: #001000;
+            border: 1px solid #0f0;
+            color: #0f0;
+            padding: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 9px;
+            cursor: pointer;
+        }
+        
+        .dept-btn:hover {
+            background: #0f0;
+            color: #000;
+        }
+        
+        /* ACTIONS BAR */
+        #actions {
+            display: flex;
+            gap: 5px;
+            padding: 8px;
+            background: #000;
+            border-top: 2px solid #0f0;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            background: #001a00;
+            border: 2px solid #0f0;
+            color: #0f0;
+            padding: 8px 12px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .action-btn:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 15px #0f0;
+        }
+        
+        .action-btn.shield { border-color: #0ff; color: #0ff; }
+        .action-btn.shield:hover { background: #0ff; }
+        .action-btn.shield.on { background: #0ff; color: #000; }
+        .action-btn.danger { border-color: #f00; color: #f00; }
+        .action-btn.danger:hover { background: #f00; color: #000; }
+        .action-btn.gold { border-color: #ffd700; color: #ffd700; }
+        .action-btn.gold:hover { background: #ffd700; }
+        
+        /* INTEL */
+        #intel {
+            padding: 8px;
+            font-size: 10px;
+            max-height: 100px;
+            overflow-y: auto;
+            background: #000;
+            border-top: 1px solid #030;
+        }
+        
+        .intel-line { padding: 2px 0; border-bottom: 1px solid #020; }
+        .intel-time { color: #050; margin-right: 5px; }
+        .intel-ok { color: #0f0; }
+        .intel-warn { color: #ff0; }
+        .intel-crit { color: #f00; }
+        .intel-gold { color: #ffd700; }
+        
+        /* BOTTOM */
+        #bottom {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2px;
+            background: #0f0;
+            max-height: 18vh;
+            overflow-y: auto;
+        }
+        
+        .bottom-panel {
+            background: #001000;
+            padding: 8px;
+        }
+        
+        .panel-title {
+            font-size: 11px;
+            font-weight: bold;
+            border-bottom: 1px solid #030;
+            padding-bottom: 4px;
+            margin-bottom: 5px;
+        }
+        
+        /* THREATS */
+        .threat-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            padding: 2px 0;
+        }
+        
+        .t-rank { color: #f00; width: 15px; }
+        .t-loc { color: #ff0; flex: 1; }
+        .t-cnt { color: #f00; }
+        
+        /* FULL ROSTER */
+        .roster-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            font-size: 9px;
+        }
+        
+        .roster-item {
+            background: #000800;
+            border: 1px solid #020;
+            padding: 2px 4px;
+        }
+        
+        .roster-item.on {
+            border-color: #0f0;
+            background: #001a00;
+        }
+        
+        /* CLI */
+        #cli {
+            background: #001000;
+            border-top: 2px solid #0f0;
+            padding: 6px 10px;
+        }
+        
+        #cli-out {
+            height: 25px;
+            overflow-y: auto;
+            font-size: 10px;
+            margin-bottom: 4px;
+        }
+        
+        #cli-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #cli-prompt { color: #0f0; font-weight: bold; font-size: 11px; }
+        
+        #cli-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            outline: none;
+        }
+        
+        #voice-btn {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 5px 10px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        #voice-btn:hover { box-shadow: 0 0 10px #0f0; }
+        #voice-btn.on { animation: pulse 0.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        
+        /* FLASH */
+        .flash {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+        }
+        
+        .flash.probe { background: radial-gradient(circle, rgba(0,255,0,0.3) 0%, transparent 70%); }
+        .flash.shield { background: radial-gradient(circle, rgba(0,255,255,0.4) 0%, transparent 70%); }
+        .flash.alert { background: radial-gradient(circle, rgba(255,0,0,0.3) 0%, transparent 70%); }
+        .flash.gold { background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 70%); }
+        .flash.show { animation: flash 0.5s ease-out; }
+        @keyframes flash { 0% { opacity: 1; } 100% { opacity: 0; } }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #001000; }
+        ::-webkit-scrollbar-thumb { background: #030; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="flash" id="flash"></div>
+        
+        <!-- HEADER -->
+        <div id="header">
+            <h1>🚀 SEED3 COMMAND CENTER — FULL FLEET 🚀</h1>
+            <div class="sub">
+                MORTY — C3 — GENERAL OF THE FORCES | 
+                <span class="live">●</span> LIVE | 
+                <span id="time">--:--:--</span> |
+                DAY <span id="day">1</span>
+            </div>
+        </div>
+        
+        <!-- WALLET STATUS -->
+        <div id="wallet-bar">
+            <span class="wallet-label">💳 WALLET:</span>
+            <span class="wallet-addr">0x7244...72f36</span>
+            <span class="wallet-bal" id="wallet-balance">⏳ Loading...</span>
+            <span class="wallet-total" id="wallet-total"></span>
+            <button class="wallet-refresh" onclick="fetchWalletBalance()">↻</button>
+            <button class="wallet-refresh" onclick="showPortfolio()" style="background:#ffd700;color:#000;">📊</button>
+        </div>
+        
+        <!-- STATUS -->
+        <div id="status">
+            <div class="stat"><span class="lbl">CREDITS:</span><span class="val gold" id="credits">1000</span></div>
+            <div class="stat"><span class="lbl">AGENTS:</span><span class="val" id="agent-count">58</span></div>
+            <div class="stat"><span class="lbl">PROBES:</span><span class="val" id="probe-count">55</span></div>
+            <div class="stat"><span class="lbl">THREATS:</span><span class="val red" id="threat-total">0</span></div>
+            <div class="stat"><span class="lbl">SHIELDS:</span><span class="val" id="shield-status">DOWN</span></div>
+        </div>
+        
+        <!-- MAIN -->
+        <div id="main">
+            <!-- GLOBE -->
+            <div id="globe-wrap">
+                <canvas id="globe"></canvas>
+                <div id="coords">ROT: 0.0°</div>
+            </div>
+            
+            <!-- DEPARTMENTS -->
+            <div id="depts">
+                <div style="background:#001a00;border-bottom:2px solid #0f0;padding:8px;text-align:center;font-weight:bold;">
+                    👥 FULL CREW — 58 AGENTS
+                </div>
+                
+                <!-- EXECUTIVE -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">🛡️ EXECUTIVE</span>
+                        <span class="dept-leader">QORA</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">QORA</span>
+                        <span class="agent-chip active">AURORA</span>
+                        <span class="agent-chip">SENTINEL</span>
+                        <span class="agent-chip">SPINDLE</span>
+                        <span class="agent-chip">LEDGER-9</span>
+                        <span class="agent-chip">EXECUTIVE</span>
+                        <span class="agent-chip">CLOSESTER</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-high" id="bar-exec" style="width:88%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('exec')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('exec')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- OPERATIONS -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">💰 OPERATIONS</span>
+                        <span class="dept-leader">PATRICIA</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">PATRICIA</span>
+                        <span class="agent-chip active">JORDAN</span>
+                        <span class="agent-chip">DUSTY</span>
+                        <span class="agent-chip">CHELIOS</span>
+                        <span class="agent-chip">HUME</span>
+                        <span class="agent-chip">MILES</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-high" id="bar-ops" style="width:85%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('ops')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('ops')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SALES -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">📈 SALES</span>
+                        <span class="dept-leader">PULP</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">PULP</span>
+                        <span class="agent-chip active">JANE</span>
+                        <span class="agent-chip">CLERK</span>
+                        <span class="agent-chip">GREET</span>
+                        <span class="agent-chip">VELVET</span>
+                        <span class="agent-chip">CONCIERGE</span>
+                        <span class="agent-chip">JUDY</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-med" id="bar-sales" style="width:62%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('sales')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('sales')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- TECHNICAL -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">🔧 TECHNICAL</span>
+                        <span class="dept-leader">STACKTRACE</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">STACKTRACE</span>
+                        <span class="agent-chip">TAPTAP</span>
+                        <span class="agent-chip">PIPELINE</span>
+                        <span class="agent-chip">BUGCATCHER</span>
+                        <span class="agent-chip">FEELIX</span>
+                        <span class="agent-chip">FIBER</span>
+                        <span class="agent-chip">HARPER</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-high" id="bar-tech" style="width:91%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('tech')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('tech')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DROIDS -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">🤖 DROIDS</span>
+                        <span class="dept-leader">C3PO</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">C3PO</span>
+                        <span class="agent-chip active">R2D2</span>
+                        <span class="agent-chip">R2-C4</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-high" id="bar-droids" style="width:95%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('droids')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('droids')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- GAMES -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">🎮 GAMES</span>
+                        <span class="dept-leader">NOG</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">NOG</span>
+                        <span class="agent-chip">MILKMAN</span>
+                        <span class="agent-chip">MINECRAFT</span>
+                        <span class="agent-chip">ROBLOX</span>
+                        <span class="agent-chip">CHRONOSPACE</span>
+                        <span class="agent-chip">DAVERSE</span>
+                        <span class="agent-chip">SGVD</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-high" id="bar-games" style="width:78%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('games')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('games')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- HARDWARE -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">🛠️ HARDWARE</span>
+                        <span class="dept-leader">COBRA</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">COBRA</span>
+                        <span class="agent-chip">CYLON</span>
+                        <span class="agent-chip">DARK-FACTORY</span>
+                        <span class="agent-chip">NOMAD</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-med" id="bar-hw" style="width:55%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('hw')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('hw')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- MARKETING -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">🎨 MARKETING</span>
+                        <span class="dept-leader">VELUM</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">VELUM</span>
+                        <span class="agent-chip">SCRIBBLE</span>
+                        <span class="agent-chip">TIKTOK</span>
+                        <span class="agent-chip">YOUTUBE</span>
+                        <span class="agent-chip">X-AGENT</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-med" id="bar-mkt" style="width:48%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('mkt')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('mkt')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CRYPTO -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">💎 CRYPTO</span>
+                        <span class="dept-leader">CRYPTONIO</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">CRYPTONIO</span>
+                        <span class="agent-chip">DUSTY</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-high" id="bar-crypto" style="width:82%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('crypto')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('crypto')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RESEARCH -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">🔬 RESEARCH</span>
+                        <span class="dept-leader">MORTY</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">MORTY</span>
+                        <span class="agent-chip">Q-ORACLE</span>
+                        <span class="agent-chip">Q-DEFENDER</span>
+                        <span class="agent-chip">RND</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-high" id="bar-research" style="width:97%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('research')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('research')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- INTELLIGENCE -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">🛰️ INTELLIGENCE</span>
+                        <span class="dept-leader">NETPROBE</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">NETPROBE</span>
+                        <span class="agent-chip">HUD</span>
+                        <span class="agent-chip">MNEMOSYNE</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-high" id="bar-intel" style="width:93%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('intel')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('intel')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PRODUCTS -->
+                <div class="dept-cat">
+                    <div class="dept-head">
+                        <span class="dept-name">📦 PRODUCTS</span>
+                        <span class="dept-leader">REGGE</span>
+                    </div>
+                    <div class="agent-grid">
+                        <span class="agent-chip leader">REGGE</span>
+                        <span class="agent-chip">CREAM</span>
+                        <span class="agent-chip">DEPOTCHAOS</span>
+                        <span class="agent-chip">COLLECTIONS</span>
+                    </div>
+                    <div class="dept-bar-wrap">
+                        <div class="dept-bar"><div class="dept-bar-fill bar-high" id="bar-prod" style="width:76%"></div></div>
+                        <div class="dept-actions">
+                            <button class="dept-btn" onclick="upgrade('prod')">+UPGRADE</button>
+                            <button class="dept-btn" onclick="boost('prod')">BOOST</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ACTIONS -->
+                <div id="actions">
+                    <button class="action-btn shield" onclick="toggleShield()" id="btn-shield">🛡️ SHIELDS</button>
+                    <button class="action-btn" onclick="probeDrill()">🔍 DRILL</button>
+                    <button class="action-btn gold" onclick="collectCredits()">💰 COLLECT</button>
+                    <button class="action-btn" onclick="recruitAgent()">👤 RECRUIT</button>
+                    <button class="action-btn" onclick="repairAll()">🔧 REPAIR</button>
+                    <button class="action-btn danger" onclick="newDay()">📅 NEW DAY</button>
+                </div>
+                
+                <!-- INTEL FEED -->
+                <div id="intel">
+                    <div style="font-weight:bold;margin-bottom:5px;">📡 GAME LOG</div>
+                    <div id="intel-msgs"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- BOTTOM -->
+        <div id="bottom">
+            <div class="bottom-panel">
+                <div class="panel-title">🚨 TOP THREATS</div>
+                <div id="threats-list"></div>
+            </div>
+            <div class="bottom-panel">
+                <div class="panel-title">👥 FULL ROSTER (58)</div>
+                <div class="roster-grid">
+                    <!-- EXECUTIVE -->
+                    <div class="roster-item on">QORA</div>
+                    <div class="roster-item on">AURORA</div>
+                    <div class="roster-item">SENTINEL</div>
+                    <div class="roster-item">SPINDLE</div>
+                    <div class="roster-item">LEDGER-9</div>
+                    <div class="roster-item">EXECUTIVE</div>
+                    <div class="roster-item">CLOSESTER</div>
+                    <!-- OPS -->
+                    <div class="roster-item on">PATRICIA</div>
+                    <div class="roster-item on">JORDAN</div>
+                    <div class="roster-item on">DUSTY</div>
+                    <div class="roster-item">CHELIOS</div>
+                    <div class="roster-item">HUME</div>
+                    <div class="roster-item">MILES</div>
+                    <!-- SALES -->
+                    <div class="roster-item">PULP</div>
+                    <div class="roster-item on">JANE</div>
+                    <div class="roster-item">CLERK</div>
+                    <div class="roster-item">GREET</div>
+                    <div class="roster-item">VELVET</div>
+                    <div class="roster-item">CONCIERGE</div>
+                    <div class="roster-item">JUDY</div>
+                    <!-- TECH -->
+                    <div class="roster-item">STACKTRACE</div>
+                    <div class="roster-item">TAPTAP</div>
+                    <div class="roster-item">PIPELINE</div>
+                    <div class="roster-item">BUGCATCHER</div>
+                    <div class="roster-item">FEELIX</div>
+                    <div class="roster-item">FIBER</div>
+                    <div class="roster-item">HARPER</div>
+                    <!-- DROIDS -->
+                    <div class="roster-item on">C3PO</div>
+                    <div class="roster-item on">R2D2</div>
+                    <div class="roster-item">R2-C4</div>
+                    <!-- GAMES -->
+                    <div class="roster-item">NOG</div>
+                    <div class="roster-item">MILKMAN</div>
+                    <div class="roster-item">MINECRAFT</div>
+                    <div class="roster-item">ROBLOX</div>
+                    <div class="roster-item">CHRONOSPACE</div>
+                    <div class="roster-item">DAVERSE</div>
+                    <div class="roster-item">SGVD</div>
+                    <!-- HW -->
+                    <div class="roster-item">COBRA</div>
+                    <div class="roster-item">CYLON</div>
+                    <div class="roster-item">DARK-FACT</div>
+                    <div class="roster-item">NOMAD</div>
+                    <!-- MKT -->
+                    <div class="roster-item">VELUM</div>
+                    <div class="roster-item">SCRIBBLE</div>
+                    <div class="roster-item">TIKTOK</div>
+                    <div class="roster-item">YOUTUBE</div>
+                    <div class="roster-item">X-AGENT</div>
+                    <!-- CRYPTO -->
+                    <div class="roster-item">CRYPTONIO</div>
+                    <!-- RESEARCH -->
+                    <div class="roster-item on">MORTY</div>
+                    <div class="roster-item">Q-ORACLE</div>
+                    <div class="roster-item">Q-DEFENDER</div>
+                    <div class="roster-item">RND</div>
+                    <!-- PRODUCTS -->
+                    <div class="roster-item">REGGE</div>
+                    <div class="roster-item">CREAM</div>
+                    <div class="roster-item">DEPOTCHAOS</div>
+                    <div class="roster-item">COLLECTIONS</div>
+                    <!-- MYL SERIES -->
+                    <div class="roster-item">MYL0</div>
+                    <div class="roster-item">MYL1</div>
+                    <div class="roster-item">MYL2</div>
+                    <div class="roster-item">MYL3</div>
+                    <div class="roster-item">MYL4</div>
+                </div>
+            </div>
+            <div class="bottom-panel">
+                <div class="panel-title">📊 SHIP STATS</div>
+                <div style="font-size:10px;">
+                    <div style="display:flex;justify-content:space-between;padding:2px 0;">
+                        <span>Overall Rating:</span><span id="overall" style="color:#0f0">82%</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:2px 0;">
+                        <span>Credits/Day:</span><span id="cpd" style="color:#ffd700">+75</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:2px 0;">
+                        <span>Defense:</span><span id="defense" style="color:#0f0">88%</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:2px 0;">
+                        <span>Active Agents:</span><span id="active" style="color:#0f0">12</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CLI -->
+        <div id="cli">
+            <div id="cli-out"></div>
+            <div id="cli-line">
+                <span id="cli-prompt">MORTY@SEED3:~$</span>
+                <input type="text" id="cli-input" placeholder="Command or speak...">
+                <button id="voice-btn" onclick="toggleVoice()">🎤</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const probeData = {"probes": [{"ip": "104.236.226.236", "location": "New York, US", "lat": 40.7128, "lon": -74.006, "threats": 45}, {"ip": "134.209.193.123", "location": "San Francisco, US", "lat": 37.7749, "lon": -122.4194, "threats": 23}, {"ip": "134.209.221.90", "location": "London, UK", "lat": 51.5074, "lon": -0.1278, "threats": 67}, {"ip": "137.184.25.37", "location": "Frankfurt, DE", "lat": 50.1109, "lon": 8.6821, "threats": 12}, {"ip": "137.184.43.136", "location": "Amsterdam, NL", "lat": 52.3676, "lon": 4.9041, "threats": 34}, {"ip": "138.197.102.64", "location": "Toronto, CA", "lat": 43.6532, "lon": -79.3832, "threats": 8}, {"ip": "138.197.168.7", "location": "Singapore, SG", "lat": 1.3521, "lon": 103.8198, "threats": 156}, {"ip": "138.68.173.67", "location": "Bangalore, IN", "lat": 12.9716, "lon": 77.5946, "threats": 89}, {"ip": "138.68.179.165", "location": "Sydney, AU", "lat": -33.8688, "lon": 151.2093, "threats": 21}, {"ip": "138.68.183.56", "location": "Tokyo, JP", "lat": 35.6762, "lon": 139.6503, "threats": 44}, {"ip": "142.93.167.120", "location": "Seoul, KR", "lat": 37.5665, "lon": 126.978, "threats": 27}, {"ip": "142.93.177.162", "location": "Paris, FR", "lat": 48.8566, "lon": 2.3522, "threats": 15}, {"ip": "142.93.35.35", "location": "Chicago, US", "lat": 41.8781, "lon": -87.6298, "threats": 52}, {"ip": "143.110.222.3", "location": "Dallas, US", "lat": 32.7767, "lon": -96.797, "threats": 19}, {"ip": "143.198.8.121", "location": "Miami, US", "lat": 25.7617, "lon": -80.1918, "threats": 33}, {"ip": "152.42.201.153", "location": "Seattle, US", "lat": 47.6062, "lon": -122.3321, "threats": 11}, {"ip": "157.230.216.250", "location": "Los Angeles, US", "lat": 34.0522, "lon": -118.2437, "threats": 28}, {"ip": "157.230.3.195", "location": "Mumbai, IN", "lat": 19.076, "lon": 72.8777, "threats": 71}, {"ip": "157.245.145.241", "location": "Dubai, UAE", "lat": 25.2048, "lon": 55.2708, "threats": 41}, {"ip": "159.203.139.3", "location": "S\u00e3o Paulo, BR", "lat": -23.5505, "lon": -46.6333, "threats": 16}, {"ip": "159.223.157.83", "location": "Johannesburg, ZA", "lat": -26.2041, "lon": 28.0473, "threats": 9}, {"ip": "159.65.172.31", "location": "Toronto, CA", "lat": 43.651, "lon": -79.3832, "threats": 23}, {"ip": "161.35.83.170", "location": "Mexico City, MX", "lat": 19.4326, "lon": -99.1332, "threats": 14}, {"ip": "162.243.27.167", "location": "Boston, US", "lat": 42.3601, "lon": -71.0589, "threats": 37}, {"ip": "162.243.74.50", "location": "Atlanta, US", "lat": 33.749, "lon": -84.388, "threats": 25}, {"ip": "164.92.133.4", "location": "Phoenix, US", "lat": 33.4484, "lon": -112.074, "threats": 18}, {"ip": "164.92.142.205", "location": "Denver, US", "lat": 39.7392, "lon": -104.9903, "threats": 31}, {"ip": "165.22.237.1", "location": "Berlin, DE", "lat": 52.52, "lon": 13.405, "threats": 22}, {"ip": "165.227.215.136", "location": "Stockholm, SE", "lat": 59.3293, "lon": 18.0686, "threats": 7}, {"ip": "165.227.72.35", "location": "Vienna, AT", "lat": 48.2082, "lon": 16.3738, "threats": 13}, {"ip": "165.245.143.157", "location": "Warsaw, PL", "lat": 52.2297, "lon": 21.0122, "threats": 19}, {"ip": "165.245.177.151", "location": "Prague, CZ", "lat": 50.0755, "lon": 14.4378, "threats": 8}, {"ip": "167.71.201.8", "location": "Zurich, CH", "lat": 47.3769, "lon": 8.5417, "threats": 11}, {"ip": "167.71.46.254", "location": "Helsinki, FI", "lat": 60.1699, "lon": 24.9384, "threats": 6}, {"ip": "170.64.137.250", "location": "Melbourne, AU", "lat": -37.8136, "lon": 144.9631, "threats": 17}, {"ip": "170.64.144.29", "location": "Jakarta, ID", "lat": -6.2088, "lon": 106.8456, "threats": 43}, {"ip": "170.64.151.26", "location": "Bangkok, TH", "lat": 13.7563, "lon": 100.5018, "threats": 29}, {"ip": "170.64.155.44", "location": "Kuala Lumpur, MY", "lat": 3.139, "lon": 101.6869, "threats": 24}, {"ip": "170.64.213.42", "location": "Hong Kong, HK", "lat": 22.3193, "lon": 114.1694, "threats": 62}, {"ip": "170.64.218.126", "location": "Taipei, TW", "lat": 25.033, "lon": 121.5654, "threats": 35}, {"ip": "170.64.228.51", "location": "Manila, PH", "lat": 14.5995, "lon": 120.9842, "threats": 38}, {"ip": "172.214.44.5", "location": "Tel Aviv, IL", "lat": 32.0853, "lon": 34.7818, "threats": 21}, {"ip": "174.138.93.146", "location": "Lisbon, PT", "lat": 38.7223, "lon": -9.1393, "threats": 12}, {"ip": "178.128.106.202", "location": "Madrid, ES", "lat": 40.4168, "lon": -3.7038, "threats": 18}, {"ip": "178.128.252.245", "location": "Rome, IT", "lat": 41.9028, "lon": 12.4964, "threats": 15}, {"ip": "178.62.211.65", "location": "Moscow, RU", "lat": 55.7558, "lon": 37.6173, "threats": 94}, {"ip": "178.62.233.87", "location": "Singapore, SG", "lat": 1.3521, "lon": 103.8198, "threats": 302}, {"ip": "188.166.75.35", "location": "Jakarta, ID", "lat": -6.1751, "lon": 106.865, "threats": 47}, {"ip": "206.189.136.233", "location": "Lagos, NG", "lat": 6.5244, "lon": 3.3792, "threats": 8}, {"ip": "207.154.248.17", "location": "Cairo, EG", "lat": 30.0444, "lon": 31.2357, "threats": 19}, {"ip": "4.210.177.136", "location": "Paris, FR", "lat": 48.8566, "lon": 2.3522, "threats": 26}, {"ip": "52.154.132.165", "location": "Houston, US", "lat": 29.7604, "lon": -95.3698, "threats": 33}, {"ip": "52.159.247.161", "location": "Detroit, US", "lat": 42.3314, "lon": -83.0458, "threats": 21}, {"ip": "64.225.17.163", "location": "Portland, US", "lat": 45.5152, "lon": -122.6784, "threats": 14}, {"ip": "64.227.186.99", "location": "Minneapolis, US", "lat": 44.9778, "lon": -93.265, "threats": 27}]};
+        
+        const depts = {
+            exec: { level: 88, name: 'Executive', leader: 'QORA', agents: 7 },
+            ops: { level: 85, name: 'Operations', leader: 'PATRICIA', agents: 6 },
+            sales: { level: 62, name: 'Sales', leader: 'PULP', agents: 7 },
+            tech: { level: 91, name: 'Technical', leader: 'STACKTRACE', agents: 7 },
+            droids: { level: 95, name: 'Droids', leader: 'C3PO', agents: 3 },
+            games: { level: 78, name: 'Games', leader: 'NOG', agents: 7 },
+            hw: { level: 55, name: 'Hardware', leader: 'COBRA', agents: 4 },
+            mkt: { level: 48, name: 'Marketing', leader: 'VELUM', agents: 5 },
+            crypto: { level: 82, name: 'Crypto', leader: 'CRYPTONIO', agents: 2 },
+            research: { level: 97, name: 'Research', leader: 'MORTY', agents: 4 },
+            intel: { level: 93, name: 'Intelligence', leader: 'NETPROBE', agents: 3 },
+            prod: { level: 76, name: 'Products', leader: 'REGGE', agents: 4 }
+        };
+        
+        let game = { credits: 1000, day: 1, shieldsOn: false };
+        let scene, camera, renderer, globe, probes = [], isRotating = true;
+        
+        // THREE.JS
+        function init() {
+            const c = document.getElementById('globe');
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000005);
+            camera = new THREE.PerspectiveCamera(50, c.clientWidth / c.clientHeight, 0.1, 1000);
+            camera.position.z = 2.5;
+            renderer = new THREE.WebGLRenderer({ canvas: c, antialias: true, alpha: true });
+            renderer.setSize(c.clientWidth, c.clientHeight);
+            scene.add(new THREE.AmbientLight(0x404040, 0.4));
+            const d = new THREE.DirectionalLight(0xffffff, 1); d.position.set(5, 3, 5); scene.add(d);
+            createEarth(); createStars(); createProbes();
+            fetchWalletBalance(); // Auto-fetch wallet on load
+            
+            let drag = false, px = 0;
+            c.addEventListener('mousedown', e => { drag = true; px = e.clientX; });
+            c.addEventListener('mousemove', e => { if(drag) { globe.rotation.y += (e.clientX - px) * 0.005; px = e.clientX; isRotating = false; } document.getElementById('coords').textContent = `ROT: ${(globe.rotation.y * 180 / Math.PI).toFixed(1)}°`; });
+            c.addEventListener('mouseup', () => { drag = false; setTimeout(() => isRotating = true, 2000); });
+            c.addEventListener('touchstart', e => { drag = true; px = e.touches[0].clientX; });
+            c.addEventListener('touchmove', e => { if(drag) { globe.rotation.y += (e.touches[0].clientX - px) * 0.005; px = e.touches[0].clientX; isRotating = false; } });
+            c.addEventListener('touchend', () => { drag = false; setTimeout(() => isRotating = true, 2000); });
+            
+            window.addEventListener('resize', () => { camera.aspect = c.clientWidth / c.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(c.clientWidth, c.clientHeight); });
+            animate();
+        }
+        
+        function createEarth() {
+            const g = new THREE.SphereGeometry(1, 64, 64);
+            const cv = document.createElement('canvas'); cv.width = 2048; cv.height = 1024;
+            const ctx = cv.getContext('2d');
+            const grad = ctx.createLinearGradient(0, 0, 0, 1024);
+            grad.addColorStop(0, '#000820'); grad.addColorStop(0.5, '#001040'); grad.addColorStop(1, '#000820');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, 2048, 1024);
+            ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)';
+            for(let i = 0; i <= 24; i++) { ctx.beginPath(); ctx.moveTo(i*85, 0); ctx.lineTo(i*85, 1024); ctx.stroke(); }
+            for(let i = 0; i <= 12; i++) { ctx.beginPath(); ctx.moveTo(0, i*85); ctx.lineTo(2048, i*85); ctx.stroke(); }
+            ctx.fillStyle = 'rgba(0, 60, 30, 0.4)';
+            [[350,280,180,120],[520,580,80,160],[1050,380,130,180],[1450,320,280,180],[1650,640,90,70]].forEach(c => { ctx.beginPath(); ctx.ellipse(c[0],c[1],c[2],c[3],0,0,Math.PI*2); ctx.fill(); });
+            globe = new THREE.Mesh(g, new THREE.MeshPhongMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, opacity: 0.95 }));
+            scene.add(globe);
+            globe.userData.shield = new THREE.Mesh(new THREE.SphereGeometry(1.08, 32, 32), new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0, side: THREE.DoubleSide }));
+            scene.add(globe.userData.shield);
+        }
+        
+        function createStars() {
+            const g = new THREE.BufferGeometry(); const v = [];
+            for(let i = 0; i < 3000; i++) v.push((Math.random()-0.5)*50, (Math.random()-0.5)*50, (Math.random()-0.5)*50);
+            g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
+            scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size: 0.05 })));
+        }
+        
+        function ll2v(lat, lon, r) {
+            const p = (90-lat)*Math.PI/180, t = (lon+180)*Math.PI/180;
+            return new THREE.Vector3(-r*Math.sin(p)*Math.cos(t), r*Math.cos(p), r*Math.sin(p)*Math.sin(t));
+        }
+        
+        function createProbes() {
+            [...probeData.probes].sort((a,b)=>b.threats-a.threats).forEach(pr => {
+                const pos = ll2v(pr.lat, pr.lon, 1.01);
+                const sz = Math.min(0.02 + pr.threats/2500, 0.08);
+                const col = pr.threats > 100 ? 0xff0000 : pr.threats > 50 ? 0xffff00 : 0x00ff00;
+                const m = new THREE.Mesh(new THREE.SphereGeometry(sz, 16, 16), new THREE.MeshBasicMaterial({ color: col }));
+                m.position.copy(pos);
+                const gl = new THREE.Mesh(new THREE.SphereGeometry(sz*3, 16, 16), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.2 }));
+                m.add(gl);
+                scene.add(m); probes.push(m);
+            });
+            updateThreats();
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            if(isRotating && globe) globe.rotation.y += 0.002;
+            probes.forEach((p,i) => { if(p.children[0]) p.children[0].material.opacity = 0.2*(0.7+Math.sin(Date.now()*0.003+i)*0.3); });
+            if(game.shieldsOn && globe.userData.shield) { globe.userData.shield.rotation.y += 0.01; globe.userData.shield.material.opacity = 0.15+Math.sin(Date.now()*0.005)*0.05; }
+            renderer.render(scene, camera);
+        }
+        
+        // GAME FUNCTIONS
+        function flash(t) { const f = document.getElementById('flash'); f.className = 'flash ' + t + ' show'; setTimeout(() => f.className = 'flash', 500); }
+        
+        function log(m, t='ok') {
+            const f = document.getElementById('intel-msgs');
+            const ti = new Date().toLocaleTimeString('en-US',{hour12:false});
+            f.innerHTML = `<div class="intel-line intel-${t}"><span class="intel-time">[${ti}]</span>${m}</div>` + f.innerHTML;
+            f.innerHTML = f.innerHTML.split('\n').slice(0, 10).join('\n');
+        }
+        
+        function speak(t) { window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
+        
+        const WALLET_ADDR = '0x7244d8C20394CC11D54b2583Fb813B3EB8B72f36';
+        
+        async function fetchWalletBalance() {
+            const el = document.getElementById('wallet-balance');
+            el.textContent = '⏳ Fetching...';
+            try {
+                // Try ETH mainnet via Ankr
+                let eth = '0.000000';
+                try {
+                    const resp = await fetch(`https://rpc.ankr.com/eth`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_getBalance', params: [WALLET_ADDR, 'latest'], id: 1 })
+                    });
+                    const d = await resp.json();
+                    eth = (parseInt(d.result, 16) / 1e18).toFixed(6);
+                } catch(e) { eth = 'ERR'; }
+                
+                // Try Base chain
+                let base = '0.000000';
+                try {
+                    const resp = await fetch(`https://rpc.ankr.com/base`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_getBalance', params: [WALLET_ADDR, 'latest'], id: 1 })
+                    });
+                    const d = await resp.json();
+                    base = (parseInt(d.result, 16) / 1e18).toFixed(6);
+                } catch(e) { base = 'ERR'; }
+                
+                el.textContent = `ETH:Ξ${eth} | BASE:Ξ${base}`;
+                log(`Wallet: ETH Ξ${eth} | Base Ξ${base}`, 'gold');
+            } catch(e) {
+                el.textContent = '❌ Error';
+                log('Wallet fetch failed: ' + e.message, 'crit');
+            }
+        }
+        
+        function updateUI() {
+            document.getElementById('credits').textContent = game.credits;
+            document.getElementById('day').textContent = game.day;
+            
+            Object.entries(depts).forEach(([k, d]) => {
+                const bar = document.getElementById(`bar-${k}`);
+                bar.style.width = d.level + '%';
+                bar.className = 'dept-bar-fill ' + (d.level >= 70 ? 'bar-high' : d.level >= 40 ? 'bar-med' : 'bar-low');
+            });
+            
+            const avg = Math.round(Object.values(depts).reduce((a,d) => a + d.level, 0) / 12);
+            document.getElementById('overall').textContent = avg + '%';
+            document.getElementById('cpd').textContent = '+' + (50 + Math.floor(avg / 2));
+            document.getElementById('defense').textContent = depts.intel.level + '%';
+            document.getElementById('active').textContent = Object.values(depts).filter(d => d.level >= 70).length + '/12';
+        }
+        
+        function upgrade(dept) {
+            if(game.credits >= 100) {
+                game.credits -= 100;
+                depts[dept].level = Math.min(100, depts[dept].level + 5);
+                flash('gold');
+                log(`${depts[dept].leader} upgraded ${depts[dept].name} (+5%)`, 'gold');
+                updateUI();
+            } else {
+                log('Not enough credits!', 'crit');
+            }
+        }
+        
+        function boost(dept) {
+            flash('probe');
+            const gain = Math.floor(Math.random() * 15) + 5;
+            depts[dept].level = Math.min(100, depts[dept].level + gain);
+            log(`${depts[dept].leader} boosted ${depts[dept].name} (+${gain}%)`, 'ok');
+            updateUI();
+        }
+        
+        function toggleShield() {
+            game.shieldsOn = !game.shieldsOn;
+            const btn = document.getElementById('btn-shield');
+            document.getElementById('shield-status').textContent = game.shieldsOn ? 'ACTIVE' : 'DOWN';
+            btn.classList.toggle('on', game.shieldsOn);
+            flash('shield');
+            log(game.shieldsOn ? '🛡️ SHIELDS ACTIVATED' : 'Shields down', game.shieldsOn ? 'ok' : 'warn');
+            speak(game.shieldsOn ? 'Shields activated.' : 'Shields down.');
+        }
+        
+        function probeDrill() {
+            flash('probe');
+            log('🔍 Running probe drill...', 'ok');
+            const gain = Math.floor(Math.random() * 100) + 50;
+            game.credits += gain;
+            log(`Drill complete! +${gain} credits`, 'gold');
+            speak(`Probe drill complete. Gained ${gain} credits.`);
+            updateUI();
+        }
+        
+        function collectCredits() {
+            flash('gold');
+            const cpd = 50 + Math.floor(Object.values(depts).reduce((a,d) => a + d.level, 0) / 24);
+            game.credits += cpd;
+            log(`💰 Collected ${cpd} credits`, 'gold');
+            speak(`Collected ${cpd} credits.`);
+            updateUI();
+        }
+        
+        function recruitAgent() {
+            if(game.credits >= 500) {
+                game.credits -= 500;
+                const deptKeys = Object.keys(depts);
+                const dept = deptKeys[Math.floor(Math.random() * deptKeys.length)];
+                depts[dept].level = Math.min(100, depts[dept].level + 10);
+                flash('gold');
+                log(`👤 New agent joined ${depts[dept].name} (+10%)`, 'gold');
+                speak('New agent recruited.');
+                updateUI();
+            } else {
+                log('Need 500 credits to recruit!', 'crit');
+            }
+        }
+        
+        function repairAll() {
+            if(game.credits >= 200) {
+                game.credits -= 200;
+                Object.keys(depts).forEach(k => { depts[k].level = Math.min(100, depts[k].level + 5); });
+                flash('probe');
+                log('🔧 All departments repaired (+5%)', 'ok');
+                updateUI();
+            } else {
+                log('Need 200 credits for repairs!', 'crit');
+            }
+        }
+        
+        function newDay() {
+            game.day++;
+            const cpd = 50 + Math.floor(Object.values(depts).reduce((a,d) => a + d.level, 0) / 24);
+            game.credits += cpd;
+            flash('gold');
+            log(`📅 Day ${game.day} | +${cpd} credits`, 'gold');
+            speak(`Day ${game.day} begins. Collected ${cpd} credits.`);
+            updateUI();
+        }
+        
+        function updateThreats() {
+            const sorted = [...probeData.probes].sort((a,b)=>b.threats-a.threats);
+            document.getElementById('threats-list').innerHTML = sorted.slice(0, 6).map((p,i)=>
+                `<div class="threat-row"><span class="t-rank">${i+1}</span><span class="t-loc">${p.location.split(',')[0]}</span><span class="t-cnt">${p.threats}</span></div>`
+            ).join('');
+            document.getElementById('probe-count').textContent = probeData.probes.length;
+            document.getElementById('threat-total').textContent = probeData.probes.reduce((a,b)=>a+b.threats,0);
+        }
+        
+        // VOICE
+        let isListening = false;
+        
+        function toggleVoice() {
+            const btn = document.getElementById('voice-btn');
+            isListening = !isListening;
+            btn.classList.toggle('on', isListening);
+            btn.textContent = isListening ? '🎤...' : '🎤';
+            
+            if(isListening && ('SpeechRecognition' in window || webkitSpeechRecognition)) {
+                const R = SpeechRecognition || webkitSpeechRecognition;
+                const r = new R();
+                r.continuous = false;
+                r.interimResults = true;
+                r.onresult = e => {
+                    document.getElementById('cli-input').value = e.results[0][0].transcript;
+                    if(e.results[0].isFinal) cmd(e.results[0][0].transcript);
+                };
+                r.onend = () => { isListening = false; btn.classList.remove('on'); btn.textContent = '🎤'; };
+                r.start();
+            }
+        }
+        
+        function speak(t) { window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
+        
+        function cmd(c) {
+            log('> ' + c);
+            const l = c.toLowerCase();
+            if(l.includes('status')) speak(`Day ${game.day}. ${game.credits} credits. ${Object.values(depts).filter(d=>d.level>=70).length} departments operational. Ready.`);
+            else if(l.includes('shield')) toggleShield();
+            else if(l.includes('drill')) probeDrill();
+            else if(l.includes('collect') || l.includes('credits')) collectCredits();
+            else if(l.includes('recruit')) recruitAgent();
+            else if(l.includes('day') || l.includes('new')) newDay();
+            else if(l.includes('repair')) repairAll();
+            else speak('Command received, Captain.');
+        }
+        
+        document.getElementById('cli-input').addEventListener('keypress', e => {
+            if(e.key === 'Enter' && e.target.value.trim()) { cmd(e.target.value); e.target.value = ''; }
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            updateUI();
+            setInterval(() => document.getElementById('time').textContent = new Date().toLocaleTimeString('en-US',{hour12:false}), 1000);
+            updateThreats();
+            
+            log('🚀 SEED3 FULL FLEET ONLINE', 'gold');
+            log('58 agents across 12 departments', 'ok');
+            log(`${game.credits} starting credits`, 'gold');
+            
+            setTimeout(() => speak('Captain, SEED3 Command Center online. Full fleet active. Fifty-eight agents across twelve departments. Ready for deployment.'), 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "channels": [
+    { "id": "bridge", "name": "BRIDGE", "type": "command", "icon": "🛸" },
+    { "id": "ops", "name": "OPERATIONS", "type": "department", "icon": "⚙️" },
+    { "id": "intel", "name": "INTELLIGENCE", "type": "department", "icon": "🔮" },
+    { "id": "sales", "name": "SALES", "type": "department", "icon": "📈" },
+    { "id": "security", "name": "SECURITY", "type": "department", "icon": "🔒" },
+    { "id": "all", "name": "ALL HANDS", "type": "broadcast", "icon": "📢" }
+  ]
+}

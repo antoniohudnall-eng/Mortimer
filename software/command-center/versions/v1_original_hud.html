@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SEED3 — ORIGINAL HUD</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: #000; color: #0f0; font-family: 'Courier New', monospace; }
+        #app { display: flex; flex-direction: column; height: 100vh; }
+        
+        /* HEADER */
+        #header { background: #001a00; border-bottom: 2px solid #0f0; padding: 8px 15px; text-align: center; }
+        #header h1 { font-size: 24px; text-shadow: 0 0 20px #0f0; letter-spacing: 3px; }
+        #header .sub { font-size: 11px; color: #050; }
+        .live { color: #f00; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        
+        /* STATS BAR */
+        #stats { display: flex; gap: 20px; font-size: 11px; padding: 5px 15px; background: #000; border-bottom: 1px solid #030; flex-wrap: wrap; }
+        .stat-item { display: flex; gap: 5px; }
+        .s-label { color: #050; }
+        .s-val { color: #0f0; }
+        .s-val.crit { color: #f00; }
+        
+        /* MAIN */
+        #main { flex: 1; display: flex; min-height: 0; }
+        
+        /* GLOBE */
+        #globe-wrap { flex: 1; position: relative; background: #000005; }
+        #globe { width: 100%; height: 100%; }
+        
+        /* SIDE PANELS */
+        #panels { width: 280px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+        .panel { background: #001000; border: 1px solid #030; padding: 8px; }
+        .panel-title { font-size: 11px; font-weight: bold; border-bottom: 1px solid #030; padding-bottom: 4px; margin-bottom: 6px; }
+        
+        /* INTEL */
+        #intel { height: 120px; overflow-y: auto; font-size: 10px; }
+        .intel-item { padding: 2px 0; border-bottom: 1px solid #020; }
+        .i-time { color: #050; margin-right: 5px; }
+        .i-crit { color: #f00; }
+        .i-warn { color: #ff0; }
+        
+        /* THREATS */
+        .threat-row { display: flex; justify-content: space-between; padding: 2px 0; font-size: 10px; }
+        .t-rank { color: #f00; width: 15px; }
+        .t-ip { color: #ff0; flex: 1; }
+        .t-cnt { color: #f00; }
+        
+        /* SYSTEMS */
+        .sys-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; font-size: 10px; }
+        .sys-item { display: flex; justify-content: space-between; padding: 2px 4px; background: #000; }
+        
+        /* CREW */
+        .crew { display: flex; flex-wrap: wrap; gap: 4px; font-size: 10px; }
+        .crew-badge { background: #001a00; border: 1px solid #030; padding: 2px 5px; }
+        .crew-badge.on { border-color: #0f0; box-shadow: 0 0 5px #0f0; }
+        
+        /* QUICK ACTIONS */
+        .actions { display: flex; gap: 5px; flex-wrap: wrap; }
+        .action-btn { background: #001000; border: 1px solid #0f0; color: #0f0; padding: 5px 10px; font-family: 'Courier New', monospace; font-size: 10px; cursor: pointer; }
+        .action-btn:hover { background: #0f0; color: #000; }
+        .action-btn.shield { border-color: #0ff; color: #0ff; }
+        .action-btn.danger { border-color: #f00; color: #f00; }
+        
+        /* CLI */
+        #cli { background: #001000; border-top: 2px solid #0f0; padding: 6px 10px; }
+        #cli-out { height: 30px; overflow-y: auto; font-size: 10px; margin-bottom: 4px; }
+        #cli-line { display: flex; align-items: center; gap: 8px; }
+        #cli-prompt { color: #0f0; font-weight: bold; font-size: 11px; }
+        #cli-input { flex: 1; background: transparent; border: none; color: #0f0; font-family: 'Courier New', monospace; font-size: 11px; outline: none; }
+        #voice-btn { background: #0f0; color: #000; border: none; padding: 5px 10px; font-family: 'Courier New', monospace; font-weight: bold; cursor: pointer; font-size: 10px; }
+        
+        /* FLASH */
+        .flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; opacity: 0; }
+        .flash.probe { background: radial-gradient(circle, rgba(0,255,0,0.3) 0%, transparent 70%); }
+        .flash.shield { background: radial-gradient(circle, rgba(0,255,255,0.4) 0%, transparent 70%); }
+        .flash.alert { background: radial-gradient(circle, rgba(255,0,0,0.3) 0%, transparent 70%); }
+        .flash.show { animation: flash 0.5s ease-out; }
+        @keyframes flash { 0% { opacity: 1; } 100% { opacity: 0; } }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #001000; }
+        ::-webkit-scrollbar-thumb { background: #030; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="flash" id="flash"></div>
+        
+        <div id="header">
+            <h1>🖥️ SEED3 COMMAND CENTER</h1>
+            <div class="sub">MORTY — C3 — GENERAL OF THE FORCES | <span class="live">●</span> LIVE | <span id="time">--:--:--</span></div>
+        </div>
+        
+        <div id="stats">
+            <div class="stat-item"><span class="s-label">PROBES:</span><span class="s-val" id="probes">55</span></div>
+            <div class="stat-item"><span class="s-label">THREATS:</span><span class="s-val crit" id="threats">0</span></div>
+            <div class="stat-item"><span class="s-label">MNEMOSYNE:</span><span class="s-val">ARMED</span></div>
+            <div class="stat-item"><span class="s-label">SHIELDS:</span><span class="s-val" id="shields">DOWN</span></div>
+            <div class="stat-item"><span class="s-label">MODE:</span><span class="s-val">EYES</span></div>
+        </div>
+        
+        <div id="main">
+            <div id="globe-wrap">
+                <canvas id="globe"></canvas>
+            </div>
+            
+            <div id="panels">
+                <div class="panel">
+                    <div class="panel-title">📡 LIVE INTEL</div>
+                    <div id="intel"></div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">🚨 THREATS</div>
+                    <div id="threats-list"></div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">🖥️ SYSTEMS</div>
+                    <div class="sys-grid">
+                        <div class="sys-item"><span>OLLAMA</span><span style="color:#0f0">ON</span></div>
+                        <div class="sys-item"><span>QMD</span><span style="color:#0f0">ON</span></div>
+                        <div class="sys-item"><span>BRIDGE</span><span style="color:#0f0">ON</span></div>
+                        <div class="sys-item"><span>VOICE</span><span style="color:#0f0">RDY</span></div>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">👥 CREW</div>
+                    <div class="crew">
+                        <span class="crew-badge on">QORA</span>
+                        <span class="crew-badge on">PATRICIA</span>
+                        <span class="crew-badge on">PULP</span>
+                        <span class="crew-badge on">C3PO</span>
+                        <span class="crew-badge on">CRYPTONIO</span>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">⚡ ACTIONS</div>
+                    <div class="actions">
+                        <button class="action-btn shield" onclick="shields()">🛡️</button>
+                        <button class="action-btn" onclick="drill()">🔍</button>
+                        <button class="action-btn" onclick="scan()">📡</button>
+                        <button class="action-btn danger" onclick="destruct()">☢️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="cli">
+            <div id="cli-out"></div>
+            <div id="cli-line">
+                <span id="cli-prompt">MORTY@SEED3:~$</span>
+                <input type="text" id="cli-input" placeholder="Command...">
+                <button id="voice-btn" onclick="voice()">🎤</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const probeData = PROBE_DATA;
+        let scene, camera, renderer, globe, probes = [], isRotating = true, shieldsOn = false;
+        
+        function init() {
+            const c = document.getElementById('globe');
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000005);
+            camera = new THREE.PerspectiveCamera(50, c.clientWidth / c.clientHeight, 0.1, 1000);
+            camera.position.z = 2.5;
+            renderer = new THREE.WebGLRenderer({ canvas: c, antialias: true, alpha: true });
+            renderer.setSize(c.clientWidth, c.clientHeight);
+            scene.add(new THREE.AmbientLight(0x404040, 0.4));
+            scene.add(Object.assign(new THREE.DirectionalLight(0xffffff, 1), { position: { x: 5, y: 3, z: 5 } }));
+            createEarth();
+            createStars();
+            createProbes();
+            
+            let drag = false, px = 0;
+            c.addEventListener('mousedown', e => { drag = true; px = e.clientX; });
+            c.addEventListener('mousemove', e => { if(drag) { globe.rotation.y += (e.clientX - px) * 0.005; px = e.clientX; isRotating = false; } });
+            c.addEventListener('mouseup', () => { drag = false; setTimeout(() => isRotating = true, 2000); });
+            
+            window.addEventListener('resize', () => { camera.aspect = c.clientWidth / c.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(c.clientWidth, c.clientHeight); });
+            animate();
+        }
+        
+        function createEarth() {
+            const geo = new THREE.SphereGeometry(1, 64, 64);
+            const cv = document.createElement('canvas'); cv.width = 2048; cv.height = 1024;
+            const ctx = cv.getContext('2d');
+            const g = ctx.createLinearGradient(0, 0, 0, 1024);
+            g.addColorStop(0, '#000820'); g.addColorStop(0.5, '#001040'); g.addColorStop(1, '#000820');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, 2048, 1024);
+            ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)';
+            for(let i = 0; i <= 24; i++) { ctx.beginPath(); ctx.moveTo(i*85, 0); ctx.lineTo(i*85, 1024); ctx.stroke(); }
+            for(let i = 0; i <= 12; i++) { ctx.beginPath(); ctx.moveTo(0, i*85); ctx.lineTo(2048, i*85); ctx.stroke(); }
+            ctx.fillStyle = 'rgba(0, 60, 30, 0.4)';
+            [[350,280,180,120],[520,580,80,160],[1050,380,130,180],[1450,320,280,180],[1650,640,90,70]].forEach(c => { ctx.beginPath(); ctx.ellipse(c[0],c[1],c[2],c[3],0,0,Math.PI*2); ctx.fill(); });
+            globe = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, opacity: 0.95 }));
+            scene.add(globe);
+            globe.userData.shield = new THREE.Mesh(new THREE.SphereGeometry(1.08, 32, 32), new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0, side: THREE.DoubleSide }));
+            scene.add(globe.userData.shield);
+        }
+        
+        function createStars() {
+            const g = new THREE.BufferGeometry(); const v = [];
+            for(let i = 0; i < 3000; i++) v.push((Math.random()-0.5)*50, (Math.random()-0.5)*50, (Math.random()-0.5)*50);
+            g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
+            scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size: 0.05 })));
+        }
+        
+        function ll2v(lat, lon, r) {
+            const p = (90-lat)*Math.PI/180, t = (lon+180)*Math.PI/180;
+            return new THREE.Vector3(-r*Math.sin(p)*Math.cos(t), r*Math.cos(p), r*Math.sin(p)*Math.sin(t));
+        }
+        
+        function createProbes() {
+            [...probeData.probes].sort((a,b)=>b.threats-a.threats).forEach(pr => {
+                const pos = ll2v(pr.lat, pr.lon, 1.01);
+                const sz = Math.min(0.02 + pr.threats/2500, 0.08);
+                const col = pr.threats > 100 ? 0xff0000 : pr.threats > 50 ? 0xffff00 : 0x00ff00;
+                const m = new THREE.Mesh(new THREE.SphereGeometry(sz, 16, 16), new THREE.MeshBasicMaterial({ color: col }));
+                m.position.copy(pos); m.userData = pr;
+                const gl = new THREE.Mesh(new THREE.SphereGeometry(sz*3, 16, 16), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.2 }));
+                m.add(gl);
+                scene.add(m); probes.push(m);
+            });
+            updateThreats();
+        }
+        
+        function animate() { requestAnimationFrame(animate); if(isRotating && globe) globe.rotation.y += 0.002; probes.forEach((p,i) => { if(p.children[0]) p.children[0].material.opacity = 0.2*(0.7+Math.sin(Date.now()*0.003+i)*0.3); }); if(shieldsOn && globe.userData.shield) { globe.userData.shield.rotation.y += 0.01; globe.userData.shield.material.opacity = 0.15+Math.sin(Date.now()*0.005)*0.05; } renderer.render(scene, camera); }
+        
+        function flash(t) { const f = document.getElementById('flash'); f.className = 'flash ' + t + ' show'; setTimeout(() => f.className = 'flash', 500); }
+        function log(m, t='normal') { const f = document.getElementById('intel'); const ti = new Date().toLocaleTimeString('en-US',{hour12:false}); f.innerHTML = `<div class="intel-item i-${t}"><span class="i-time">[${ti}]</span>${m}</div>` + f.innerHTML; f.innerHTML = f.innerHTML.split('\n').slice(0,15).join('\n'); }
+        function speak(t) { window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
+        
+        function shields() { shieldsOn = !shieldsOn; document.getElementById('shields').textContent = shieldsOn ? 'ACTIVE' : 'DOWN'; flash('shield'); log(shieldsOn ? '🛡️ SHIELDS ON' : 'Shields down'); speak(shieldsOn ? 'Shields activated.' : 'Shields down.'); }
+        function drill() { flash('probe'); log('🔍 Probe drill...', 'normal'); speak('Running probe drill.'); setTimeout(() => { const t = [...probeData.probes].sort((a,b)=>b.threats-a.threats)[0]; log(`Top: ${t.location} - ${t.threats}`, 'warn'); speak(`Highest threat: ${t.location}, ${t.threats} attempts.`); }, 1500); }
+        function scan() { log('📡 Scanning...'); speak('Scanning network.'); setTimeout(() => { log(`${probeData.probes.length} probes active`, 'normal'); speak('Scan complete. All nominal.'); }, 1000); }
+        function destruct() { if(confirm('☢️ SELF-DESTRUCT?')) { flash('alert'); log('☢️ DESTRUCT', 'crit'); speak('Self destruct initiated.'); setTimeout(() => { log('Reinitializing...'); speak('Network reinitializing.'); }, 2000); } }
+        
+        function voice() { if('SpeechRecognition' in window||webkitSpeechRecognition) { const R = SpeechRecognition||webkitSpeechRecognition; const r = new R(); r.continuous=false; r.interimResults=true; r.onresult = e => { document.getElementById('cli-input').value = e.results[0][0].transcript; if(e.results[0].isFinal) cmd(e.results[0][0].transcript); }; r.start(); } }
+        function cmd(c) { log('> ' + c); const l = c.toLowerCase(); if(l.includes('status')||l.includes('stat')) speak(`${probeData.probes.length} probes. ${probeData.probes.reduce((a,b)=>a+b.threats,0)} threats. All nominal.`); else if(l.includes('shield')) shields(); else if(l.includes('drill')) drill(); else if(l.includes('scan')) scan(); else speak('Ready.'); }
+        
+        document.getElementById('cli-input').addEventListener('keypress', e => { if(e.key === 'Enter' && e.target.value.trim()) { cmd(e.target.value); e.target.value = ''; } });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            setInterval(() => document.getElementById('time').textContent = new Date().toLocaleTimeString('en-US',{hour12:false}), 1000);
+            updateThreats();
+            log('SEED3 online', 'normal'); log(`${probeData.probes.length} probes`, 'normal');
+            setTimeout(() => speak('Captain, SEED3 Command Center online. All systems nominal.'), 500);
+        });
+        
+        function updateThreats() {
+            document.getElementById('threats').textContent = probeData.probes.reduce((a,b)=>a+b.threats,0);
+            document.getElementById('probes').textContent = probeData.probes.length;
+            document.getElementById('threats-list').innerHTML = [...probeData.probes].sort((a,b)=>b.threats-a.threats).slice(0,8).map((p,i)=>`<div class="threat-row"><span class="t-rank">${i+1}</span><span class="t-ip">${p.location.split(',')[0]}</span><span class="t-cnt">${p.threats}</span></div>`).join('');
+        }
+    </script>
+</body>
+</html>

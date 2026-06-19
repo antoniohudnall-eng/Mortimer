@@ -1,0 +1,34 @@
+{
+  "missions": [
+    {
+      "id": "intel-001", "name": "NETWORK SCAN", "dept": "Intelligence",
+      "status": "active", "progress": 75, "reward": 150,
+      "description": "Scan probe network for threats",
+      "assigned": ["morty", "netprobe"]
+    },
+    {
+      "id": "sales-001", "name": "CLIENT OUTREACH", "dept": "Sales",
+      "status": "active", "progress": 40, "reward": 300,
+      "description": "Contact 50 potential clients",
+      "assigned": ["pulp", "jane"]
+    },
+    {
+      "id": "tech-001", "name": "SYSTEM UPDATE", "dept": "Technical",
+      "status": "active", "progress": 90, "reward": 200,
+      "description": "Deploy latest security patches",
+      "assigned": ["stacktrace", "pipeline"]
+    },
+    {
+      "id": "mkt-001", "name": "VIRAL CAMPAIGN", "dept": "Marketing",
+      "status": "standby", "progress": 0, "reward": 500,
+      "description": "Launch TikTok marketing campaign",
+      "assigned": ["velum", "tiktok"]
+    },
+    {
+      "id": "crypto-001", "name": "PORTFOLIO REVIEW", "dept": "Crypto",
+      "status": "active", "progress": 60, "reward": 250,
+      "description": "Analyze and rebalance holdings",
+      "assigned": ["cryptonio", "dusty"]
+    }
+  ]
+}
