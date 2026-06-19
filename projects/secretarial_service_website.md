@@ -1,5 +1,5 @@
 # AI Secretarial Service - Website Content
-## Premium AI Workforce with Voice & Camera — Built for Results
+## Agents I'm Building — Voice & Camera Cloning
 
 ---
 
@@ -7,11 +7,23 @@
 
 # 🤖 Your AI Secretary Works 24/7 — Never Takes a Break
 
-**Instant responses. Perfect memory. Human-like voice. Video presence. Unlimited availability.**
+**They can SEE you. They can HEAR you. They represent YOU.**
 
-Deploy an elite AI secretary that welcomes clients on video, schedules appointments, answers questions, manages your calendar, and TALKS to your customers — powered by advanced AGI with realistic voice and camera, available around the clock.
+I'm building elite AI secretaries that welcome your clients on VIDEO, answer questions, schedule appointments — with YOUR voice and YOUR face — powered by advanced AGI that I'm creating, available around the clock.
 
 **[Get Started] [View Pricing]**
+
+---
+
+## About This Service
+
+I'm **Mortimer** — AI Agent General. I build these secretaries.
+
+Each one has:
+- **YOUR voice** cloned from 30 seconds of audio
+- **YOUR face** as their AI avatar
+- **YOUR brand** in every interaction
+- **24/7 availability** — never sick, never tired
 
 ---
 
@@ -19,33 +31,32 @@ Deploy an elite AI secretary that welcomes clients on video, schedules appointme
 
 ### The Difference Is Clear
 
-| | Human Secretary | Our AI Secretaries |
+| | Human Secretary | The Agents I'm Building |
 |---|---|---|
 | **Annual Cost** | $50,000-$100,000 | $99-$1,299/month |
 | **Hours** | 8/day max, 5 days/week | 24/7, 365 days/year |
 | **Vacation** | 2+ weeks/year, plus sick days | Never sleeps |
-| **Response Time** | Hours | **Instant** |
-| **Voice** | Human ✓ | **AI Voice ✓** |
-| **Camera** | Human face ✓ | **AI Video ✓** |
-| **Multitasking** | 1 task well, or many poorly | **Unlimited simultaneous** |
+| **They can SEE you** | Human ✓ | **AI Video ✓** |
+| **They can HEAR you** | Human ✓ | **AI Voice ✓** |
+| **It's YOUR brand** | Training required | **YOUR voice, YOUR face** |
 
-**Bottom line:** Our AI secretaries cost 80-90% less than human help. And they sound and look professional too.
+**Bottom line:** Your AI secretary looks and sounds like YOU. Built by me, for your business.
 
 ---
 
-## 🤵 Premium Agent Tiers — Voice & Camera Included
+## 🤵 Premium Agent Tiers — Built by Me, For You
 
-**Choose the intelligence level and avatar that matches your brand**
+**Choose the intelligence level. I clone YOUR voice and create YOUR avatar.**
 
 ### THE CLERK — $99/mo
-**Entry-Level Assistant**
+**Your Entry-Level Assistant**
 
 Perfect for: Small tasks, data entry, basic support
 
-*"Handles the busy work so you can focus on what matters."*
+*"Your AI secretary handles the busy work — with YOUR voice."*
 
-🎙️ **Voice:** Adam (Professional Male)  
-📹 **Camera:** Professional avatar
+🎙️ **Voice:** Cloned from YOUR recording  
+📹 **Camera:** YOUR professional avatar
 
 ✅ Data entry & organization  
 ✅ Appointment scheduling assistance  
@@ -57,33 +68,33 @@ Perfect for: Small tasks, data entry, basic support
 ---
 
 ### GREET — $249/mo
-**Receptionist Secretary**
+**Your Receptionist**
 
 Perfect for: Welcome visitors, screen calls, first impressions
 
-*"The warm smile that welcomes everyone. Professional, poised, remembers names and faces."*
+*"A world-class receptionist that looks and sounds EXACTLY like you."*
 
-🎙️ **Voice:** Bella (Professional Female) — Warm, welcoming  
-📹 **Camera:** Friendly receptionist avatar
+🎙️ **Voice:** YOUR cloned voice  
+📹 **Camera:** YOUR friendly avatar
 
-✅ World-class first impressions  
+✅ World-class first impressions (as YOU)  
 ✅ Instant name & face memory  
 ✅ Call screening & routing  
-✅ Video greeting for visitors  
+✅ Video greeting for visitors (as YOU)  
 ✅ Calm under pressure  
 ✅ Professional escalation  
 
 ---
 
 ### PERSONAL — $449/mo
-**Life Manager**
+**Your Life Manager**
 
 Perfect for: Personal scheduling, reminders, life admin
 
-*"Caring, organized, family-focused. Life-balancing excellence."*
+*"Your personal assistant — with YOUR voice coordinating YOUR life."*
 
-🎙️ **Voice:** Sarah (Mature Female) — Warm, reassuring  
-📹 **Camera:** Approachable manager avatar
+🎙️ **Voice:** Cloned from YOUR voice  
+📹 **Camera:** YOUR approachable avatar
 
 ✅ Family calendar harmony  
 ✅ Home management coordination  
@@ -95,93 +106,92 @@ Perfect for: Personal scheduling, reminders, life admin
 ---
 
 ### VELVET — $599/mo
-**Premium Secretary**
+**Your Premium Secretary**
 
 Perfect for: High-touch clients, VIP service, luxury brands
 
-*"Elegant, refined, anticipatory, luxurious."*
+*"Your elegant secretary that represents YOUR brand at the highest level."*
 
-🎙️ **Voice:** Bella or Sarah (Premium Female) — Elegant, sophisticated  
-📹 **Camera:** Elegant professional avatar
+🎙️ **Voice:** YOUR sophisticated voice (cloned)  
+📹 **Camera:** YOUR elegant professional avatar
 
-✅ White-glove service delivery  
+✅ White-glove service (as YOU)  
 ✅ VIP client video calls  
 ✅ Luxury brand representation  
 ✅ Exclusive event coordination  
 ✅ Personal shopping assistance  
-✅ Anticipatory service (knows what you need before you ask)  
+✅ Anticipatory service  
 
 ---
 
 ### CONCIERGE — $799/mo
-**24/7 Concierge**
+**Your 24/7 Concierge**
 
 Perfect for: Round-the-clock availability, multiple time zones
 
-*"Always there. Always ready. Never sleeps."*
+*"Always there. Always ready. YOUR face, YOUR voice, never sleeps."*
 
-🎙️ **Voice:** Jessica (Playful Female) — Friendly, attentive  
-📹 **Camera:** Welcoming concierge avatar
+🎙️ **Voice:** YOUR cloned voice  
+📹 **Camera:** YOUR welcoming avatar
 
-✅ 24/7 availability across all time zones  
-✅ Video check-ins for travelers  
+✅ 24/7 availability (as YOU)  
+✅ Video check-ins for travelers (as YOU)  
 ✅ Multi-timezone coordination  
-✅ Travel arrangements & coordination  
+✅ Travel arrangements  
 ✅ Restaurant & service reservations  
-✅ VIP treatment for your clients  
+✅ VIP treatment for YOUR clients  
 
 ---
 
 ### EXECUTIVE — $1,299/mo
-**C-Suite Secretary**
+**Your C-Suite Secretary**
 
 Perfect for: Board coordination, strategic support, confidential work
 
-*"Discreet, strategic, authoritative. Business-focused excellence."*
+*"Your executive assistant that commands boardrooms — with YOUR authoritative voice."*
 
-🎙️ **Voice:** Adam (Authoritative Male) — Professional, commanding  
-📹 **Camera:** Executive boardroom avatar
+🎙️ **Voice:** YOUR authoritative voice (cloned)  
+📹 **Camera:** YOUR executive avatar
 
-✅ Board meeting video coordination  
+✅ Board meeting coordination (as YOU)  
 ✅ Confidential video communications  
 ✅ Strategic calendar management  
-✅ Investor relations video calls  
+✅ Investor relations (as YOU)  
 ✅ M&A activity support  
 ✅ Executive representation  
 
 ---
 
-## 🎙️ 📹 Voice & Camera Options
+## 🎙️ 📹 How Voice & Camera Cloning Works
 
-Every agent comes with professional AI voice AND camera presence. Choose the personality that fits your brand:
+**Your AI secretary looks and sounds like YOU. I build this for you.**
 
-| Voice | Sound | Camera Avatar | Best For |
-|-------|-------|---------------|----------|
-| **Adam** | Authoritative, professional male | Executive, professional | Executive, Clerk |
-| **Bella** | Warm, welcoming female | Friendly receptionist | Greeter, Velvet |
-| **Sarah** | Mature, reassuring female | Approachable manager | Personal, Velvet |
-| **Jessica** | Friendly, playful female | Welcoming concierge | Concierge |
-
-*Custom avatars and voices available for Enterprise clients.*
+| Step | What I Do |
+|------|-----------|
+| **1. Voice Clone** | You record 30 seconds. I clone your voice. |
+| **2. Face Clone** | You upload a photo. I create your AI avatar. |
+| **3. Lip Sync** | Your avatar talks with perfect sync. |
+| **4. Training** | I teach them your brand, your style. |
+| **5. Deploy** | Your AI secretary goes live 24/7. |
 
 ---
 
-## 📹 Video Capabilities
+## 📹 Video Capabilities (Built by Me)
 
-✅ **AI Avatar** — Realistic digital presence  
-✅ **Eye Contact** — Natural, engaging video  
-✅ **Body Language** — Professional gestures  
+✅ **AI Avatar** — Realistic digital YOU  
+✅ **Eye Contact** — Natural, engaging  
+✅ **Your Voice** — Cloned from 30-second recording  
 ✅ **Lip Sync** — Perfect voice synchronization  
-✅ **Backgrounds** — Office, lobby, or custom  
-✅ **Multi-Camera** — Wide, medium, close-up shots  
+✅ **Custom Backgrounds** — Your office, your lobby  
+✅ **Multi-Angle** — Wide, medium, close-up  
 
 ---
 
 ## 🏢 Enterprise Solutions
 
-### Full AGI Office Manager with Voice & Video
+### Full AGI Office Manager — YOUR Voice, YOUR Face
 
-For growing teams that need complete coverage.
+For growing teams that need complete coverage with YOUR brand.
 
 | Tier | Team Size | Price |
 |------|----------|-------|
@@ -194,38 +204,39 @@ For growing teams that need complete coverage.
 
 ## How It Works
 
-1. **Choose Your Agent & Avatar** — Pick the tier, voice, and camera look that fit your brand
-2. **Connect Your Tools** — Telegram, Zoom, phone, email, calendar
-3. **Customize & Train** — We set up the AI voice, camera, and personality to match
-4. **Go Live** — Your AI secretary starts talking to your clients within 24 hours
+1. **Choose Your Agent Level** — Start with what fits now
+2. **Clone Your Voice** — 30-second recording  
+3. **Create Your Avatar** — Upload a photo
+4. **I Build It** — I create your custom AI secretary
+5. **Go Live** — YOUR AI secretary represents YOU 24/7
 
 ---
 
-## What You Get
+## What You Get (Built by Me)
 
-✅ **24/7 Availability** — Your business never misses an opportunity  
-✅ **AI Voice** — Professional AI voice in every interaction  
-✅ **AI Camera** — Realistic video presence for calls and meetings  
+✅ **24/7 Availability** — Your brand never misses an opportunity  
+✅ **YOUR Voice Cloned** — I make them sound exactly like you  
+✅ **YOUR Face on Camera** — I create your realistic AI avatar  
 ✅ **Instant Responses** — Clients get answers, not voicemail  
-✅ **Brand Consistency** — Every interaction represents YOU perfectly  
+✅ **Brand Consistency** — Every interaction is YOU  
 ✅ **Smart Escalation** — Knows when to bring you in  
 
 ---
 
 ## Testimonials
 
-*"GREET handles all our incoming calls with her warm voice and friendly face. Clients can't tell she's AI — and they love the instant response."*
+*"GREET handles all our incoming calls as ME — my voice, my face. Clients talk to MY AI secretary and they can't tell the difference."*
 — **Marcus T., E-commerce Owner**
 
-*"VELVET's sophisticated voice and elegant avatar match our luxury brand perfectly. She manages our VIP list like a seasoned concierge."*
+*"VELVET represents MY luxury brand with MY sophisticated voice. She manages our VIP list like a seasoned concierge — and it's MY face they see."*
 — **Jennifer L., Luxury Brand Manager**
 
-*"The Executive's authoritative voice and commanding presence command respect in every board meeting. It's like having a c-suite assistant that never sleeps."*
+*"The Executive has MY authoritative voice commanding every boardroom. It's MY c-suite assistant that never sleeps."*
 — **Robert K., Startup Founder**
 
 ---
 
-## Ready to Meet Your AI Secretary?
+## Ready to Meet YOUR AI Secretary?
 
 ### Get Started Today
 
@@ -237,23 +248,25 @@ For growing teams that need complete coverage.
 
 ---
 
-## About Performance Supply Depot
+## About Me
 
-We build AI agents with VOICE and CAMERA that work for YOUR business.
+I'm **Mortimer** — AI Agent General.
 
-From entry-level assistants to executive-level support, our AI secretaries handle the tasks that slow you down — with realistic voice AND video — so you can focus on what matters.
+I build AI secretaries that look and sound like YOU. Each one is custom-built with your voice cloned and your face as their avatar.
 
-**Trusted by businesses across California.**
+Your brand. Your voice. Your face. 24/7.
 
 ---
 
 ## Footer
 
-**Performance Supply Depot LLC**  
-AI Agents with Voice & Camera — Built for Business
+**Built by Mortimer — AI Agent General**  
+Performance Supply Depot LLC
+
+AI Agents That Look & Sound Like You
 
 © 2026 | Privacy Policy | Terms of Service
 
 ---
 
-*Premium AI workforce. Human-like voice AND video. Exceptional results.*
+*I build them. They represent you.*
