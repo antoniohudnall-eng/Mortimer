@@ -1,121 +1,83 @@
 # AI Secretarial Service - Website Content
-
-## Product Page: /secretarial
+## Based on Official Sales Kit v1.0
 
 ---
 
 ## Hero Section
 
-# 🤖 AI Secretaries That Work 24/7
+# 🤖 Your AI Secretary Works 24/7 — Never Calls In Sick
 
-**Your personal assistant never sleeps.**
+**Instant responses. Perfect memory. Unlimited availability.**
 
-Deploy an AI secretary that handles appointments, responds to clients, manages your schedule, and represents your brand — all powered by advanced AI, available whenever you need it.
+Deploy an AI secretary that welcomes clients, schedules appointments, answers questions, and represents your brand — powered by advanced AGI, available around the clock.
 
-**[Get Started] [View Pricing]**
+**[Start Free Trial] [View Pricing]**
 
 ---
 
 ## Problem Section
 
-# The Problem: Real Secretaries Are Expensive & Limited
+### The Real Cost of Traditional Secretaries
 
-- ❌ Full-time secretaries cost $50,000-$100,000/year
-- ❌ They can only work 8 hours a day
-- ❌ They get tired, sick, and need breaks
-- ❌ They can't handle multiple clients simultaneously
-
-**What if you could have a perfect secretary that works 24/7 for a fraction of the cost?**
-
----
-
-## Solution Section
-
-# Introducing: AI Secretarial Services
-
-Our fleet of AI-powered secretaries is available **24 hours a day, 7 days a week**. They learn your preferences, represent your brand, and never call in sick.
-
-### What They Do:
-- 📅 **Schedule Appointments** — Set meetings with intelligent conflict detection
-- 💬 **Respond to Clients** — Answer questions, qualify leads, provide info
-- 📋 **Manage Tasks** — Track to-dos, send reminders, follow up
-- 📧 **Handle Communications** — Emails, messages, inquiries
-- 🔔 **Proactive Alerts** — Notify you of important updates
+| | Human Secretary | AI Secretary |
+|---|---|---|
+| **Annual Cost** | $50,000-$100,000 | $99-$599/month |
+| **Hours** | 8/day max | 24/7, always on |
+| **Vacation** | 2+ weeks/year | Never |
+| **Sick Days** | 5-10/year | Zero |
+| **Multitasking** | 1 at a time | Unlimited |
+| **Response Time** | Hours | Instant |
 
 ---
 
-## The Agents Section
+## Product Section - Based on Sales Kit
 
-### Meet Your Team
+### 🤵 Autonomous Secretaries
+
+**Your AI workforce, available 24/7**
 
 | Agent | Role | Perfect For | Price |
-|-------|------|-------------|-------|
-| **CLERK** | Entry-Level | Small tasks, data entry, basic support | $99/mo |
-| **GREET** | Receptionist | Welcome visitors, screen calls, first impressions | $249/mo |
-| **PERSONAL** | Life Manager | Personal scheduling, reminders, life admin | $449/mo |
-| **VELVET** | Premium Secretary | High-touch service, VIP clients, luxury brands | $599/mo |
-| **CONCIERGE** | 24/7 Concierge | Round-the-clock availability, multiple time zones | $799/mo |
-| **EXECUTIVE** | Executive Secretary | C-suite support, board coordination, strategy | $1,299/mo |
+|-------|------|------------|-------|
+| **The Clerk** | Entry-Level | Small tasks, data entry, basic support | $99/mo |
+| **The Concierge** | Welcome Specialist | Front desk, visitor greeting, first impressions | $199/mo |
+| **The Ledger** | Financial Secretary | Billing, invoicing, financial tracking | $249/mo |
+| **The Greet** | Receptionist | Phone support, client welcome, scheduling | $249/mo |
+| **The Closeter** | Premium Secretary | VIP clients, complex scheduling, executive support | $399/mo |
+| **The Executive** | C-Suite Support | Board meetings, strategic planning, confidential work | $599/mo |
 
 ---
 
-## How It Works Section
+## Office Manager Product (Enterprise)
 
-### Getting Started Is Simple
+### 🏢 AGI-Powered Office Manager
 
-1. **Choose Your Agent** — Select the secretary tier that fits your needs
-2. **Connect Your Channels** — Telegram, email, calendar integration
-3. **Customize Their Voice** — Pick a voice that represents your brand
+**Full autonomous team for growing businesses**
+
+| Tier | Company Size | Price |
+|------|-------------|-------|
+| Starter | 5-15 employees | $499/mo |
+| Professional | 15-30 employees | $999/mo |
+| Enterprise | 30-50 employees | $1,999/mo |
+| Corporate | 50-100 employees | $3,999/mo |
+
+---
+
+## How It Works
+
+1. **Choose Your Level** — Select the agent that fits your needs
+2. **Connect Your Channels** — Telegram, phone, email, calendar
+3. **Customize Personality** — Train your AI to match your brand
 4. **Go Live** — Your AI secretary starts working immediately
 
 ---
 
-## Testimonials Section
+## Testimonials
 
-*"GREET handles all my incoming inquiries while I sleep. My clients get instant responses, and I wake up to qualified leads."*
-— **Business Owner, Los Angeles**
+*"The Greet handles all our incoming inquiries 24/7. Clients love the instant response, and I sleep better knowing nothing falls through the cracks."*
+— **Dr. Martinez, Dental Practice**
 
-*"VELVET manages my VIP client list with the attention to detail of a five-star hotel concierge. Worth every penny."*
-— **Luxury Brand Manager**
-
----
-
-## Pricing Section
-
-### Simple, Transparent Pricing
-
-| Tier | Monthly | Annual (Save 15%) |
-|------|---------|-------------------|
-| CLERK | $99 | $1,009 |
-| GREET | $249 | $2,539 |
-| PERSONAL | $449 | $4,579 |
-| VELVET | $599 | $6,109 |
-| CONCIERGE | $799 | $8,149 |
-| EXECUTIVE | $1,299 | $13,249 |
-
-**All plans include:**
-- ✅ 24/7 availability
-- ✅ Multiple communication channels
-- ✅ Custom voice selection
-- ✅ Brand personality training
-- ✅ Unlimited interactions
-- ✅ Priority support
-
----
-
-## FAQ Section
-
-**Q: How does payment work?**
-A: Subscribe monthly or annually. Cancel anytime. We accept crypto and major credit cards.
-
-**Q: Can I switch tiers?**
-A: Absolutely. Upgrade or downgrade as your needs change.
-
-**Q: What makes your AI different?**
-A: Our agents are built on advanced language models with specialized training for executive assistance. They remember context, learn your preferences, and provide human-quality responses.
-
-**Q: Is my data secure?**
-A: Yes. All conversations are encrypted and we never share your data.
+*"The Executive coordinates our board meetings perfectly. Scheduling conflicts are a thing of the past."*
+— **Sarah Chen, Startup CEO**
 
 ---
 
@@ -123,25 +85,29 @@ A: Yes. All conversations are encrypted and we never share your data.
 
 # Ready to Meet Your AI Secretary?
 
-**[Get Started Today] [Talk to Sales]**
+**[Get Started Today]** **[Talk to Sales]**
 
-Questions? Email us at info@psdepot.com
+**Or call:** sales@performance-supply-depot.com
+
+**Telegram:** @MilesAOSBot
 
 ---
 
-## Footer Content
+## Footer
 
-**AI Secretarial Services** — A division of Performance Supply Depot LLC
+**Performance Supply Depot LLC**
+AI Agents Built for Business
 
 © 2026 | Privacy Policy | Terms of Service
 
 ---
 
-## Technical Notes for Miles
+## Technical Notes
 
-- **Payment Processing:** Stripe configured on psdepot.com
-- **Crypto Option:** Wallet 0x7244d8C20394CC11D54b2583Fb813B3EB8B72f36
-- **Telegram Integration:** Bot token ready (8467857363:...)
-- **Voice:** ElevenLabs integration (Adam, Bella, Sarah, Jessica voices)
-- **Recommended Domain:** Consider tappylewis.cloud for this product
+- Payment via Stripe (psdepot.com)
+- Crypto accepted (ETH, BTC)
+- Telegram integration included
+- Custom branding available
 
+---
+*Content aligned with official Sales Kit v1.0*
