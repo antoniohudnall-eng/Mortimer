@@ -1,0 +1,11 @@
+{
+  "name": "MORTIMER_DROID",
+  "description": "Mortimer voice for DroidScript TextToSpeech",
+  "formula": "Speed = GM (φ), Pitch = PI / GM (π/φ)",
+  "gm": 1.6180339887,
+  "pi": 3.1415926535,
+  "speed": 1.618,
+  "pitch": 1.9416,
+  "droidscript_code": "app.TextToSpeech(text, GM, PI / GM);",
+  "notes": "Golden Mean for speed, π divided by Golden Mean for pitch"
+}
