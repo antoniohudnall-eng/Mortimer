@@ -1,80 +1,47 @@
-# 🎬 AGENT SALES TIKTOK - COMPLETE
+# 🎬 Agent Sales TikTok Pipeline
 
-## What We Built
+## Voice Configuration
 
-```
-~/mortimer/agent-sales-tiktok/
-└── main.py     # Full pipeline: script → voice → video
-```
+| Provider | Status | Role |
+|----------|--------|------|
+| **espeak-ng** | ✅ ACTIVE | PRIMARY (native) |
+| **ElevenLabs** | ⏸️ STANDBY | No credits |
 
-## ✅ COMPLETED
+ElevenLabs key is stored but has no credits. Using native espeak-ng only.
 
-| Component | Status |
-|-----------|--------|
-| Script Generator | ✅ 6 agent types with viral hooks |
-| Video Creator | ✅ 1080x1920 TikTok format |
-| Voice (ElevenLabs) | ✅ Integrated (needs key) |
-| Temporal Workflows | ✅ Patricia-approved patterns |
-| GitHub Pushed | ✅ antoniohudnall-eng/Mortimer |
-
-## 🔴 NEEDED FOR VOICE
-
-### Step 1: Get ElevenLabs API Key
-
-1. Go to **https://elevenlabs.io/api**
-2. Login/signup
-3. Copy your API key (starts with `sk_`)
-4. Send to me OR set it:
+## Usage
 
 ```bash
-export ELEVENLABS_API_KEY="sk_your_key_here"
+cd ~/mortimer/agent-sales-tiktok
+
+# Generate single video
+python3 temporal_workflows.py gen clerk
+
+# Generate all 6 agents
+python3 temporal_workflows.py all
+
+# Batch generate
+python3 temporal_workflows.py batch 10
 ```
 
-## 🟡 TIKTOK UPLOAD OPTIONS
+## Agents
 
-### Option A: Manual (Fastest)
-1. Videos saved to `/storage/emulated/0/Movies/AgentSales/`
-2. Open TikTok app
-3. Upload from gallery
+| Agent | Price | Tagline |
+|-------|-------|---------|
+| CLERK | $97/mo | Handles emails 24/7 |
+| GREET | $147/mo | Professional receptionist |
+| PERSONAL | $197/mo | Your AI life manager |
+| VELVET | $247/mo | Premium assistant |
+| CONCIERGE | $297/mo | 24/7 VIP support |
+| EXECUTIVE | $497/mo | C-suite coordination |
 
-### Option B: Third-Party Scheduler
-- **Later.com** - Schedule posts
-- **Publer** - Auto-post
-- **Buffer** - Queue management
+## Videos
 
-### Option C: TikAPI (Paid)
-- **https://tikapi.io/** - Real API for auto-post
-- Requires payment but full automation
+Output: `/storage/emulated/0/Movies/AgentSales/`
 
-## 📊 FILES
+Format: 1080x1920 (TikTok/Reels)
+Voice: espeak-ng (native)
 
-```
-GitHub: github.com/antoniohudnall-eng/Mortimer
-Branch: main
-New:    agent-sales-tiktok/main.py
+## Temporal Steps
 
-Local:  /storage/emulated/0/Movies/AgentSales/
-```
-
-## 🎯 NEXT STEPS
-
-1. **Captain:** Set ElevenLabs key → I generate voiceovers
-2. **Captain:** Choose upload method (manual vs auto)
-3. **Morty:** Generate daily batch → Send to Captain via Telegram
-4. **Miles:** Monitor & escalate
-
-## 📹 VIDEOS CREATED TODAY
-
-```
-AST_0619_130215_con.mp4  - CONCIERGE
-AST_0619_130221_exe.mp4  - EXECUTIVE  
-AST_0619_130227_per.mp4  - PERSONAL
-AST_0619_130232_vel.mp4  - VELVET
-AST_0619_130237_con.mp4  - CONCIERGE
-```
-
-**Total: 5 videos ready for upload**
-
----
-
-*Morty | C3 | SEED3 | 2026-06-19*
+See `TEMPORAL_STEPS.md` for completion roadmap.
