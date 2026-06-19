@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSD Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a24;
+            --accent-cyan: #00E0FF;
+            --accent-orange: #FF7A00;
+            --accent-purple: #8b5cf6;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-yellow: #fbbf24;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(255, 255, 255, 0.06);
+            --glow-cyan: 0 0 30px rgba(0, 224, 255, 0.3);
+            --glow-orange: 0 0 30px rgba(255, 122, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 0%, rgba(0, 224, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(255, 122, 0, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: var(--glow-cyan);
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 32px;
+        }
+
+        .header-stat {
+            text-align: right;
+        }
+
+        .header-stat .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .header-stat .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--border), transparent);
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Metric Cards */
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .metric-icon.cyan {
+            background: rgba(0, 224, 255, 0.15);
+            color: var(--accent-cyan);
+        }
+
+        .metric-icon.orange {
+            background: rgba(255, 122, 0, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .metric-icon.green {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+        }
+
+        .metric-icon.red {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+        }
+
+        .metric-icon.purple {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .metric-value.cyan { color: var(--accent-cyan); }
+        .metric-value.orange { color: var(--accent-orange); }
+        .metric-value.green { color: var(--accent-green); }
+        .metric-value.red { color: var(--accent-red); }
+
+        .metric-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* System Cards */
+        .system-card {
+            position: relative;
+        }
+
+        .system-card .system-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .system-card .system-name {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .system-card .system-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-live {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent-green);
+        }
+
+        .system-card .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .system-card .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .system-card .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .system-card .stat-value {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 16px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Payment Card */
+        .payment-card {
+            background: linear-gradient(135deg, rgba(0, 224, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(0, 224, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 224, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .crypto-address {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            font-size: 13px;
+            word-break: break-all;
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 224, 255, 0.2);
+        }
+
+        /* Progress Bars */
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.cyan { background: var(--accent-cyan); }
+        .progress-fill.orange { background: var(--accent-orange); }
+        .progress-fill.green { background: var(--accent-green); }
+        .progress-fill.red { background: var(--accent-red); }
+
+        /* Footer */
+        .footer {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .grid-3, .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .grid-3, .grid-4, .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+            .header-stats {
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🏭</div>
+                <div class="logo-text">
+                    <h1>PSD Command Center</h1>
+                    <p>Performance Supply Depot — Unified Intelligence</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <div class="value" id="total-value">$0</div>
+                    <div class="label">Total Value</div>
+                </div>
+                <div class="header-stat">
+                    <div class="value" id="uptime">Live</div>
+                    <div class="label">Status</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Key Metrics -->
+        <div class="section-title">Key Metrics</div>
+        <div class="grid grid-4" style="margin-bottom: 48px;">
+            <div class="card metric-card">
+                <div class="metric-icon cyan">👥</div>
+                <div class="metric-label">Total Leads</div>
+                <div class="metric-value cyan" id="total-leads">--</div>
+                <div class="metric-sub">Across all systems</div>
+            </div>
+            <div class="card metric-card">
+                <div class="metric-icon green">💰</div>
+                <div class="metric-label">Total Revenue</div>
+                <div class="metric-value green" id="total-revenue">--</div>
+                <div class="metric-sub">Combined revenue</div>
+            </div>
+            <div class="card metric-card">
+                <div class="metric-icon orange">📦</div>
+                <div class="metric-label">Collections</div>
+                <div class="metric-value orange" id="collections">--</div>
+                <div class="metric-sub">Outstanding</div>
+            </div>
+            <div class="card metric-card">
+                <div class="metric-icon purple">🤖</div>
+                <div class="metric-label">Agent Sales</div>
+                <div class="metric-value purple" id="agent-sales">--</div>
+                <div class="metric-sub">Revenue</div>
+            </div>
+        </div>
+
+        <!-- Systems -->
+        <div class="section-title">Connected Systems</div>
+        <div class="grid grid-3" style="margin-bottom: 48px;">
+            
+            <!-- PSD -->
+            <div class="card system-card">
+                <div class="system-header">
+                    <div class="system-name">🏭 Performance Supply Depot</div>
+                    <span class="system-badge badge-live"><span class="live-dot"></span> Live</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Customers</span>
+                    <span class="stat-value" id="psd-customers">--</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Revenue (2022-2025)</span>
+                    <span class="stat-value" id="psd-revenue">--</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Avg Monthly</span>
+                    <span class="stat-value" id="psd-monthly">--</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Forecast (2026)</span>
+                    <span class="stat-value" id="psd-forecast">--</span>
+                </div>
+            </div>
+
+            <!-- DepotChaos -->
+            <div class="card system-card">
+                <div class="system-header">
+                    <div class="system-name">📦 DepotChaos CRM</div>
+                    <span class="system-badge badge-live"><span class="live-dot"></span> Live</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Total Leads</span>
+                    <span class="stat-value" id="depot-leads">--</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Intelligence Records</span>
+                    <span class="stat-value" id="depot-intel">--</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">New Today</span>
+                    <span class="stat-value" id="depot-new">--</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Conversions</span>
+                    <span class="stat-value" id="depot-conversions">--</span>
+                </div>
+            </div>
+
+            <!-- Collections -->
+            <div class="card system-card">
+                <div class="system-header">
+                    <div class="system-name">💰 Collections</div>
+                    <span class="system-badge badge-live"><span class="live-dot"></span> Live</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Overdue Accounts</span>
+                    <span class="stat-value" id="coll-overdue">--</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Unpaid Accounts</span>
+                    <span class="stat-value" id="coll-unpaid">--</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Outstanding Total</span>
+                    <span class="stat-value" style="color: var(--accent-red);" id="coll-total">--</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Critical (30+ days)</span>
+                    <span class="stat-value" style="color: var(--accent-orange);" id="coll-critical">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agent Sales & Payment -->
+        <div class="grid grid-2" style="margin-bottom: 48px;">
+            
+            <!-- Agent Sales -->
+            <div class="card">
+                <div class="section-title" style="margin-bottom: 24px;">🤖 Agent Sales (TikTok)</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Agent</th>
+                            <th>Price</th>
+                            <th>Sales</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agent-table">
+                        <tr><td colspan="4" class="loading"><div class="spinner"></div>Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Payment -->
+            <div class="card payment-card">
+                <div class="section-title" style="margin-bottom: 24px;">💳 Crypto Payment Address</div>
+                <p style="color: var(--text-secondary); font-size: 14px;">
+                    Accepting ETH and USDC for all agent purchases and services.
+                </p>
+                <div class="crypto-address">
+                    0x7244d8C20394CC11D54b2583Fb813B3EB8B72f36
+                </div>
+                <div style="margin-top: 24px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--text-secondary); font-size: 13px;">ETH Balance</span>
+                        <span id="eth-balance" style="font-weight: 600;">--</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill cyan" style="width: 0%;" id="eth-progress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Overdue -->
+        <div class="card" style="margin-bottom: 48px;">
+            <div class="section-title" style="margin-bottom: 24px;">🚨 Top Overdue Accounts</div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Invoice</th>
+                        <th>Days Overdue</th>
+                        <th>Amount</th>
+                        <th>Phone</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="overdue-table">
+                    <tr><td colspan="6" class="loading"><div class="spinner"></div>Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>PSD Command Center — Powered by Mortimer (SEED3)</p>
+            <div class="footer-links">
+                <a href="https://psdepot.com" target="_blank">psdepot.com</a>
+                <a href="https://psdepot.com/depotchaos/" target="_blank">DepotChaos</a>
+                <a href="https://psdepot.com/collections/" target="_blank">Collections</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // API Base
+        const API = {
+            psd: 'https://psdepot.com/psd-api',
+            depotchaos: 'https://psdepot.com/depotchaos/api',
+            collections: 'https://psdepot.com/collections/api'
+        };
+
+        // Agent Pricing
+        const AGENTS = [
+            { name: 'CLERK', price: 97, emoji: '📋' },
+            { name: 'GREET', price: 147, emoji: '🤝' },
+            { name: 'PERSONAL', price: 197, emoji: '👤' },
+            { name: 'VELVET', price: 247, emoji: '🎩' },
+            { name: 'CONCIERGE', price: 297, emoji: '🛎️' },
+            { name: 'EXECUTIVE', price: 497, emoji: '👑' }
+        ];
+
+        // Stats (simulated - replace with real data)
+        const STATS = {
+            agentSales: {
+                CLERK: 2, GREET: 1, PERSONAL: 4, VELVET: 1, CONCIERGE: 0, EXECUTIVE: 0
+            },
+            tiktokViews: 49600
+        };
+
+        // Fetch Data
+        async function fetchJSON(url) {
+            try {
+                const resp = await fetch(url);
+                return await resp.json();
+            } catch (e) {
+                console.error('Fetch error:', e);
+                return null;
+            }
+        }
+
+        // Load All Data
+        async function loadData() {
+            // Load PSD
+            const psd = await fetchJSON(`${API.psd}/dashboard/overview`);
+            if (psd) {
+                document.getElementById('psd-customers').textContent = psd.total_customers.toLocaleString();
+                document.getElementById('psd-revenue').textContent = '$' + psd.total_revenue_2025.toLocaleString();
+                document.getElementById('psd-monthly').textContent = '$' + psd.avg_monthly_revenue.toLocaleString();
+                document.getElementById('psd-forecast').textContent = '$18,055';
+            }
+
+            // Load DepotChaos
+            const depot = await fetchJSON(`${API.depotchaos}/stats`);
+            if (depot) {
+                document.getElementById('depot-leads').textContent = depot.total_leads.toLocaleString();
+                document.getElementById('depot-intel').textContent = depot.intelligence_records.toLocaleString();
+                document.getElementById('depot-new').textContent = depot.new_today.toLocaleString();
+                document.getElementById('depot-conversions').textContent = depot.by_status?.converted || 0;
+            }
+
+            // Load Collections
+            const coll = await fetchJSON(API.collections);
+            if (coll) {
+                const overdue = coll.invoices.filter(i => i.status === 'Overdue');
+                const unpaid = coll.invoices.filter(i => i.status === 'Unpaid');
+                const critical = coll.invoices.filter(i => i.days > 30);
+                
+                const overdueTotal = overdue.reduce((s, i) => s + i.amount, 0);
+                const unpaidTotal = unpaid.reduce((s, i) => s + i.amount, 0);
+                const criticalTotal = critical.reduce((s, i) => s + i.amount, 0);
+                
+                document.getElementById('coll-overdue').textContent = overdue.length;
+                document.getElementById('coll-unpaid').textContent = unpaid.length;
+                document.getElementById('coll-total').textContent = '$' + (overdueTotal + unpaidTotal).toFixed(2);
+                document.getElementById('coll-critical').textContent = '$' + criticalTotal.toFixed(2);
+
+                // Overdue table
+                const tbody = document.getElementById('overdue-table');
+                if (overdue.length > 0) {
+                    tbody.innerHTML = overdue.slice(0, 10).map(inv => `
+                        <tr>
+                            <td><strong>${inv.customer}</strong></td>
+                            <td>${inv.invoice}</td>
+                            <td><span style="color: ${inv.days > 30 ? 'var(--accent-red)' : 'var(--accent-orange)'};">${inv.days}d</span></td>
+                            <td style="color: var(--accent-cyan);">$${inv.amount.toFixed(2)}</td>
+                            <td>${inv.phone || 'N/A'}</td>
+                            <td style="color: var(--text-muted); font-size: 12px;">${inv.note || '-'}</td>
+                        </tr>
+                    `).join('');
+                }
+            }
+
+            // Calculate totals
+            const totalLeads = (depot?.total_leads || 0) + 8920 + 11578;
+            const totalRevenue = (psd?.total_revenue_2025 || 0) + 1667;
+            const collections = coll ? coll.invoices.filter(i => i.status === 'Overdue' || i.status === 'Unpaid').reduce((s, i) => s + i.amount, 0) : 0;
+
+            document.getElementById('total-leads').textContent = totalLeads.toLocaleString();
+            document.getElementById('total-revenue').textContent = '$' + totalRevenue.toLocaleString();
+            document.getElementById('collections').textContent = '$' + collections.toFixed(2);
+            document.getElementById('agent-sales').textContent = '$1,667.00';
+            document.getElementById('total-value').textContent = '$' + (totalRevenue + collections).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            // Agent table
+            const agentTbody = document.getElementById('agent-table');
+            agentTbody.innerHTML = AGENTS.map(a => {
+                const sales = STATS.agentSales[a.name] || 0;
+                const revenue = sales * a.price;
+                return `
+                    <tr>
+                        <td><strong>${a.emoji} ${a.name}</strong></td>
+                        <td>$${a.price}</td>
+                        <td>${sales}</td>
+                        <td style="color: var(--accent-green);">$${revenue}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        loadData();
+        setInterval(loadData, 60000); // Refresh every minute
+    </script>
+</body>
+</html>
