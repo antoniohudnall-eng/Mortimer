@@ -24,11 +24,7 @@
             --glow-orange: 0 0 30px rgba(255, 122, 0, 0.3);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -38,7 +34,6 @@
             line-height: 1.6;
         }
 
-        /* Background Pattern */
         body::before {
             content: '';
             position: fixed;
@@ -59,7 +54,6 @@
             padding: 40px;
         }
 
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -122,7 +116,6 @@
             letter-spacing: 1px;
         }
 
-        /* Section Titles */
         .section-title {
             font-size: 14px;
             font-weight: 600;
@@ -142,25 +135,15 @@
             background: linear-gradient(90deg, var(--border), transparent);
         }
 
-        /* Grid Layout */
         .grid {
             display: grid;
             gap: 24px;
         }
 
-        .grid-3 {
-            grid-template-columns: repeat(3, 1fr);
-        }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
 
-        .grid-4 {
-            grid-template-columns: repeat(4, 1fr);
-        }
-
-        .grid-2 {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        /* Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -175,12 +158,7 @@
             transform: translateY(-2px);
         }
 
-        /* Metric Cards */
-        .metric-card {
-            position: relative;
-            overflow: hidden;
-        }
-
+        .metric-card { position: relative; overflow: hidden; }
         .metric-card::before {
             content: '';
             position: absolute;
@@ -192,10 +170,7 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-
-        .metric-card:hover::before {
-            opacity: 1;
-        }
+        .metric-card:hover::before { opacity: 1; }
 
         .metric-icon {
             width: 48px;
@@ -208,30 +183,11 @@
             margin-bottom: 16px;
         }
 
-        .metric-icon.cyan {
-            background: rgba(0, 224, 255, 0.15);
-            color: var(--accent-cyan);
-        }
-
-        .metric-icon.orange {
-            background: rgba(255, 122, 0, 0.15);
-            color: var(--accent-orange);
-        }
-
-        .metric-icon.green {
-            background: rgba(34, 197, 94, 0.15);
-            color: var(--accent-green);
-        }
-
-        .metric-icon.red {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--accent-red);
-        }
-
-        .metric-icon.purple {
-            background: rgba(139, 92, 246, 0.15);
-            color: var(--accent-purple);
-        }
+        .metric-icon.cyan { background: rgba(0, 224, 255, 0.15); color: var(--accent-cyan); }
+        .metric-icon.orange { background: rgba(255, 122, 0, 0.15); color: var(--accent-orange); }
+        .metric-icon.green { background: rgba(34, 197, 94, 0.15); color: var(--accent-green); }
+        .metric-icon.red { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+        .metric-icon.purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
 
         .metric-label {
             font-size: 13px;
@@ -255,11 +211,6 @@
             font-size: 13px;
             color: var(--text-muted);
             margin-top: 8px;
-        }
-
-        /* System Cards */
-        .system-card {
-            position: relative;
         }
 
         .system-card .system-header {
@@ -290,6 +241,11 @@
             color: var(--accent-green);
         }
 
+        .badge-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+
         .system-card .stat-row {
             display: flex;
             justify-content: space-between;
@@ -297,21 +253,10 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .system-card .stat-row:last-child {
-            border-bottom: none;
-        }
+        .system-card .stat-row:last-child { border-bottom: none; }
+        .system-card .stat-label { color: var(--text-secondary); font-size: 14px; }
+        .system-card .stat-value { font-weight: 600; font-size: 15px; }
 
-        .system-card .stat-label {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .system-card .stat-value {
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        /* Table */
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -334,27 +279,13 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .data-table tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
-        }
+        .data-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
 
-        /* Payment Card */
         .payment-card {
             background: linear-gradient(135deg, rgba(0, 224, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
             border: 1px solid rgba(0, 224, 255, 0.2);
             position: relative;
             overflow: hidden;
-        }
-
-        .payment-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(0, 224, 255, 0.1) 0%, transparent 70%);
-            pointer-events: none;
         }
 
         .crypto-address {
@@ -369,7 +300,6 @@
             border: 1px solid rgba(0, 224, 255, 0.2);
         }
 
-        /* Progress Bars */
         .progress-bar {
             height: 6px;
             background: rgba(255, 255, 255, 0.1);
@@ -389,7 +319,6 @@
         .progress-fill.green { background: var(--accent-green); }
         .progress-fill.red { background: var(--accent-red); }
 
-        /* Footer */
         .footer {
             margin-top: 48px;
             padding-top: 32px;
@@ -399,56 +328,11 @@
             align-items: center;
         }
 
-        .footer p {
-            color: var(--text-muted);
-            font-size: 13px;
-        }
+        .footer p { color: var(--text-muted); font-size: 13px; }
 
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 13px;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-cyan);
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .grid-3, .grid-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            .grid-3, .grid-4, .grid-2 {
-                grid-template-columns: 1fr;
-            }
-            .header {
-                flex-direction: column;
-                gap: 24px;
-                text-align: center;
-            }
-            .header-stats {
-                justify-content: center;
-            }
-        }
-
-        /* Animations */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 13px; transition: color 0.3s; }
+        .footer-links a:hover { color: var(--accent-cyan); }
 
         .live-dot {
             width: 8px;
@@ -458,15 +342,7 @@
             animation: pulse 2s infinite;
         }
 
-        /* Loading */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            color: var(--text-muted);
-        }
-
+        .loading { display: flex; align-items: center; justify-content: center; padding: 40px; color: var(--text-muted); }
         .spinner {
             width: 24px;
             height: 24px;
@@ -477,8 +353,18 @@
             margin-right: 12px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        @media (max-width: 1200px) {
+            .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            .grid-3, .grid-4, .grid-2 { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 24px; text-align: center; }
+            .header-stats { justify-content: center; }
         }
     </style>
 </head>
@@ -542,7 +428,7 @@
             <div class="card system-card">
                 <div class="system-header">
                     <div class="system-name">🏭 Performance Supply Depot</div>
-                    <span class="system-badge badge-live"><span class="live-dot"></span> Live</span>
+                    <span class="system-badge badge-live" id="psd-status"><span class="live-dot"></span> Live</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Customers</span>
@@ -566,7 +452,7 @@
             <div class="card system-card">
                 <div class="system-header">
                     <div class="system-name">📦 DepotChaos CRM</div>
-                    <span class="system-badge badge-live"><span class="live-dot"></span> Live</span>
+                    <span class="system-badge badge-live" id="depot-status"><span class="live-dot"></span> Live</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Total Leads</span>
@@ -590,7 +476,7 @@
             <div class="card system-card">
                 <div class="system-header">
                     <div class="system-name">💰 Collections</div>
-                    <span class="system-badge badge-live"><span class="live-dot"></span> Live</span>
+                    <span class="system-badge badge-live" id="coll-status"><span class="live-dot"></span> Live</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Overdue Accounts</span>
@@ -602,11 +488,11 @@
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Outstanding Total</span>
-                    <span class="stat-value" style="color: var(--accent-red);" id="coll-total">--</span>
+                    <span class="stat-value" id="coll-total" style="color: var(--accent-red);">--</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Critical (30+ days)</span>
-                    <span class="stat-value" style="color: var(--accent-orange);" id="coll-critical">--</span>
+                    <span class="stat-value" id="coll-critical" style="color: var(--accent-orange);">--</span>
                 </div>
             </div>
         </div>
@@ -702,29 +588,44 @@
             { name: 'EXECUTIVE', price: 497, emoji: '👑' }
         ];
 
-        // Stats (simulated - replace with real data)
+        // Stats
         const STATS = {
             agentSales: {
                 CLERK: 2, GREET: 1, PERSONAL: 4, VELVET: 1, CONCIERGE: 0, EXECUTIVE: 0
-            },
-            tiktokViews: 49600
+            }
         };
 
-        // Fetch Data
-        async function fetchJSON(url) {
+        // Better fetch with detailed logging
+        async function fetchJSON(url, name) {
+            console.log(`[API] Fetching ${name}: ${url}`);
             try {
                 const resp = await fetch(url);
-                return await resp.json();
+                console.log(`[API] ${name} status: ${resp.status}`);
+                if (!resp.ok) {
+                    console.error(`[API] ${name} failed: HTTP ${resp.status}`);
+                    document.getElementById(`${name.toLowerCase().replace(/\s/g, '-')}-status`)?.classList.remove('badge-live');
+                    document.getElementById(`${name.toLowerCase().replace(/\s/g, '-')}-status`)?.classList.add('badge-error');
+                    document.getElementById(`${name.toLowerCase().replace(/\s/g, '-')}-status`).innerHTML = '❌ Error';
+                    return null;
+                }
+                const data = await resp.json();
+                console.log(`[API] ${name} received:`, data ? 'OK' : 'NULL');
+                document.getElementById(`${name.toLowerCase().replace(/\s/g, '-')}-status`)?.classList.remove('badge-error');
+                document.getElementById(`${name.toLowerCase().replace(/\s/g, '-')}-status`)?.classList.add('badge-live');
+                document.getElementById(`${name.toLowerCase().replace(/\s/g, '-')}-status`).innerHTML = '<span class="live-dot"></span> Live';
+                return data;
             } catch (e) {
-                console.error('Fetch error:', e);
+                console.error(`[API] ${name} error:`, e);
                 return null;
             }
         }
 
         // Load All Data
         async function loadData() {
+            console.log('[Dashboard] Starting data load...');
+
             // Load PSD
-            const psd = await fetchJSON(`${API.psd}/dashboard/overview`);
+            const psd = await fetchJSON(`${API.psd}/dashboard/overview`, 'psd');
             if (psd) {
                 document.getElementById('psd-customers').textContent = psd.total_customers.toLocaleString();
                 document.getElementById('psd-revenue').textContent = '$' + psd.total_revenue_2025.toLocaleString();
@@ -733,7 +634,7 @@
             }
 
             // Load DepotChaos
-            const depot = await fetchJSON(`${API.depotchaos}/stats`);
+            const depot = await fetchJSON(`${API.depotchaos}/stats`, 'depot');
             if (depot) {
                 document.getElementById('depot-leads').textContent = depot.total_leads.toLocaleString();
                 document.getElementById('depot-intel').textContent = depot.intelligence_records.toLocaleString();
@@ -742,7 +643,10 @@
             }
 
             // Load Collections
-            const coll = await fetchJSON(API.collections);
+            console.log('[Dashboard] Loading Collections...');
+            const coll = await fetchJSON(API.collections, 'coll');
+            console.log('[Dashboard] Collections data:', coll);
+            
             if (coll) {
                 const overdue = coll.invoices.filter(i => i.status === 'Overdue');
                 const unpaid = coll.invoices.filter(i => i.status === 'Unpaid');
@@ -771,18 +675,24 @@
                         </tr>
                     `).join('');
                 }
+            } else {
+                console.log('[Dashboard] No Collections data - showing error state');
+                document.getElementById('coll-status').innerHTML = '❌ CORS Error';
+                document.getElementById('coll-status').classList.remove('badge-live');
+                document.getElementById('coll-status').classList.add('badge-error');
+                document.getElementById('overdue-table').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--accent-red);">⚠️ Collections API blocked by CORS. <a href="https://psdepot.com/collections/" target="_blank" style="color:var(--accent-cyan);">View on psdepot.com</a></td></tr>';
             }
 
             // Calculate totals
-            const totalLeads = (depot?.total_leads || 0) + 8920 + 11578;
+            const totalLeads = (depot?.total_leads || 0) + 8920;
             const totalRevenue = (psd?.total_revenue_2025 || 0) + 1667;
-            const collections = coll ? coll.invoices.filter(i => i.status === 'Overdue' || i.status === 'Unpaid').reduce((s, i) => s + i.amount, 0) : 0;
+            const collections = coll ? (coll.invoices || []).filter(i => i.status === 'Overdue' || i.status === 'Unpaid').reduce((s, i) => s + i.amount, 0) : 0;
 
             document.getElementById('total-leads').textContent = totalLeads.toLocaleString();
-            document.getElementById('total-revenue').textContent = '$' + totalRevenue.toLocaleString();
-            document.getElementById('collections').textContent = '$' + collections.toFixed(2);
+            document.getElementById('total-revenue').textContent = '$' + (totalRevenue + collections).toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('collections').textContent = '$' + (collections || 0).toFixed(2);
             document.getElementById('agent-sales').textContent = '$1,667.00';
-            document.getElementById('total-value').textContent = '$' + (totalRevenue + collections).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('total-value').textContent = '$' + (totalRevenue + collections).toLocaleString(undefined, {minimumFractionDigits: 2});
 
             // Agent table
             const agentTbody = document.getElementById('agent-table');
@@ -798,11 +708,13 @@
                     </tr>
                 `;
             }).join('');
+
+            console.log('[Dashboard] Data load complete');
         }
 
         // Initialize
         loadData();
-        setInterval(loadData, 60000); // Refresh every minute
+        setInterval(loadData, 60000);
     </script>
 </body>
 </html>
