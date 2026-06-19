@@ -1,16 +1,14 @@
 {
+  "psd_customers": 501,
+  "psd_revenue": 1804820.0,
+  "psd_forecast": 18055,
+  "depotchaos_leads": 11578,
+  "depotchaos_intelligence": 74521,
   "collections_outstanding": 18954.74,
   "collections_overdue": 12,
-  "collections_overdue_amount": 4842.34,
-  "collections_critical": 1096.56,
-  "depotchaos_leads": 11578,
-  "depotchaos_new_today": 409,
   "leads_total": 20498,
-  "leads_new": 409,
   "tiktok_views": 49600,
-  "tiktok_leads": 84,
-  "emails_sent": 100,
   "sales_total": 11,
-  "revenue_cents": 2062174.0000000002,
-  "last_updated": "2026-06-19T14:11:45.387458"
+  "revenue_total": 1825441.74,
+  "last_updated": "2026-06-19T14:13:51.519074"
 }
