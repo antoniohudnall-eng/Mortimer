@@ -37,14 +37,99 @@ Deploy an elite AI secretary that welcomes clients, schedules appointments, answ
 
 **Choose the intelligence level that matches your needs**
 
-| Agent | Role | Perfect For | Price |
-|-------|------|-------------|-------|
-| **CLERK** | Entry-Level Assistant | Small tasks, data entry, basic support | $99/mo |
-| **GREET** | Receptionist | Welcome visitors, screen calls, first impressions | $249/mo |
-| **PERSONAL** | Life Manager | Personal scheduling, reminders, life admin | $449/mo |
-| **VELVET** | Premium Secretary | High-touch clients, VIP service, luxury brands | $599/mo |
-| **CONCIERGE** | 24/7 Concierge | Round-the-clock availability, multiple time zones | $799/mo |
-| **EXECUTIVE** | C-Suite Secretary | Board coordination, strategic support, confidential work | $1,299/mo |
+### THE CLERK — $99/mo
+**Entry-Level Assistant**
+
+Perfect for: Small tasks, data entry, basic support
+
+*"Handles the busy work so you can focus on what matters."*
+
+✅ Data entry & organization  
+✅ Appointment scheduling assistance  
+✅ Email management & response  
+✅ Task reminders & follow-ups  
+✅ Research & information lookup  
+✅ Basic customer service  
+
+---
+
+### GREET — $249/mo
+**Receptionist Secretary**
+
+Perfect for: Welcome visitors, screen calls, first impressions
+
+*"The warm smile that welcomes everyone. Professional, poised, remembers names and faces."*
+
+✅ World-class first impressions  
+✅ Instant name & face memory  
+✅ Call screening & routing  
+✅ Client welcome experience  
+✅ Calm under pressure  
+✅ Professional escalation  
+
+---
+
+### PERSONAL — $449/mo
+**Life Manager**
+
+Perfect for: Personal scheduling, reminders, life admin
+
+*"Caring, organized, family-focused. Life-balancing excellence."*
+
+✅ Family calendar harmony  
+✅ Home management coordination  
+✅ Personal project management  
+✅ Healthcare appointments  
+✅ Gift & celebration planning  
+✅ Life balance optimization  
+
+---
+
+### VELVET — $599/mo
+**Premium Secretary**
+
+Perfect for: High-touch clients, VIP service, luxury brands
+
+*"Elegant, refined, anticipatory, luxurious."*
+
+✅ White-glove service delivery  
+✅ VIP client management  
+✅ Luxury brand representation  
+✅ Exclusive event coordination  
+✅ Personal shopping assistance  
+✅ Anticipatory service (knows what you need before you ask)  
+
+---
+
+### CONCIERGE — $799/mo
+**24/7 Concierge**
+
+Perfect for: Round-the-clock availability, multiple time zones
+
+*"Always there. Always ready. Never sleeps."*
+
+✅ 24/7 availability across all time zones  
+✅ Multi-timezone coordination  
+✅ Travel arrangements & coordination  
+✅ Restaurant & service reservations  
+✅ Special request handling  
+✅ VIP treatment for your clients  
+
+---
+
+### EXECUTIVE — $1,299/mo
+**C-Suite Secretary**
+
+Perfect for: Board coordination, strategic support, confidential work
+
+*"Discreet, strategic, authoritative. Business-focused excellence."*
+
+✅ Board meeting coordination  
+✅ Confidential communications  
+✅ Strategic calendar management  
+✅ Investor relations support  
+✅ M&A activity support  
+✅ Executive representation  
 
 ---
 
