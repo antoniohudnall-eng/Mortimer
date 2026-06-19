@@ -758,3 +758,79 @@ function OnDestroy() {
     if (reflexSystem) reflexSystem.saveReflexes();
     app.ShowPopup("MyL0n ROS: Memory saved. Goodbye, Captain!");
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ADDITIONAL MODULATION — Captain's Updates (2026-06-18)
+// ═══════════════════════════════════════════════════════════════════════════
+
+function awardReward(amount, reason) {
+    if (rewards) {
+        rewards.addReward(amount);
+        logSubconscious(`Reward: +${amount} (${reason})`);
+    }
+}
+
+function findApp(query) {
+    const lower = query.toLowerCase();
+    for (const appName of installedApps) {
+        if (lower.includes(appName.toLowerCase())) {
+            return appName;
+        }
+    }
+    return null;
+}
+
+function getSunTimes() {
+    // Get sunrise/sunset based on location (placeholder)
+    const now = new Date();
+    const sunrise = new Date(now);
+    sunrise.setHours(6, 0, 0);
+    const sunset = new Date(now);
+    sunset.setHours(18, 30, 0);
+    
+    const times = `Sunrise: ${sunrise.toLocaleTimeString()}. Sunset: ${sunset.toLocaleTimeString()}.`;
+    app.TextToSpeech(times, VOICE_SPEED / 100, VOICE_PITCH / 100);
+    app.ShowPopup(times);
+    return times;
+}
+
+function storeReflex(pattern, data) {
+    if (reflexSystem) {
+        reflexSystem.addReflex(pattern, JSON.stringify(data));
+    }
+}
+
+function executeDecision(decision) {
+    // Layer expansion
+    if (decision === "layer expansion") {
+        if (neuralNetwork) {
+            neuralNetwork.addLayer(3);
+            awardReward(15, "layer expansion");
+        }
+    }
+}
+
+// Voice decision processor
+function processVoiceDecision(text) {
+    const lower = text.toLowerCase();
+    
+    // Layer expansion trigger
+    if (lower.includes("grow layer") || lower.includes("add layer")) {
+        executeDecision("layer expansion");
+        return true;
+    }
+    
+    // Sun times
+    if (lower.includes("sun") && (lower.includes("time") || lower.includes("rise") || lower.includes("set"))) {
+        executeDecision("getSunTimes");
+        return true;
+    }
+    
+    // App launching
+    if (lower.includes("open") || lower.includes("launch")) {
+        executeDecision("openApp");
+        return true;
+    }
+    
+    return false;
+}
