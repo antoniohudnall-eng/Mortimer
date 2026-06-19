@@ -1,0 +1,16 @@
+[Unit]
+Description=N'og nog Brain Bridge Server
+After=network.target aos-brain-v4.service
+Wants=aos-brain-v4.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/.openclaw/workspace/nognog/bridge
+ExecStart=/usr/bin/python3 /root/.openclaw/workspace/nognog/bridge/bridge_server.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

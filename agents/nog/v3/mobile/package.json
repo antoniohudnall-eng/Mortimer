@@ -1,0 +1,23 @@
+{
+  "name": "nognog-v3-mobile",
+  "version": "3.0.0",
+  "description": "N'OG NOG v3 Mobile - Universal Explorer",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run copy:web",
+    "copy:web": "cp -r ../index.html ../js ../css ../assets ./www/ 2>/dev/null || mkdir -p www \u0026\u0026 cp ../index.html www/ \u0026\u0026 cp -r ../js www/",
+    "sync": "npx cap sync",
+    "build:android": "npm run copy:web \u0026\u0026 npx cap sync android \u0026\u0026 cd android \u0026\u0026 ./gradlew assembleRelease",
+    "build:ios": "npm run copy:web \u0026\u0026 npx cap sync ios \u0026\u0026 cd ios/App \u0026\u0026 xcodebuild -workspace App.xcworkspace -scheme App -configuration Release",
+    "open:android": "npx cap open android",
+    "open:ios": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/ios": "^5.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^5.0.0"
+  }
+}

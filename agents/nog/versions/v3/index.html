@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>N'OG NOG v3.0 - Universal Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #00ff88;
+            overflow: hidden;
+            touch-action: none;
+        }
+        
+        #gameCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        /* Loading Screen */
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #0a0a1a 0%, #000 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+        
+        #loadingScreen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 0 20px #00ff88;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading-status {
+            font-size: 0.9em;
+            color: #66aa88;
+            margin: 10px 0;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: #222;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            transition: width 0.3s;
+            box-shadow: 0 0 10px #00ff88;
+        }
+        
+        /* Main Menu */
+        #mainMenu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0,50,50,0.8) 0%, rgba(0,0,0,0.95) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 500;
+            transition: opacity 0.5s;
+        }
+        
+        #mainMenu.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .menu-title {
+            font-size: clamp(2em, 8vw, 4em);
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 0 30px #00ff88, 0 0 60px #00ff88;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .menu-subtitle {
+            font-size: 1.2em;
+            color: #66aa88;
+            margin-bottom: 40px;
+        }
+        
+        .menu-button {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-family: inherit;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+            min-width: 250px;
+        }
+        
+        .menu-button:hover {
+            background: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 20px #00ff88;
+            transform: translateY(-2px);
+        }
+        
+        .menu-button:active {
+            transform: translateY(0);
+        }
+        
+        .platform-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+            border-radius: 4px;
+            font-size: 0.8em;
+            color: #66aa88;
+        }
+        
+        /* HUD */
+        #hud {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+        }
+        
+        .hud-panel {
+            position: absolute;
+            background: rgba(0, 20, 20, 0.8);
+            border: 1px solid #00ff88;
+            padding: 10px 15px;
+            font-size: clamp(10px, 2vw, 12px);
+            pointer-events: auto;
+        }
+        
+        #statsPanel {
+            top: 20px;
+            left: 20px;
+            min-width: 180px;
+        }
+        
+        #systemPanel {
+            top: 20px;
+            right: 20px;
+            min-width: 180px;
+            text-align: right;
+        }
+        
+        .hud-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 0;
+        }
+        
+        .hud-label {
+            color: #66aa88;
+        }
+        
+        .hud-value {
+            color: #00ff88;
+            font-weight: bold;
+        }
+        
+        /* Crosshair */
+        #crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+        }
+        
+        #crosshair::before,
+        #crosshair::after {
+            content: '';
+            position: absolute;
+            background: rgba(0, 255, 136, 0.8);
+        }
+        
+        #crosshair::before {
+            width: 2px;
+            height: 20px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        #crosshair::after {
+            width: 20px;
+            height: 2px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* Mini Map */
+        #miniMap {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: rgba(0, 20, 20, 0.8);
+            border: 1px solid #00ff88;
+        }
+        
+        #miniMapCanvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Touch Controls */
+        #touchControls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: none;
+        }
+        
+        .touch-zone {
+            position: absolute;
+            pointer-events: auto;
+        }
+        
+        #joystickZone {
+            bottom: 30px;
+            left: 30px;
+            width: 120px;
+            height: 120px;
+        }
+        
+        #joystickBase {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 255, 136, 0.5);
+            border-radius: 50%;
+            top: 10px;
+            left: 10px;
+        }
+        
+        #joystickKnob {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 255, 136, 0.6);
+            border: 2px solid #00ff88;
+            border-radius: 50%;
+            top: 40px;
+            left: 40px;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+        }
+        
+        #thrustZone {
+            bottom: 40px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+        }
+        
+        #thrustButton {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 136, 255, 0.2);
+            border: 2px solid #0088ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        #thrustButton:active {
+            background: rgba(0, 136, 255, 0.5);
+            box-shadow: 0 0 20px #0088ff;
+        }
+        
+        /* Galaxy View Toggle */
+        #galaxyView {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 20, 20, 0.9);
+            border: 1px solid #00ff88;
+            padding: 10px 20px;
+            font-size: 12px;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        
+        #galaxyView:hover {
+            background: rgba(0, 255, 136, 0.2);
+        }
+        
+        /* Mobile optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            #touchControls {
+                display: block !important;
+            }
+        }
+        
+        /* Galaxy Info Panel */
+        #galaxyInfo {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            background: rgba(0, 20, 20, 0.9);
+            border: 1px solid #00ff88;
+            padding: 15px;
+            font-size: 11px;
+            max-width: 250px;
+            display: none;
+        }
+        
+        #galaxyInfo.visible {
+            display: block;
+        }
+        
+        .galaxy-type {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+        
+        .galaxy-stat {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-title">N'OG NOG</div>
+        <div style="font-size: 1.5em; color: #66aa88; margin-bottom: 30px;">Universal Explorer v3.0</div>
+        <div class="loading-status" id="loadingStatus">Detecting platform...</div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loadingProgress"></div>
+        </div>
+        <div class="platform-badge" id="platformBadge">Detecting...</div>
+    </div>
+    
+    <!-- Main Menu -->
+    <div id="mainMenu">
+        <div class="menu-title">N'OG NOG</div>
+        <div class="menu-subtitle">Universal Explorer v3.0</div>
+        <button class="menu-button" onclick="startGame()">Start Journey</button>
+        <button class="menu-button" onclick="showGalaxyInfo()">Galaxy Types</button>
+        <button class="menu-button" onclick="toggleSettings()">Settings</button>
+    </div>
+    
+    <!-- HUD -->
+    <div id="hud">
+        <div class="hud-panel" id="statsPanel">
+            <div class="hud-row"><span class="hud-label">Velocity:</span><span class="hud-value" id="velocity">0</span> m/s</div>
+            <div class="hud-row"><span class="hud-label">Fuel:</span><span class="hud-value" id="fuel">100</span>%</div>
+            <div class="hud-row"><span class="hud-label">Shield:</span><span class="hud-value" id="shield">100</span>%</div>
+            <div class="hud-row"><span class="hud-label">Coords:</span><span class="hud-value" id="coords">0, 0, 0</span></div>
+        </div>
+        
+        <div class="hud-panel" id="systemPanel">
+            <div class="hud-row"><span class="hud-label">Galaxy:</span><span class="hud-value" id="galaxyName">Unknown</span></div>
+            <div class="hud-row"><span class="hud-label">Type:</span><span class="hud-value" id="galaxyType">-</span></div>
+            <div class="hud-row"><span class="hud-label">Stars:</span><span class="hud-value" id="starCount">0</span></div>
+            <div class="hud-row"><span class="hud-label">Distance:</span><span class="hud-value" id="distance">0</span> ly</div>
+        </div>
+        
+        <div id="crosshair"></div>
+        
+        <div id="miniMap">
+            <canvas id="miniMapCanvas"></canvas>
+        </div>
+        
+        <div id="galaxyView" onclick="toggleGalaxyView()">
+            Press G to Toggle Galaxy View
+        </div>
+        
+        <div id="galaxyInfo">
+            <div class="galaxy-type" id="infoGalaxyType">Spiral Galaxy</div>
+            <div class="galaxy-stat" id="infoStarCount">Stars: 10,000</div>
+            <div class="galaxy-stat" id="infoAge">Age: 5.2 billion years</div>
+            <div class="galaxy-stat" id="infoNebulae">Nebulae: 7</div>
+        </div>
+        
+        <!-- Touch Controls -->
+        <div id="touchControls">
+            <div id="joystickZone" class="touch-zone">
+                <div id="joystickBase"></div>
+                <div id="joystickKnob"></div>
+            </div>
+            <div id="thrustZone" class="touch-zone">
+                <div id="thrustButton">THRUST</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Canvas -->
+    <canvas id="gameCanvas"></canvas>
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
+    <script src="js/core/Platform.js"></script>
+    <script src="js/universe/GalaxyGenerator.js"></script>
+    <script src="js/universe/Universe.js"></script>
+    <script src="js/player/Player.js"></script>
+    <script src="js/core/Game.js"></script>
+    <script>
+        // N'OG NOG v3.0 - Universal Explorer
+        // Procedural Galaxy Generation with Platform Detection
+        
+        let game;
+        
+        // Update loading status
+        function updateLoading(text, progress) {
+            document.getElementById('loadingStatus').textContent = text;
+            document.getElementById('loadingProgress').style.width = progress + '%';
+        }
+        
+        // Initialize on load
+        window.addEventListener('load', async () => {
+            // Detect platform
+            updateLoading('Detecting platform...', 10);
+            await new Promise(r => setTimeout(r, 100));
+            
+            // Initialize game
+            game = new GameV3();
+            await game.init();
+            
+            // Update platform badge
+            const p = game.platform.getPlatform();
+            const tier = game.platform.getTier();
+            document.getElementById('platformBadge').textContent = 
+                `${p.mobile ? 'Mobile' : p.tablet ? 'Tablet' : 'Desktop'} | ${tier.toUpperCase()} | ${p.memory}GB RAM`;
+        });
+        
+        function startGame() {
+            game.startGame();
+        }
+        
+        function showGalaxyInfo() {
+            alert('Galaxy Types:\n\n' +
+                'SPIRAL - Logarithmic arms, young stars in arms\n' +
+                'BARRED SPIRAL - Central bar connecting spiral arms\n' +
+                'ELLIPTICAL - Smooth, featureless, older stars\n' +
+                'IRREGULAR - Chaotic, no defined structure\n' +
+                'RING - Central void surrounded by star ring');
+        }
+        
+        function toggleSettings() {
+            alert('Settings:\n\n' +
+                'Optimized for: ' + game.platform.getTier().toUpperCase() + '\n' +
+                'Stars: ' + game.platform.settings.starCount + '\n' +
+                'Resolution: ' + game.platform.settings.pixelRatio + 'x\n' +
+                'Shadows: ' + (game.platform.settings.shadows ? 'ON' : 'OFF') + '\n' +
+                'Bloom: ' + (game.platform.settings.bloom ? 'ON' : 'OFF'));
+        }
+        
+        function toggleGalaxyView() {
+            if (game) game.toggleGalaxyView();
+        }
+        
+        // Game V3 Class
+        class GameV3 {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000000);
+                this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
+                
+                this.platform = new PlatformDetector();
+                this.settings = this.platform.getSettings();
+                
+                this.universe = null;
+                this.player = null;
+                this.currentGalaxy = null;
+                this.galaxyView = false;
+                
+                this.clock = new THREE.Clock();
+            }
+            
+            async init() {
+                // Setup renderer with platform-optimized settings
+                this.renderer.setPixelRatio(this.settings.pixelRatio);
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setClearColor(0x000011);
+                
+                // Setup camera
+                this.camera.position.set(0, 100, 500);
+                
+                // Add basic lighting
+                const ambient = new THREE.AmbientLight(0x404040, 0.5);
+                this.scene.add(ambient);
+                
+                const directional = new THREE.DirectionalLight(0xffffff, 0.5);
+                directional.position.set(1, 1, 1);
+                this.scene.add(directional);
+                
+                // Generate galaxy
+                updateLoading('Generating galaxy...', 40);
+                await new Promise(r => setTimeout(r, 100));
+                
+                this.generateGalaxy();
+                
+                // Setup player
+                updateLoading('Initializing player...', 70);
+                await new Promise(r => setTimeout(r, 100));
+                
+                this.player = new Player(this.scene, this.camera);
+                
+                // Hide loading
+                updateLoading('Ready', 100);
+                await new Promise(r => setTimeout(r, 300));
+                document.getElementById('loadingScreen').classList.add('hidden');
+                
+                // Show touch controls if needed
+                if (this.platform.isTouch()) {
+                    document.getElementById('touchControls').style.display = 'block';
+                }
+                
+                // Start render loop
+                this.animate();
+                
+                // Handle resize
+                window.addEventListener('resize', () => this.onResize());
+            }
+            
+            generateGalaxy() {
+                // Create galaxy generator
+                const generator = new GalaxyGenerator(Math.random() * 100000);
+                
+                // Generate with platform-optimized star count
+                this.currentGalaxy = generator.generateGalaxy(null, this.settings.starCount);
+                
+                // Create star field
+                const starGeometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(this.currentGalaxy.stars.length * 3);
+                const colors = new Float32Array(this.currentGalaxy.stars.length * 3);
+                const sizes = new Float32Array(this.currentGalaxy.stars.length);
+                
+                this.currentGalaxy.stars.forEach((star, i) => {
+                    positions[i * 3] = star.x;
+                    positions[i * 3 + 1] = star.y;
+                    positions[i * 3 + 2] = star.z;
+                    
+                    colors[i * 3] = star.color.r;
+                    colors[i * 3 + 1] = star.color.g;
+                    colors[i * 3 + 2] = star.color.b;
+                    
+                    sizes[i] = star.size;
+                });
+                
+                starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                starGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                starGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+                
+                const starMaterial = new THREE.PointsMaterial({
+                    size: 2,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.8,
+                    sizeAttenuation: true
+                });
+                
+                this.starField = new THREE.Points(starGeometry, starMaterial);
+                this.scene.add(this.starField);
+                
+                // Update HUD
+                document.getElementById('galaxyType').textContent = this.currentGalaxy.type;
+                document.getElementById('starCount').textContent = this.currentGalaxy.starCount.toLocaleString();
+                
+                // Center galaxy
+                const center = new THREE.Vector3();
+                this.currentGalaxy.stars.forEach(s => center.add(new THREE.Vector3(s.x, s.y, s.z)));
+                center.divideScalar(this.currentGalaxy.stars.length);
+                
+                this.galaxyCenter = center;
+            }
+            
+            startGame() {
+                document.getElementById('mainMenu').classList.add('hidden');
+                document.getElementById('hud').style.display = 'block';
+                
+                // Lock pointer
+                this.canvas.requestPointerLock();
+            }
+            
+            toggleGalaxyView() {
+                this.galaxyView = !this.galaxyView;
+                
+                if (this.galaxyView) {
+                    // Zoom out to see galaxy
+                    this.camera.position.set(0, 0, this.currentGalaxy.radius * 3);
+                    this.camera.lookAt(this.galaxyCenter);
+                    document.getElementById('galaxyInfo').classList.add('visible');
+                } else {
+                    // Return to player view
+                    this.camera.position.copy(this.player.position);
+                    document.getElementById('galaxyInfo').classList.remove('visible');
+                }
+            }
+            
+            onResize() {
+                this.camera.aspect = window.innerWidth / window.innerHeight;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+            
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                const delta = this.clock.getDelta();
+                
+                // Update player
+                if (this.player && document.getElementById('hud').style.display === 'block') {
+                    this.player.update(delta);
+                    
+                    // Update HUD
+                    const stats = this.player.getStats();
+                    document.getElementById('velocity').textContent = stats.velocity;
+                    document.getElementById('fuel').textContent = stats.fuel;
+                    document.getElementById('shield').textContent = stats.shield;
+                    document.getElementById('coords').textContent = stats.coords;
+                    
+                    // Calculate distance from galaxy center
+                    if (this.galaxyCenter) {
+                        const dist = this.player.position.distanceTo(this.galaxyCenter);
+                        document.getElementById('distance').textContent = Math.floor(dist / 9.461e12); // Convert to light years
+                    }
+                }
+                
+                // Rotate galaxy slowly
+                if (this.starField) {
+                    this.starField.rotation.z += 0.0001;
+                }
+                
+                // Render
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('mainMenu').classList.remove('hidden');
+                document.getElementById('hud').style.display = 'none';
+            }
+            if (e.key.toLowerCase() === 'g') {
+                toggleGalaxyView();
+            }
+        });
+    </script>
+</body>
+</html>

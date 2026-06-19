@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain v4.4 Status | AOS Mission Control</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0ff;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #8892b0;
+            font-size: 1.1rem;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .icon {
+            font-size: 1.5rem;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: auto;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-active {
+            background: #10b981;
+            box-shadow: 0 0 10px #10b981;
+        }
+        
+        .status-warning {
+            background: #f59e0b;
+            box-shadow: 0 0 10px #f59e0b;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .component-list {
+            list-style: none;
+        }
+        
+        .component-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .component-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .component-name {
+            color: #ccd6f6;
+        }
+        
+        .component-status {
+            font-size: 0.85rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .status-ready {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-running {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        .new-badge {
+            background: linear-gradient(90deg, #ec4899, #8b5cf6);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 10px;
+            margin-left: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .connection-flow {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .flow-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: #00d4ff;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .flow-node {
+            background: linear-gradient(135deg, #1e3a5f, #2d5a87);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .flow-arrow {
+            color: #64748b;
+            font-size: 1.2rem;
+        }
+        
+        .endpoints {
+            margin-top: 2rem;
+        }
+        
+        .endpoint {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .endpoint-method {
+            background: #3b82f6;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .endpoint-path {
+            color: #94a3b8;
+        }
+        
+        .live-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .timestamp {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Complete Brain v4.4</h1>
+            <p class="subtitle">Autonomous Operations Engine | Signal/Noise Pipeline Active</p>
+            <div class="live-status">
+                <span class="live-dot"></span>
+                <span>Connected to Mission Control v2.0</span>
+            </div>
+        </header>
+        
+        <div class="status-grid">
+            <!-- Core Organs -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">🫀</span>
+                    <span>Core Organs</span>
+                    <span class="status-indicator status-active"></span>
+                </div>
+                <ul class="component-list">
+                    <li>
+                        <span class="component-name">SuperiorHeart</span>
+                        <span class="component-status status-running">RUNNING</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Stomach v2</span>
+                        <span class="component-status status-running">RUNNING</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Intestine v2</span>
+                        <span class="component-status status-running">RUNNING</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Brain v3.1</span>
+                        <span class="component-status status-running">RUNNING</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- NEW v4.4 Organs -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">🫘</span>
+                    <span>NEW v4.4 Organs</span>
+                    <span class="new-badge">New</span>
+                </div>
+                <ul class="component-list">
+                    <li>
+                        <span class="component-name">LIVER v1.0</span>
+                        <span class="component-status status-ready">CLEAN</span>
+                    </li>
+                    <li>
+                        <span class="component-name">KIDNEYS v1.0</span>
+                        <span class="component-status status-ready">FILTER</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Thyroid v1.2</span>
+                        <span class="component-status status-ready">SECRETING</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Model Router</span>
+                        <span class="component-status status-running">ACTIVE</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Support Systems -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">⚙️</span>
+                    <span>Support Systems</span>
+                    <span class="status-indicator status-active"></span>
+                </div>
+                <ul class="component-list">
+                    <li>
+                        <span class="component-name">QMD Loop</span>
+                        <span class="component-status status-running">OLLAMA MODE</span>
+                    </li>
+                    <li>
+                        <span class="component-name">MemoryBridge</span>
+                        <span class="component-status status-ready">ACTIVE</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Socket Server</span>
+                        <span class="component-status status-ready">READY</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Mission Control</span>
+                        <span class="component-status status-running">Port 8080</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Legacy Systems -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">🧬</span>
+                    <span>Legacy Systems</span>
+                    <span class="status-indicator status-active"></span>
+                </div>
+                <ul class="component-list">
+                    <li>
+                        <span class="component-name">3D Cortex</span>
+                        <span class="component-status status-ready">32×32×3</span>
+                    </li>
+                    <li>
+                        <span class="component-name">TracRay</span>
+                        <span class="component-status status-ready">ACTIVE</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Consciousness Layers</span>
+                        <span class="component-status status-ready">INTEGRATED</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Interfaces -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">🎙️</span>
+                    <span>Sensory & Interface</span>
+                    <span class="status-indicator status-active"></span>
+                </div>
+                <ul class="component-list">
+                    <li>
+                        <span class="component-name">Voice Interface</span>
+                        <span class="component-status status-ready">7 VOICES</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Vision Interface</span>
+                        <span class="component-status status-warning">STUB</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- BHSI -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">💓</span>
+                    <span>BHSI v4 Integration</span>
+                    <span class="status-indicator status-active"></span>
+                </div>
+                <ul class="component-list">
+                    <li>
+                        <span class="component-name">Heart v4</span>
+                        <span class="component-status status-running">72 BPM</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Stomach v4</span>
+                        <span class="component-status status-ready">ACTIVE</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Intestines v4</span>
+                        <span class="component-status status-ready">ACTIVE</span>
+                    </li>
+                    <li>
+                        <span class="component-name">Socket</span>
+                        <span class="component-status status-ready">/tmp/bhsi_v4.sock</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Signal Flow -->
+        <div class="connection-flow">
+            <h2 class="flow-title">🔄 Signal/Noise Pipeline</h2>
+            <div class="flow-diagram">
+                <div class="flow-node">Raw Input</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node" style="background: linear-gradient(135deg, #4a1c1c, #7c2d2d);">LIVER</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node">Brain v3.1</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node" style="background: linear-gradient(135deg, #1c3a4a, #2d5a7c);">KIDNEYS</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node">Output</div>
+            </div>
+            
+            <div class="endpoints">
+                <h3 style="margin-bottom: 1rem; color: #ccd6f6;">Mission Control Endpoints</h3>
+                <div class="endpoint">
+                    <span class="endpoint-method">GET</span>
+                    <span class="endpoint-path">/api/status</span>
+                    <span style="color: #64748b;">Full system status</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">GET</span>
+                    <span class="endpoint-path">/api/liver</span>
+                    <span style="color: #64748b;">Liver state</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">GET</span>
+                    <span class="endpoint-path">/api/kidneys</span>
+                    <span style="color: #64748b;">Kidneys state</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">GET</span>
+                    <span class="endpoint-path">/api/thyroid</span>
+                    <span style="color: #64748b;">Thyroid status</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">POST</span>
+                    <span class="endpoint-path">/api/decide</span>
+                    <span style="color: #64748b;">Make decision via Router</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">POST</span>
+                    <span class="endpoint-path">/api/speak</span>
+                    <span style="color: #64748b;">Generate voice via Router</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="timestamp">
+            <p>Brain v4.4 Deployed: 2026-04-05 07:48 UTC</p>
+            <p>Mission Control: http://localhost:8080 | Socket: /tmp/aos_brain.sock</p>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-refresh status every 30 seconds
+        setInterval(() => {
+            fetch('http://localhost:8080/api/status')
+                .then(r => r.json())
+                .then(data => {
+                    console.log('Brain status:', data);
+                    document.querySelector('.live-status span:last-child').textContent = 
+                        `Last update: ${new Date().toLocaleTimeString()}`;
+                })
+                .catch(() => {
+                    document.querySelector('.live-status').style.background = 'rgba(239, 68, 68, 0.1)';
+                    document.querySelector('.live-dot').style.background = '#ef4444';
+                });
+        }, 30000);
+    </script>
+</body>
+</html>

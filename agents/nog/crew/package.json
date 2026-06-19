@@ -1,0 +1,31 @@
+{
+  "name": "nognog-crew-system",
+  "version": "1.0.0",
+  "description": "N'og nog: Persistent Crew System with Brain Integration",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js start",
+    "status": "node main.js status",
+    "rest": "node main.js rest",
+    "report": "node main.js report",
+    "add": "node main.js add",
+    "list": "node main.js list"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.0",
+    "rcon-client": "^4.2.0",
+    "ws": "^8.14.0",
+    "mineflayer": "^4.20.0",
+    "mineflayer-pathfinder": "^2.4.5",
+    "mineflayer-collectblock": "^1.6.0"
+  },
+  "keywords": [
+    "nognog",
+    "crew",
+    "game",
+    "ai",
+    "autonomous"
+  ],
+  "author": "Antonio Hudnall & Miles",
+  "license": "MIT"
+}
