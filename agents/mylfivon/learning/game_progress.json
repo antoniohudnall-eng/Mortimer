@@ -1,0 +1,16 @@
+{
+  "agent_id": "mylfivon",
+  "games_played": {
+    "tic_tac_toe": 81,
+    "checkers": 88
+  },
+  "wins": {
+    "tic_tac_toe": 31,
+    "checkers": 45
+  },
+  "skill_levels": {
+    "tic_tac_toe": 1.0,
+    "checkers": 1.0
+  },
+  "total_experiences": 3841
+}

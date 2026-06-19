@@ -1,0 +1,48 @@
+{
+  "child_id": "mylfivon",
+  "scenarios_completed": [
+    {
+      "name": "stack_tower",
+      "success": true,
+      "steps": 0
+    },
+    {
+      "name": "sort_colors",
+      "success": false,
+      "steps": 1000
+    },
+    {
+      "name": "navigate_course",
+      "success": false,
+      "steps": 1000
+    },
+    {
+      "name": "precision_place",
+      "success": false,
+      "steps": 500
+    },
+    {
+      "name": "multi_task",
+      "success": false,
+      "steps": 0
+    }
+  ],
+  "total_steps": 2500,
+  "success_rate": 0.2,
+  "skills_learned": [
+    "stack_tower"
+  ],
+  "best_skill": "stack_tower",
+  "config": {
+    "id": "mylfivon",
+    "type": "myl",
+    "created": "2026-03-29T23:29:20.990919",
+    "specialization": "cooperation",
+    "stats": {
+      "strength": 0.7713081085530651,
+      "dexterity": 0.9942541969844487,
+      "intelligence": 0.9005662035254048,
+      "curiosity": 0.7745784091106994
+    }
+  }
+}

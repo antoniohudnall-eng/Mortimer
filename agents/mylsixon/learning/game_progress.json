@@ -1,0 +1,16 @@
+{
+  "agent_id": "mylsixon",
+  "games_played": {
+    "tic_tac_toe": 78,
+    "checkers": 90
+  },
+  "wins": {
+    "tic_tac_toe": 39,
+    "checkers": 48
+  },
+  "skill_levels": {
+    "tic_tac_toe": 1.0,
+    "checkers": 1.0
+  },
+  "total_experiences": 3912
+}

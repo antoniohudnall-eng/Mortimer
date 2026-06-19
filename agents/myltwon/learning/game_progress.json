@@ -1,0 +1,16 @@
+{
+  "agent_id": "myltwon",
+  "games_played": {
+    "tic_tac_toe": 93,
+    "checkers": 84
+  },
+  "wins": {
+    "tic_tac_toe": 50,
+    "checkers": 41
+  },
+  "skill_levels": {
+    "tic_tac_toe": 1.0,
+    "checkers": 1.0
+  },
+  "total_experiences": 3723
+}

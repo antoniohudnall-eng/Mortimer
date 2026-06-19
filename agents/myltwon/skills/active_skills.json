@@ -1,0 +1,21 @@
+{
+  "hermes": {
+    "active": true,
+    "channels": [
+      "slack",
+      "discord",
+      "email"
+    ],
+    "priority": "high"
+  },
+  "mini-agent": {
+    "active": true,
+    "max_concurrent": 10,
+    "autonomy": "medium"
+  },
+  "minimax-m2": {
+    "active": false,
+    "model": "MiniMax-M2",
+    "access": "limited"
+  }
+}
