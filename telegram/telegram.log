@@ -1,0 +1,10 @@
+sh: /data/data/com.termux/files/usr/bin/bash: Permission denied
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/mortimer/telegram/mortimer_telegram.py", line 31, in <module>
+    class MortimerTelegram:
+    ...<94 lines>...
+            app.run_polling(allowed_updates=Update.ALL_TYPES)
+  File "/data/data/com.termux/files/home/mortimer/telegram/mortimer_telegram.py", line 79, in MortimerTelegram
+    async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPES.DEFAULT_TYPE):
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'ContextTypes' has no attribute 'DEFAULT_TYPES'. Did you mean: 'DEFAULT_TYPE'?

@@ -1,0 +1,4 @@
+[QMD] Initialized in LOCAL mode
+[QMD] Service running on http://127.0.0.1:8000
+[QMD] Model: qwen2.5:1.5b, Ollama: False
+[QMD] GET /health HTTP/1.1

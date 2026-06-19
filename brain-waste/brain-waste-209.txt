@@ -1,0 +1,18 @@
+BRAIN WASTE REPORT
+==================
+Timestamp: 2026-05-14T06:52:30.638359+00:00
+Source: Miles_Brain_v4.4
+Signal Quality: 0.865
+
+KIDNEYS STATUS:
+- Bladder Level: 329 / 500
+- Total Processed: 1285108
+- Noise Estimate: 0.5319960746589273
+- Unique Patterns: 72114
+- State: FILTER
+
+QMD CYCLES: 72277
+ROUTER CALLS: 0
+THYROID: BASELINE (0 secretions)
+
+Full JSON attached. Feed this to Mortimer's brain.

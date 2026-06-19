@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Mortimer Mission Control</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            color: #00ff88;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin: 20px 0;
+            text-shadow: 0 0 20px #00ff88;
+        }
+        .status-bar {
+            background: rgba(0,255,136,0.1);
+            border: 1px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .card {
+            background: rgba(20,20,40,0.8);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0,255,136,0.2);
+        }
+        .card h2 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #222;
+        }
+        .online { color: #00ff88; }
+        .offline { color: #ff4757; }
+        .consciousness-bar {
+            background: #222;
+            border-radius: 5px;
+            height: 20px;
+            margin: 5px 0;
+            position: relative;
+        }
+        .consciousness-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 1s;
+        }
+        .conscious { background: #00ff88; }
+        .subconscious { background: #00bfff; }
+        .unconscious { background: #ff6b6b; }
+        .timestamp {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+        }
+        .emoji { font-size: 1.5em; }
+        .value { font-weight: bold; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .live { animation: pulse 2s infinite; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 MORTIMER MISSION CONTROL</h1>
+        
+        <div class="status-bar">
+            <span class="emoji">🖥️</span> MORTIMER STATUS: 
+            <span class="value online live">ONLINE</span> |
+            <span class="emoji">📍</span> LOCATION: <span class="value">Termux (Android)</span> |
+            <span class="emoji">🧠</span> CONSCIOUSNESS: <span class="value">ACTIVE</span>
+        </div>
+        
+        <div class="grid">
+            <!-- Services -->
+            <div class="card">
+                <h2>📡 SERVICES</h2>
+                <div id="services"></div>
+            </div>
+            
+            <!-- Brain -->
+            <div class="card">
+                <h2>🧠 BRAIN</h2>
+                <div id="brain"></div>
+            </div>
+            
+            <!-- Consciousness -->
+            <div class="card">
+                <h2>💭 CONSCIOUSNESS</h2>
+                <div id="consciousness"></div>
+            </div>
+            
+            <!-- Drives -->
+            <div class="card">
+                <h2>🔥 CORE DRIVES</h2>
+                <div id="drives"></div>
+            </div>
+        </div>
+        
+        <div class="timestamp">
+            Last updated: <span id="timestamp"></span>
+        </div>
+    </div>
+    
+    <script>
+        function update() {
+            fetch('/status')
+                .then(r => r.json())
+                .then(data => {
+                    // Timestamp
+                    document.getElementById('timestamp').textContent = data.timestamp;
+                    
+                    // Services
+                    let servicesHtml = '';
+                    for (let [name, info] of Object.entries(data.services)) {
+                        let status = info.status === 'ONLINE' ? '<span class="online">● ONLINE</span>' : '<span class="offline">● OFFLINE</span>';
+                        let models = info.models ? ` (${info.models} models)` : '';
+                        servicesHtml += '<div class="item"><span>' + name + models + '</span>' + status + '</div>';
+                    }
+                    document.getElementById('services').innerHTML = servicesHtml;
+                    
+                    // Brain
+                    let brainHtml = '<div class="item"><span>Memory Files</span><span class="value">' + data.brain.memory_files + '</span></div>';
+                    brainHtml += '<div class="item"><span>Today Studied</span><span class="value">' + (data.brain.today_study ? 'YES 🎓' : 'NO') + '</span></div>';
+                    let curriculum = data.brain.curriculum_complete ? 'COMPLETE 🎉' : 'Stage ' + data.brain.curriculum_stage;
+                    brainHtml += '<div class="item"><span>Curriculum</span><span class="value">' + curriculum + '</span></div>';
+                    document.getElementById('brain').innerHTML = brainHtml;
+                    
+                    // Consciousness
+                    let c = data.consciousness;
+                    let consHtml = '<div class="item"><span>🧠 Conscious</span><span class="value">' + c.conscious + '</span></div>';
+                    consHtml += '<div class="consciousness-bar"><div class="consciousness-fill conscious" style="width:' + (parseInt(c.conscious)*10) + '%"></div></div>';
+                    consHtml += '<div class="item"><span>🔄 Subconscious</span><span class="value">' + c.subconscious + '</span></div>';
+                    consHtml += '<div class="consciousness-bar"><div class="consciousness-fill subconscious" style="width:' + c.subconscious + '%"></div></div>';
+                    consHtml += '<div class="item"><span>💭 Unconscious</span><span class="value">' + c.unconscious + '</span></div>';
+                    consHtml += '<div class="consciousness-bar"><div class="consciousness-fill unconscious" style="width:' + (parseInt(c.unconscious)/20) + '%"></div></div>';
+                    document.getElementById('consciousness').innerHTML = consHtml;
+                    
+                    // Drives
+                    let drivesHtml = '';
+                    for (let [name, level] of Object.entries(c.drives)) {
+                        let pct = level * 100;
+                        let namePretty = name.replace(/_/g, ' ').toUpperCase();
+                        drivesHtml += '<div class="item"><span>' + namePretty + '</span><span class="value">' + Math.round(level*100) + '%</span></div>';
+                        drivesHtml += '<div class="consciousness-bar"><div class="consciousness-fill conscious" style="width:' + pct + '%"></div></div>';
+                    }
+                    document.getElementById('drives').innerHTML = drivesHtml;
+                });
+        }
+        
+        update();
+        setInterval(update, 5000);
+    </script>
+</body>
+</html>

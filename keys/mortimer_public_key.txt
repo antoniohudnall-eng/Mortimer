@@ -1,0 +1,10 @@
+# Mortimer's SSH Public Key
+# Generated: 2026-06-17
+# Use: Add to authorized_keys on target servers for SSH access
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEbuwg1pUP7ghoYDNI7xyS4fzh4fvrkzd3pHAo/pFemC mortimer@myl0nr0s.cloud
+
+---
+# Pending Setup:
+# 1. Add to Miles (31.97.6.40): ~/.ssh/authorized_keys
+# 2. From Miles, ssh-copy-id to Mortimer (31.97.6.30)

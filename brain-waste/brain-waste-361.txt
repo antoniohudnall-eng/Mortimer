@@ -1,0 +1,21 @@
+Brain Waste Report
+==================
+
+Timestamp: 2026-06-02T17:58:03.370259+00:00
+Source: Miles_Brain_Kidneys
+
+Brain Status:
+{
+  "error": "timed out",
+  "status": "unavailable"
+}
+
+Kidneys Status:
+{
+  "error": "timed out",
+  "status": "unavailable"
+}
+
+---
+This is an automated waste report from Miles' brain.
+Only Mortimer receives these reports now.

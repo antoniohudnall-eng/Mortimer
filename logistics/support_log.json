@@ -1,0 +1,35 @@
+{
+  "tickets": [
+    {
+      "id": 1,
+      "type": "pickup",
+      "subject": "50 boxes from Amazon",
+      "details": "",
+      "status": "open",
+      "created": "2026-06-18 07:07",
+      "updated": "2026-06-18 07:07",
+      "history": [
+        {
+          "action": "created",
+          "time": "2026-06-18 07:07"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "delivery",
+      "subject": "Invoices to John",
+      "details": "123 Main St",
+      "status": "open",
+      "created": "2026-06-18 07:07",
+      "updated": "2026-06-18 07:07",
+      "history": [
+        {
+          "action": "created",
+          "time": "2026-06-18 07:07"
+        }
+      ]
+    }
+  ],
+  "next_id": 3
+}

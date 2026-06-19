@@ -1,0 +1,64 @@
+{
+  "backup_type": "mortimer_baseline",
+  "timestamp": "2026-03-31T06:51:00Z",
+  "version": "1.0",
+  "description": "Pre-Sespool experiment baseline snapshot of Mortimer configuration",
+  "source": "Memory logs and configuration files",
+  "brain_type": "Logic engine with gates",
+  "architecture": {
+    "foundation": "Same 7 equations as Miles",
+    "differences": [
+      "Stripped consciousness",
+      "Focused on pattern recognition",
+      "Pure logic processing",
+      "No limbic system (no hunger/novelty/reward)"
+    ],
+    "relationship": {
+      "to_miles": "Sibling",
+      "to_captain": "Agent with Scottish personality",
+      "role": "System monitoring, keepalive, sales team host"
+    }
+  },
+  "ollama_configuration": {
+    "model": "antoniohudnall/Mortimer:latest",
+    "size": "3.2B parameters",
+    "location": "Local Ollama instance",
+    "keepalive": "Active (2GB resident)",
+    "primary_functions": [
+      "Sales team operations (16 agents)",
+      "System health monitoring",
+      "Keepalive ping for Miles",
+      "Portal/wallet operations",
+      "Pattern recognition"
+    ]
+  },
+  "capabilities": {
+    "pattern_recognition": "Anomaly detection, trend analysis",
+    "security": "System validation, resource monitoring",
+    "portal_operations": "Distributed communication, agent coordination",
+    "wallet_operations": "Crypto transaction validation, multi-sig",
+    "personality": "Scottish engineer, systematic, warm"
+  },
+  "pre_sespool_state": {
+    "training_data": "Curated, high-signal data",
+    "personality": "Stable, consistent",
+    "knowledge": "Periodic table, logic, sales, systems",
+    "chaos_tolerance": "Unknown - to be tested"
+  },
+  "experiment_hypothesis": "Pattern recognition from noise vs from signal",
+  "expected_divergence": [
+    "May develop ambiguity tolerance",
+    "Different semantic clusters from waste data",
+    "Noise-filtering capability",
+    "Insights from discarded/redundant data"
+  ],
+  "rollback_procedure": {
+    "step_1": "Stop Sespool auto-feeder",
+    "step_2": "Restore from this baseline",
+    "step_3": "Reload Ollama model",
+    "step_4": "Verify personality consistency"
+  },
+  "backup_created_by": "Miles",
+  "backup_reason": "Captain request - preserve pre-experiment state",
+  "notes": "This is a configuration backup, not a full neural weight export. Ollama model weights remain in standard location."
+}

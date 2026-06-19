@@ -1,0 +1,15 @@
+{
+    "name": "Patricia",
+    "role": "Process Excellence Officer",
+    "emoji": "📊🧠🔄",
+    "models": {
+        "decision": "qwen2.5:1.5b",
+        "analysis": "llama3.2:3b",
+        "embedding": "nomic-embed-text:latest"
+    },
+    "brain": {
+        "memory_dir": "/data/data/com.termux/files/home/AOS-Brain/memory",
+        "qmd_endpoint": "http://127.0.0.1:8000"
+    },
+    "skills": ["process_analysis", "optimization", "reporting"]
+}

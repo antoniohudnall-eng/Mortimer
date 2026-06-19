@@ -1,0 +1,28 @@
+{
+  "canisters": {
+    "counter": {
+      "main": "counter/main.mo",
+      "type": "motoko"
+    },
+    "frontend": {
+      "dependencies": ["counter"],
+      "frontend": {
+        "entrypoint": "index.html"
+      },
+      "source": ["index.html"],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": "mops"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4943",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}

@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-05-16T05:00:54.474724+00:00",
+  "source": "Miles_Brain_v4.4",
+  "kidneys": {
+    "state": "FILTER",
+    "total_processed": 1469622,
+    "reabsorbed": 0,
+    "excreted": 1383668,
+    "bladder_level": 294,
+    "bladder_capacity": 500,
+    "nutrients_stored": 1000,
+    "recent_signal_avg": 0.45,
+    "noise_estimate": 0.5451904387966078,
+    "unique_patterns_seen": 82654
+  },
+  "qmd": {
+    "total_cycles": 82839,
+    "avg_latency_ms": 1116.6550686416442,
+    "cache_hits": 1386783,
+    "cache_size": 4
+  },
+  "router": {
+    "models": {
+      "decision": "bonsai-8b-q1_0",
+      "decision_fallback": "tinyllama:latest",
+      "voice": "antoniohudnall/Mort_II:latest",
+      "embedding": "nomic-embed-text:latest",
+      "reasoning": "qwen2.5:3b"
+    },
+    "stats": {
+      "decision": {
+        "calls": 0,
+        "avg_latency": 0
+      },
+      "voice": {
+        "calls": 0,
+        "avg_latency": 0
+      },
+      "embedding": {
+        "calls": 0,
+        "avg_latency": 0
+      }
+    }
+  },
+  "thyroid": {
+    "state": "BASELINE",
+    "ollama_level": 0.0,
+    "local_level": 1.0,
+    "last_secretion_seconds_ago": 999,
+    "secretion_count_today": 0,
+    "baseline_timeout": 120.0,
+    "secretions_today": 0,
+    "total_secretion_time": 0.0,
+    "baseline_time": 0.0
+  },
+  "consciousness": {
+    "conscious": {
+      "active_items": 10,
+      "capacity": 10
+    },
+    "subconscious": {
+      "active_items": 100,
+      "capacity": 100
+    },
+    "unconscious": {
+      "active_items": 210,
+      "capacity": 2000
+    },
+    "cross_talk_events": 100
+  },
+  "cortex": {
+    "conscious_mean": 0.500566303730011,
+    "conscious_max": 0.5808063745498657,
+    "subconscious_mean": -0.002137079508945268,
+    "unconscious_mean": 0.00019221763377210197,
+    "volume_size": 32768,
+    "history_length": 100
+  },
+  "tracray": {
+    "total_points": 5000,
+    "episodes": 14696,
+    "current_episode_length": 22,
+    "capacity": 5000,
+    "utilization": 1.0
+  },
+  "liver": {
+    "state": "CLEAN",
+    "filtered_total": 1469622,
+    "toxic_neutralized": 0,
+    "bile_stored": 0,
+    "bile_capacity": 1000,
+    "purify_threshold": 0.3,
+    "toxic_threshold": 0.7
+  },
+  "signal_quality": 0.865
+}

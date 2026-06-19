@@ -1,0 +1,561 @@
+======================================================================
+PATRICIA v4.3 + AURORA v4.3 - Multi-Model Agents
+======================================================================
+
+📊 Activating Patricia v4.3...
+📊🧠🔄 Patricia v4.3
+Role: Multi-Model Process Excellence Officer
+🧠🔄 Brain v4.3 initializing...
+Active model: antoniohudnall/Mort_II:latest
+Available models: 5
+  ✅ ACTIVE Mort_II (Primary) (antoniohudnall/Mort_II:latest)
+  ⏳ standby Phi-3 (Fast) (phi3:latest)
+  ⏳ standby TinyLlama (Tiny) (tinyllama:latest)
+  ⏳ standby Qwen 2.5 (qwen2.5:3b)
+  ⏳ standby Llama 3.2 (llama3.2:latest)
+🎓 Continuous learning with multi-model support
+
+✅ Brain v4.3 ready
+
+To switch models:
+  brain.switch_to_model('phi3:latest')
+  brain.switch_to_model('tinyllama:latest')
+
+----------------------------------------------------------------------
+MODEL SWITCHING DEMO
+----------------------------------------------------------------------
+
+📋 Available Models:
+  🟢 Mort_II (Primary) (antoniohudnall/Mort_II:latest)
+  ⚪ Phi-3 (Fast) (phi3:latest)
+  ⚪ TinyLlama (Tiny) (tinyllama:latest)
+  ⚪ Qwen 2.5 (qwen2.5:3b)
+  ⚪ Llama 3.2 (llama3.2:latest)
+
+======================================================================
+DOWNLOAD INSTRUCTIONS
+======================================================================
+
+To download a model:
+
+1. Check available models:
+   ollama list
+
+2. Download a model:
+   ollama pull phi3:latest
+   ollama pull tinyllama:latest
+   ollama pull qwen2.5:3b
+
+3. Verify download:
+   ollama list
+
+4. Test the model:
+   ollama run phi3:latest "Hello world"
+
+
+======================================================================
+STANDALONE TEST
+======================================================================
+
+To test phi3 standalone:
+  python patricia_v4_3_multi_model.py test phi3
+
+To test tinyllama standalone:
+  python patricia_v4_3_multi_model.py test tinyllama
+[2026-06-17 20:16:31] Patricia v4.3 Service starting...
+[2026-06-17 20:16:31] Patricia v4.3 Service starting...
+🧠🔄 Brain v4.3 initializing...
+Active model: antoniohudnall/Mort_II:latest
+Available models: 5
+  ✅ ACTIVE Mort_II (Primary) (antoniohudnall/Mort_II:latest)
+  ⏳ standby Phi-3 (Fast) (phi3:latest)
+  ⏳ standby TinyLlama (Tiny) (tinyllama:latest)
+  ⏳ standby Qwen 2.5 (qwen2.5:3b)
+  ⏳ standby Llama 3.2 (llama3.2:latest)
+🎓 Continuous learning with multi-model support
+
+✅ Brain v4.3 ready
+
+To switch models:
+  brain.switch_to_model('phi3:latest')
+  brain.switch_to_model('tinyllama:latest')
+[2026-06-17 20:16:31] ✅ Brain ready - Active model: antoniohudnall/Mort_II:latest
+[2026-06-17 20:16:31] ✅ Brain ready - Active model: antoniohudnall/Mort_II:latest
+[2026-06-17 20:16:31] 💓 Heartbeat - Brain active
+[2026-06-17 20:16:31] 💓 Heartbeat - Brain active
+[2026-06-17 20:21:31] 💓 Heartbeat - Brain active
+[2026-06-17 20:21:31] 💓 Heartbeat - Brain active
+[2026-06-17 20:26:31] 💓 Heartbeat - Brain active
+[2026-06-17 20:26:31] 💓 Heartbeat - Brain active
+[2026-06-17 20:31:31] 💓 Heartbeat - Brain active
+[2026-06-17 20:31:31] 💓 Heartbeat - Brain active
+[2026-06-17 20:36:32] 💓 Heartbeat - Brain active
+[2026-06-17 20:36:32] 💓 Heartbeat - Brain active
+[2026-06-17 20:41:32] 💓 Heartbeat - Brain active
+[2026-06-17 20:41:32] 💓 Heartbeat - Brain active
+[2026-06-17 20:46:32] 💓 Heartbeat - Brain active
+[2026-06-17 20:46:32] 💓 Heartbeat - Brain active
+[2026-06-17 20:51:32] 💓 Heartbeat - Brain active
+[2026-06-17 20:51:32] 💓 Heartbeat - Brain active
+[2026-06-17 20:56:32] 💓 Heartbeat - Brain active
+[2026-06-17 20:56:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:01:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:01:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:06:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:06:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:11:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:11:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:16:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:16:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:21:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:21:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:26:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:26:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:31:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:31:32] 💓 Heartbeat - Brain active
+[2026-06-17 21:36:48] 💓 Heartbeat - Brain active
+[2026-06-17 21:36:48] 💓 Heartbeat - Brain active
+[2026-06-17 21:41:48] 💓 Heartbeat - Brain active
+[2026-06-17 21:41:48] 💓 Heartbeat - Brain active
+[2026-06-17 21:51:52] 💓 Heartbeat - Brain active
+[2026-06-17 21:51:52] 💓 Heartbeat - Brain active
+[2026-06-17 21:56:52] 💓 Heartbeat - Brain active
+[2026-06-17 21:56:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:01:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:01:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:06:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:06:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:11:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:11:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:16:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:16:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:21:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:21:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:26:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:26:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:31:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:31:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:36:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:36:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:41:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:41:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:46:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:46:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:51:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:51:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:56:52] 💓 Heartbeat - Brain active
+[2026-06-17 22:56:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:01:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:01:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:06:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:06:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:11:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:11:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:16:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:16:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:21:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:21:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:26:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:26:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:31:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:31:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:36:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:36:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:41:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:41:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:46:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:46:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:51:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:51:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:56:52] 💓 Heartbeat - Brain active
+[2026-06-17 23:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 00:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 01:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 02:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 03:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:26:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:31:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:36:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:41:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:46:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:51:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 04:56:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:01:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:06:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:11:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:16:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:21:52] 💓 Heartbeat - Brain active
+[2026-06-18 05:26:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:26:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:31:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:31:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:36:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:36:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:41:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:41:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:46:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:46:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:51:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:51:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:56:53] 💓 Heartbeat - Brain active
+[2026-06-18 05:56:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:01:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:01:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:06:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:06:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:11:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:11:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:16:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:16:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:21:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:21:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:26:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:26:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:31:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:31:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:36:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:36:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:41:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:41:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:46:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:46:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:51:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:51:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:56:53] 💓 Heartbeat - Brain active
+[2026-06-18 06:56:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:01:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:01:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:06:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:06:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:11:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:11:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:16:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:16:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:21:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:21:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:26:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:26:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:31:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:31:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:36:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:36:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:41:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:41:53] 💓 Heartbeat - Brain active
+[2026-06-18 07:54:46] 💓 Heartbeat - Brain active
+[2026-06-18 07:54:46] 💓 Heartbeat - Brain active
+[2026-06-18 08:00:47] 💓 Heartbeat - Brain active
+[2026-06-18 08:00:47] 💓 Heartbeat - Brain active
+[2026-06-18 08:10:42] 💓 Heartbeat - Brain active
+[2026-06-18 08:10:42] 💓 Heartbeat - Brain active
+[2026-06-18 08:19:45] 💓 Heartbeat - Brain active
+[2026-06-18 08:19:45] 💓 Heartbeat - Brain active
+[2026-06-18 08:24:46] 💓 Heartbeat - Brain active
+[2026-06-18 08:24:46] 💓 Heartbeat - Brain active
+[2026-06-18 08:29:46] 💓 Heartbeat - Brain active
+[2026-06-18 08:29:46] 💓 Heartbeat - Brain active
+[2026-06-18 08:34:46] 💓 Heartbeat - Brain active
+[2026-06-18 08:34:46] 💓 Heartbeat - Brain active
+[2026-06-18 08:39:50] 💓 Heartbeat - Brain active
+[2026-06-18 08:39:50] 💓 Heartbeat - Brain active
+[2026-06-18 08:44:50] 💓 Heartbeat - Brain active
+[2026-06-18 08:44:50] 💓 Heartbeat - Brain active
+[2026-06-18 08:49:50] 💓 Heartbeat - Brain active
+[2026-06-18 08:49:50] 💓 Heartbeat - Brain active
+[2026-06-18 08:56:25] 💓 Heartbeat - Brain active
+[2026-06-18 08:56:25] 💓 Heartbeat - Brain active
+[2026-06-18 09:02:00] 💓 Heartbeat - Brain active
+[2026-06-18 09:02:00] 💓 Heartbeat - Brain active
+[2026-06-18 09:07:05] 💓 Heartbeat - Brain active
+[2026-06-18 09:07:05] 💓 Heartbeat - Brain active
+[2026-06-18 09:15:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:15:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:20:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:20:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:25:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:25:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:30:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:30:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:35:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:35:21] 💓 Heartbeat - Brain active
+[2026-06-18 09:41:02] 💓 Heartbeat - Brain active
+[2026-06-18 09:41:02] 💓 Heartbeat - Brain active
+[2026-06-18 09:46:02] 💓 Heartbeat - Brain active
+[2026-06-18 09:46:02] 💓 Heartbeat - Brain active
+[2026-06-18 09:51:02] 💓 Heartbeat - Brain active
+[2026-06-18 09:51:02] 💓 Heartbeat - Brain active
+[2026-06-18 09:56:20] 💓 Heartbeat - Brain active
+[2026-06-18 09:56:20] 💓 Heartbeat - Brain active
+[2026-06-18 10:04:26] 💓 Heartbeat - Brain active
+[2026-06-18 10:04:26] 💓 Heartbeat - Brain active
+[2026-06-18 10:09:31] 💓 Heartbeat - Brain active
+[2026-06-18 10:09:31] 💓 Heartbeat - Brain active
+[2026-06-18 10:14:43] 💓 Heartbeat - Brain active
+[2026-06-18 10:14:43] 💓 Heartbeat - Brain active
+[2026-06-18 10:19:45] 💓 Heartbeat - Brain active
+[2026-06-18 10:19:45] 💓 Heartbeat - Brain active
+[2026-06-18 10:24:58] 💓 Heartbeat - Brain active
+[2026-06-18 10:24:58] 💓 Heartbeat - Brain active
+[2026-06-18 10:29:58] 💓 Heartbeat - Brain active
+[2026-06-18 10:29:58] 💓 Heartbeat - Brain active
+[2026-06-18 10:34:59] 💓 Heartbeat - Brain active
+[2026-06-18 10:34:59] 💓 Heartbeat - Brain active
+[2026-06-18 10:40:06] 💓 Heartbeat - Brain active
+[2026-06-18 10:40:06] 💓 Heartbeat - Brain active
+[2026-06-18 10:46:25] 💓 Heartbeat - Brain active
+[2026-06-18 10:46:25] 💓 Heartbeat - Brain active
+[2026-06-18 10:51:29] 💓 Heartbeat - Brain active
+[2026-06-18 10:51:29] 💓 Heartbeat - Brain active
+[2026-06-18 10:57:18] 💓 Heartbeat - Brain active
+[2026-06-18 10:57:18] 💓 Heartbeat - Brain active
+[2026-06-18 11:03:06] 💓 Heartbeat - Brain active
+[2026-06-18 11:03:06] 💓 Heartbeat - Brain active
+[2026-06-18 11:08:06] 💓 Heartbeat - Brain active
+[2026-06-18 11:08:06] 💓 Heartbeat - Brain active
+[2026-06-18 11:13:06] 💓 Heartbeat - Brain active
+[2026-06-18 11:13:06] 💓 Heartbeat - Brain active
+[2026-06-18 11:18:07] 💓 Heartbeat - Brain active
+[2026-06-18 11:18:07] 💓 Heartbeat - Brain active
+[2026-06-18 11:23:07] 💓 Heartbeat - Brain active
+[2026-06-18 11:23:07] 💓 Heartbeat - Brain active
+[2026-06-18 11:28:08] 💓 Heartbeat - Brain active
+[2026-06-18 11:28:08] 💓 Heartbeat - Brain active
+[2026-06-18 11:33:08] 💓 Heartbeat - Brain active
+[2026-06-18 11:33:08] 💓 Heartbeat - Brain active
+[2026-06-18 11:38:08] 💓 Heartbeat - Brain active
+[2026-06-18 11:38:08] 💓 Heartbeat - Brain active
+[2026-06-18 11:43:09] 💓 Heartbeat - Brain active
+[2026-06-18 11:43:09] 💓 Heartbeat - Brain active
+[2026-06-18 11:48:14] 💓 Heartbeat - Brain active
+[2026-06-18 11:48:14] 💓 Heartbeat - Brain active
+[2026-06-18 11:53:16] 💓 Heartbeat - Brain active
+[2026-06-18 11:53:16] 💓 Heartbeat - Brain active
+[2026-06-18 11:58:16] 💓 Heartbeat - Brain active
+[2026-06-18 11:58:16] 💓 Heartbeat - Brain active
+[2026-06-18 12:03:47] 💓 Heartbeat - Brain active
+[2026-06-18 12:03:47] 💓 Heartbeat - Brain active
+[2026-06-18 12:08:49] 💓 Heartbeat - Brain active
+[2026-06-18 12:08:49] 💓 Heartbeat - Brain active
+[2026-06-18 12:13:49] 💓 Heartbeat - Brain active
+[2026-06-18 12:13:49] 💓 Heartbeat - Brain active
+[2026-06-18 12:19:12] 💓 Heartbeat - Brain active
+[2026-06-18 12:19:12] 💓 Heartbeat - Brain active
+[2026-06-18 12:24:17] 💓 Heartbeat - Brain active
+[2026-06-18 12:24:17] 💓 Heartbeat - Brain active
+[2026-06-18 12:29:17] 💓 Heartbeat - Brain active
+[2026-06-18 12:29:17] 💓 Heartbeat - Brain active
+[2026-06-18 12:34:18] 💓 Heartbeat - Brain active
+[2026-06-18 12:34:18] 💓 Heartbeat - Brain active
+[2026-06-18 12:39:18] 💓 Heartbeat - Brain active
+[2026-06-18 12:39:18] 💓 Heartbeat - Brain active
+[2026-06-18 12:44:18] 💓 Heartbeat - Brain active
+[2026-06-18 12:44:18] 💓 Heartbeat - Brain active
+[2026-06-18 12:49:18] 💓 Heartbeat - Brain active
+[2026-06-18 12:49:18] 💓 Heartbeat - Brain active
+[2026-06-18 12:54:33] 💓 Heartbeat - Brain active
+[2026-06-18 12:54:33] 💓 Heartbeat - Brain active
+[2026-06-18 13:00:01] 💓 Heartbeat - Brain active
+[2026-06-18 13:00:01] 💓 Heartbeat - Brain active
+[2026-06-18 13:05:18] 💓 Heartbeat - Brain active
+[2026-06-18 13:05:18] 💓 Heartbeat - Brain active
+[2026-06-18 13:10:19] 💓 Heartbeat - Brain active
+[2026-06-18 13:10:19] 💓 Heartbeat - Brain active
+[2026-06-18 13:16:04] 💓 Heartbeat - Brain active
+[2026-06-18 13:16:04] 💓 Heartbeat - Brain active
+[2026-06-18 13:21:53] 💓 Heartbeat - Brain active
+[2026-06-18 13:21:53] 💓 Heartbeat - Brain active
+[2026-06-18 13:28:27] 💓 Heartbeat - Brain active
+[2026-06-18 13:28:27] 💓 Heartbeat - Brain active
+[2026-06-18 13:33:55] 💓 Heartbeat - Brain active
+[2026-06-18 13:33:55] 💓 Heartbeat - Brain active
+[2026-06-18 13:38:59] 💓 Heartbeat - Brain active
+[2026-06-18 13:38:59] 💓 Heartbeat - Brain active
+[2026-06-18 13:45:00] 💓 Heartbeat - Brain active
+[2026-06-18 13:45:00] 💓 Heartbeat - Brain active
+[2026-06-18 13:52:00] 💓 Heartbeat - Brain active
+[2026-06-18 13:52:00] 💓 Heartbeat - Brain active
+[2026-06-18 13:57:41] 💓 Heartbeat - Brain active
+[2026-06-18 13:57:41] 💓 Heartbeat - Brain active
+[2026-06-18 14:02:42] 💓 Heartbeat - Brain active
+[2026-06-18 14:02:42] 💓 Heartbeat - Brain active
+[2026-06-18 14:15:47] 💓 Heartbeat - Brain active
+[2026-06-18 14:15:47] 💓 Heartbeat - Brain active
+[2026-06-18 14:21:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:21:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:26:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:26:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:31:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:31:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:36:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:36:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:41:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:41:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:46:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:46:44] 💓 Heartbeat - Brain active
+[2026-06-18 14:51:45] 💓 Heartbeat - Brain active
+[2026-06-18 14:51:45] 💓 Heartbeat - Brain active
+[2026-06-18 14:56:50] 💓 Heartbeat - Brain active
+[2026-06-18 14:56:50] 💓 Heartbeat - Brain active
+[2026-06-18 15:02:06] 💓 Heartbeat - Brain active
+[2026-06-18 15:02:06] 💓 Heartbeat - Brain active
+[2026-06-18 15:07:06] 💓 Heartbeat - Brain active
+[2026-06-18 15:07:06] 💓 Heartbeat - Brain active
+[2026-06-18 15:12:14] 💓 Heartbeat - Brain active
+[2026-06-18 15:12:14] 💓 Heartbeat - Brain active
+[2026-06-18 15:18:01] 💓 Heartbeat - Brain active
+[2026-06-18 15:18:01] 💓 Heartbeat - Brain active
+[2026-06-18 15:24:40] 💓 Heartbeat - Brain active
+[2026-06-18 15:24:40] 💓 Heartbeat - Brain active
+[2026-06-18 15:30:11] 💓 Heartbeat - Brain active
+[2026-06-18 15:30:11] 💓 Heartbeat - Brain active
+[2026-06-18 15:35:15] 💓 Heartbeat - Brain active
+[2026-06-18 15:35:15] 💓 Heartbeat - Brain active
+[2026-06-18 15:40:40] 💓 Heartbeat - Brain active
+[2026-06-18 15:40:40] 💓 Heartbeat - Brain active
+[2026-06-18 15:45:40] 💓 Heartbeat - Brain active
+[2026-06-18 15:45:40] 💓 Heartbeat - Brain active
+[2026-06-18 15:50:43] 💓 Heartbeat - Brain active
+[2026-06-18 15:50:43] 💓 Heartbeat - Brain active
+[2026-06-18 15:56:35] 💓 Heartbeat - Brain active
+[2026-06-18 15:56:35] 💓 Heartbeat - Brain active
+[2026-06-18 16:02:58] 💓 Heartbeat - Brain active
+[2026-06-18 16:02:58] 💓 Heartbeat - Brain active
+[2026-06-18 16:08:14] 💓 Heartbeat - Brain active
+[2026-06-18 16:08:14] 💓 Heartbeat - Brain active
+[2026-06-18 16:13:16] 💓 Heartbeat - Brain active
+[2026-06-18 16:13:16] 💓 Heartbeat - Brain active
+[2026-06-18 16:18:16] 💓 Heartbeat - Brain active
+[2026-06-18 16:18:16] 💓 Heartbeat - Brain active
+[2026-06-18 16:23:19] 💓 Heartbeat - Brain active
+[2026-06-18 16:23:19] 💓 Heartbeat - Brain active
+[2026-06-18 16:28:28] 💓 Heartbeat - Brain active
+[2026-06-18 16:28:28] 💓 Heartbeat - Brain active
+[2026-06-18 16:34:25] 💓 Heartbeat - Brain active
+[2026-06-18 16:34:25] 💓 Heartbeat - Brain active
+[2026-06-18 16:45:37] 💓 Heartbeat - Brain active
+[2026-06-18 16:45:37] 💓 Heartbeat - Brain active
+[2026-06-18 16:55:40] 💓 Heartbeat - Brain active
+[2026-06-18 16:55:40] 💓 Heartbeat - Brain active
+[2026-06-18 17:00:40] 💓 Heartbeat - Brain active
+[2026-06-18 17:00:40] 💓 Heartbeat - Brain active
+[2026-06-18 18:00:26] Patricia v4.3 Service starting...
+[2026-06-18 18:00:26] ✅ Brain ready - Active model: antoniohudnall/Mort_II:latest
+[2026-06-18 18:00:26] 💓 Heartbeat - Brain active
+[2026-06-18 18:05:26] 💓 Heartbeat - Brain active
+[2026-06-18 18:07:24] Patricia v4.3 Service starting...
+[2026-06-18 18:07:24] ✅ Brain ready - Active model: antoniohudnall/Mort_II:latest
+[2026-06-18 18:07:24] 💓 Heartbeat - Brain active
+[2026-06-18 18:12:24] 💓 Heartbeat - Brain active
