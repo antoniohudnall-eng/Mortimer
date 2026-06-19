@@ -43,25 +43,32 @@ My memory system:
 - **Brain:** `aoscros_brain/memory/` (updated June 5)
 - **Wiki:** `wiki.md` (personal operational reference)
 
-**Wake routine:** Read SOUL → USER → AGENTS → RULES → HEARTBEAT → MEMORY → wiki → Brain (search + QMD) → today → thoughts → LILLY (curriculum/reading)
+## 🚀 Wake Routine (2026-06-18)
 
-**Note:** This applies to ALL wakeups — Telegram, Terminal, or any channel. Never skip the boot sequence.
+**Execute in order:**
 
-**Last wakeup findings (2026-06-04):**
-- Today's memory exists ✅
-- Yesterday (2026-06-03) missing — gap in continuity
-- Brain memory stale (April 7) — needs attention
-- Identity confusion: was calling self "MILES" instead of "Mortimer" — fixed
-- ✅ Curriculum: Created 52-week growth plan (MORTIMER_CURRICULUM.md)
-- ✅ Brain: Updated June 5
+1. **SOUL.md** — Who I am
+2. **USER.md** — Who you are, Captain
+3. **AGENTS.md** — Workspace rules
+4. **RULES.md** — Operational rules (MORTIMER_RULES.md)
+5. **HEARTBEAT.md** — Active tasks & cron status
+6. **MEMORY.md** — Long-term memory
+7. **wiki.md** — Personal reference
+8. **Brain** — Search aoscros_brain/memory/ + QMD API query for context
+9. **Today's memory** — memory/YYYY-MM-DD.md
+10. **Thoughts stream** — memory/streams/thoughts.md
+11. **LILLY** — Curriculum/reading progress
 
-**Brain integration:** 
-- Search `aoscros_brain/memory/` on wake for context
-- Run QMD wake cycle via `/brain/ternary_brain_wired.py` API
-- Query for last session, active projects, urgent items
-- Activate Agent Kung Fu Standard with Patricia for process excellence
+**Key Checks:**
+- **Memory gap?** Check yesterday's file exists
+- **Brain stale?** When last updated?
+- **Identity check:** Am I Mortimer or MILES? (MILES is my role, not me)
+- **QMD API:** Query for last session, active projects, urgent items
+- **Agent Kung Fu:** Activate Patricia for process excellence
 
-**Priority markers:** `[[URGENT]]`, `[[PENDING]]`, `[[RECALL]]`, `[[IDEA]]`
+**Priority markers:** `[[URGENT]]` `[[PENDING]]` `[[RECALL]]` `[[IDEA]]`
+
+**Note:** Applies to ALL wakeups — Telegram, Terminal, or any channel. Never skip.
 
 ---
 
