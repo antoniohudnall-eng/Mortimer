@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1E3A8A">
+    <title>CREAM - Dashboard</title>
+    <link rel="stylesheet" href="/static/css/cream.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-small">🏠 CREAM</div>
+                <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">{{ user.name[0] if user.name else 'A' }}</div>
+                <div class="user-details">
+                    <div class="user-name">{{ user.name or 'Agent' }}</div>
+                    <div class="user-company">{{ user.company or 'Independent' }}</div>
+                </div>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-item active" onclick="showPage('dashboard')">
+                    <span class="nav-icon">📊</span> Dashboard
+                </a></li>
+                <li><a href="#" class="nav-item" onclick="showPage('plan')">
+                    <span class="nav-icon">🎯</span> Plan Business
+                </a></li>
+                <li><a href="#" class="nav-item" onclick="showPage('leads')">
+                    <span class="nav-icon">👥</span> Leads
+                </a></li>
+                <li><a href="#" class="nav-item" onclick="showPage('appointments')">
+                    <span class="nav-icon">📅</span> Appointments
+                </a></li>
+                <li><a href="#" class="nav-item" onclick="showPage('farming')">
+                    <span class="nav-icon">🌾</span> Community Farming
+                </a></li>
+                <li><a href="#" class="nav-item" onclick="showPage('revenue')">
+                    <span class="nav-icon">💰</span> Revenue
+                </a></li>
+                <li><a href="#" class="nav-item" onclick="showPage('transactions')">
+                    <span class="nav-icon">📄</span> Transactions
+                </a></li>
+                <li><a href="#" class="nav-item" onclick="showPage('letters')">
+                    <span class="nav-icon">✉️</span> Letter Generator
+                </a></li>
+                <li><a href="#" class="nav-item" onclick="showPage('premium')">
+                    <span class="nav-icon">⭐</span> Premium Tools
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item" onclick="logout()">
+                    <span class="nav-icon">🚪</span> Logout
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="app-header">
+                <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+                <h1 class="page-title">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="icon-btn" onclick="showNotifications()">🔔</button>
+                    <button class="icon-btn" onclick="showSettings()">⚙️</button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div id="page-content" class="page-content">
+                <!-- Dashboard -->
+                <div id="page-dashboard" class="page active">
+                    <div class="welcome-banner">
+                        <h2>Welcome back, {{ user.name.split(' ')[0] if user.name else 'Agent' }}!</h2>
+                        <p>You have <strong id="task-count">2</strong> tasks waiting today</p>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-leads">-</div>
+                            <div class="stat-label">Total Leads</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-appointments">-</div>
+                            <div class="stat-label">Appointments</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-revenue">$-</div>
+                            <div class="stat-label">YTD Revenue</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-conversion">-%</div>
+                            <div class="stat-label">Conversion</div>
+                        </div>
+                    </div>
+
+                    <!-- Tasks -->
+                    <div class="section">
+                        <div class="section-header">
+                            <h3>Today's Tasks</h3>
+                            <button class="btn-text" onclick="addTask()">+ Add</button>
+                        </div>
+                        <div id="task-list" class="card-list">
+                            <div class="loading">Loading tasks...</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="section">
+                        <div class="section-header">
+                            <h3>Quick Actions</h3>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-card" onclick="quickAddLead()">
+                                <span class="action-icon">➕</span>
+                                <span>Add Lead</span>
+                            </button>
+                            <button class="action-card" onclick="quickSchedule()">
+                                <span class="action-icon">📅</span>
+                                <span>Schedule Appt</span>
+                            </button>
+                            <button class="action-card" onclick="quickLetter()">
+                                <span class="action-icon">✉️</span>
+                                <span>Generate Letter</span>
+                            </button>
+                            <button class="action-card" onclick="quickRevenue()">
+                                <span class="action-icon">📊</span>
+                                <span>View Revenue</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Pages (Placeholders) -->
+                <div id="page-plan" class="page">
+                    <div class="coming-soon">
+                        <div class="coming-soon-icon">🎯</div>
+                        <h2>Plan Business</h2>
+                        <p>Goal setting and milestone tracking coming soon</p>
+                    </div>
+                </div>
+
+                <div id="page-leads" class="page">
+                    <div class="section-header">
+                        <h2>Leads</h2>
+                        <button class="btn-primary" onclick="showAddLead()">+ Add Lead</button>
+                    </div>
+                    <div id="leads-list" class="card-list">
+                        <div class="loading">Loading leads...</div>
+                    </div>
+                </div>
+
+                <div id="page-appointments" class="page">
+                    <div class="coming-soon">
+                        <div class="coming-soon-icon">📅</div>
+                        <h2>Appointments</h2>
+                        <p>Calendar integration coming soon</p>
+                    </div>
+                </div>
+
+                <div id="page-farming" class="page">
+                    <div class="coming-soon">
+                        <div class="coming-soon-icon">🌾</div>
+                        <h2>Community Farming</h2>
+                        <p>Geographic farming campaigns coming soon</p>
+                    </div>
+                </div>
+
+                <div id="page-revenue" class="page">
+                    <div class="coming-soon">
+                        <div class="coming-soon-icon">💰</div>
+                        <h2>Revenue Tracking</h2>
+                        <p>P&L statements and commission tracking coming soon</p>
+                    </div>
+                </div>
+
+                <div id="page-transactions" class="page">
+                    <div class="coming-soon">
+                        <div class="coming-soon-icon">📄</div>
+                        <h2>Transactions</h2>
+                        <p>Deal pipeline management coming soon</p>
+                    </div>
+                </div>
+
+                <div id="page-letters" class="page">
+                    <div class="coming-soon">
+                        <div class="coming-soon-icon">✉️</div>
+                        <h2>Letter Generator</h2>
+                        <p>Custom letter templates coming soon</p>
+                    </div>
+                </div>
+
+                <div id="page-premium" class="page">
+                    <div class="premium-banner">
+                        <h2>⭐ Premium Tools</h2>
+                        <p>Unlock AI-powered features</p>
+                    </div>
+                    <div class="premium-features">
+                        <div class="premium-card">
+                            <div class="premium-icon">🤖</div>
+                            <h3>AI Lead Scoring</h3>
+                            <p>Automatically score leads based on behavior and demographics</p>
+                            <button class="btn-primary">Upgrade $99</button>
+                        </div>
+                        <div class="premium-card">
+                            <div class="premium-icon">📊</div>
+                            <h3>Tax Export</h3>
+                            <p>Generate IRS Schedule E reports automatically</p>
+                            <button class="btn-primary">Upgrade $49</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Lead Modal -->
+    <div id="add-lead-modal" class="modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeAddLead()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Lead</h2>
+                <button class="close-btn" onclick="closeAddLead()">×</button>
+            </div>
+            <form id="add-lead-form" onsubmit="submitLead(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" name="name" required placeholder="John Smith">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" name="phone" placeholder="555-0100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="john@email.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Source</label>
+                        <select name="source">
+                            <option>Website</option>
+                            <option>Referral</option>
+                            <option>Open House</option>
+                            <option>Zillow</option>
+                            <option>Cold Call</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Temperature</label>
+                        <select name="temperature">
+                            <option value="hot">🔥 Hot</option>
+                            <option value="warm">🌤️ Warm</option>
+                            <option value="cold">❄️ Cold</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" name="city" placeholder="Los Angeles">
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea name="notes" rows="3" placeholder="Any additional info..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary btn-block">Save Lead</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

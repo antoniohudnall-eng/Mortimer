@@ -1,0 +1,61 @@
+{
+  "job": {
+    "name": "CREAM-Standalone-Build",
+    "description": "Build CREAM PIM - Time & Chaos Clone for Desktop (.exe) and Mobile (.apk)",
+    "priority": 1,
+    "type": "multi_platform_build",
+    "created_at": "2026-04-19T01:43:00Z",
+    "submitter": "Miles (Sales Consultant)",
+    "products": [
+      {
+        "type": "desktop_app",
+        "platform": "windows",
+        "output_format": ".exe",
+        "source_path": "/root/.openclaw/workspace/cream-standalone/desktop",
+        "build_tool": "tauri",
+        "build_command": "npm run tauri:build",
+        "expected_output": "src-tauri/target/release/CREAM PIM.exe",
+        "features": [
+          "Contacts Management",
+          "Calendar (Day/Week/Month views)",
+          "Task Management with priorities",
+          "Project Management with progress tracking",
+          "Import/Export (CSV/JSON)",
+          "Duplicate Contact Finder",
+          "Data Backup/Restore",
+          "Quick Search"
+        ]
+      },
+      {
+        "type": "mobile_app",
+        "platform": "android",
+        "output_format": ".apk",
+        "source_path": "/root/.openclaw/workspace/cream-standalone/mobile",
+        "build_tool": "react_native",
+        "build_command": "cd android && ./gradlew assembleRelease",
+        "expected_output": "android/app/build/outputs/apk/release/app-release.apk",
+        "features": [
+          "Contacts Management",
+          "Calendar View",
+          "Task Management",
+          "Project Management",
+          "Offline Data Storage",
+          "Quick Search"
+        ]
+      }
+    ],
+    "shared_code": {
+      "path": "/root/.openclaw/workspace/cream-standalone/shared",
+      "language": "typescript",
+      "description": "Core business logic shared between Desktop and Mobile"
+    },
+    "artifacts": {
+      "desktop_exe": "/root/.openclaw/workspace/cream-standalone/desktop/src-tauri/target/release/",
+      "mobile_apk": "/root/.openclaw/workspace/cream-standalone/mobile/android/app/build/outputs/apk/release/"
+    },
+    "notification": {
+      "on_complete": true,
+      "channels": ["webchat"]
+    }
+  }
+}

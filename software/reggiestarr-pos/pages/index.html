@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReggieStarr — Digital Cash Register System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Header */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: fixed;
+            width: 100%;
+            background: rgba(10,10,26,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: #ff6b35; }
+        .cta-btn {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: #0a0a1a;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,107,53,0.3);
+        }
+        
+        /* Hero */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, #ff6b35, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 22px;
+            color: rgba(255,255,255,0.7);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        .hero-btns { display: flex; gap: 20px; justify-content: center; }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            border-color: #ff6b35;
+            color: #ff6b35;
+        }
+        
+        /* Register Visual */
+        .register-preview {
+            padding: 60px 0;
+            text-align: center;
+        }
+        .register-frame {
+            background: linear-gradient(145deg, #2a2a3a, #1a1a2a);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 2px solid rgba(255,107,53,0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+        .register-display {
+            background: #0a0a1a;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+        }
+        .register-total {
+            font-size: 48px;
+            color: #ff6b35;
+            font-weight: 700;
+        }
+        .register-items {
+            color: rgba(255,255,255,0.5);
+            margin-top: 10px;
+        }
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .key {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .key:hover { background: rgba(255,107,53,0.3); }
+        .key.fn { background: rgba(255,107,53,0.2); }
+        .key.enter { background: linear-gradient(135deg, #ff6b35, #f7931e); color: #0a0a1a; font-weight: 700; }
+        
+        /* Features */
+        .features {
+            padding: 80px 0;
+            background: rgba(255,255,255,0.02);
+        }
+        .section-title {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 60px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 40px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255,107,53,0.1);
+        }
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        .feature-card p {
+            color: rgba(255,255,255,0.6);
+            line-height: 1.6;
+        }
+        
+        /* Hardware */
+        .hardware {
+            padding: 80px 0;
+            text-align: center;
+        }
+        .hardware-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        .hardware-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 30px;
+        }
+        .hardware-item h4 {
+            color: #ff6b35;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            text-align: center;
+        }
+        .cta-section h2 {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+        .cta-section p {
+            font-size: 20px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 40px;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 40px; }
+            .keypad { grid-template-columns: repeat(3, 1fr); }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">ReggieStarr</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#hardware">Hardware</a>
+                <a href="#demo">Demo</a>
+            </div>
+            <a href="#download" class="cta-btn">Get ReggieStarr</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>The Digital Cash Register<br><span>Reimagined</span></h1>
+            <p>Professional POS system with multi-language support, crypto payments, kitchen display, and real-time inventory. Built for restaurants, retail, and service businesses.</p>
+            <div class="hero-btns">
+                <a href="#download" class="cta-btn">Download Free</a>
+                <a href="#demo" class="btn-secondary">View Hardware</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="register-preview">
+        <div class="container">
+            <div class="register-frame">
+                <div class="register-display">
+                    <div class="register-total">$0.00</div>
+                    <div class="register-items">Ready for transaction</div>
+                </div>
+                <div class="keypad">
+                    <button class="key">7</button>
+                    <button class="key">8</button>
+                    <button class="key">9</button>
+                    <button class="key fn">PLU</button>
+                    <button class="key">4</button>
+                    <button class="key">5</button>
+                    <button class="key">6</button>
+                    <button class="key fn">Dept</button>
+                    <button class="key">1</button>
+                    <button class="key">2</button>
+                    <button class="key">3</button>
+                    <button class="key fn">Disc</button>
+                    <button class="key">0</button>
+                    <button class="key">00</button>
+                    <button class="key">.</button>
+                    <button class="key enter">Enter</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Everything Your Business Needs</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💱</div>
+                    <h3>Multi-Currency</h3>
+                    <p>Accept USD, EUR, GBP, BTC, and more. Real-time conversion rates. Crypto QR codes for payments.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>8 Languages</h3>
+                    <p>English, Spanish, French, German, Chinese, Japanese, Arabic, and Portuguese built-in.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Kitchen Display</h3>
+                    <p>Integrated KDS sends orders directly to kitchen. No more lost tickets or miscommunication.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Inventory Management</h3>
+                    <p>Real-time stock tracking. Automatic reorder alerts. Ingredient-level cost analysis.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Clerk Management</h3>
+                    <p>Track employee performance. Role-based permissions. Time clock integration.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Reports & Analytics</h3>
+                    <p>Daily sales, tax summaries, top products, hourly trends. Export to Excel or PDF.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hardware" id="hardware">
+        <div class="container">
+            <h2 class="section-title">Hardware Specs (RS-79)</h2>
+            <div class="hardware-grid">
+                <div class="hardware-item">
+                    <h4>Display</h4>
+                    <p>14" touchscreen<br>1920x1080 IPS<br>Anti-glare coating</p>
+                </div>
+                <div class="hardware-item">
+                    <h4>Processor</h4>
+                    <p>Raspberry Pi 5<br>2.4GHz quad-core<br>8GB RAM</p>
+                </div>
+                <div class="hardware-item">
+                    <h4>Storage</h4>
+                    <p>256GB SSD<br>Cloud backup<br>Offline capable</p>
+                </div>
+                <div class="hardware-item">
+                    <h4>Connectivity</h4>
+                    <p>WiFi 6 / Ethernet<br>4x USB ports<br>Bluetooth 5.0</p>
+                </div>
+                <div class="hardware-item">
+                    <h4>Printer</h4>
+                    <p>80mm thermal<br>Auto-cutter<br>200mm/s speed</p>
+                </div>
+                <div class="hardware-item">
+                    <h4>Peripherals</h4>
+                    <p>Cash drawer<br>Barcode scanner<br>Customer display</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="download">
+        <div class="container">
+            <h2>Ready to Upgrade Your POS?</h2>
+            <p>Join hundreds of businesses using ReggieStarr for faster checkout, better reporting, and happier customers.</p>
+            <a href="#" class="cta-btn">Download ReggieStarr — Free</a>
+        </div>
+    </section>
+
+    <section style="padding: 60px 0; background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,255,136,0.05)); border-top: 1px solid rgba(255,107,53,0.2); border-bottom: 1px solid rgba(255,107,53,0.2);">
+        <div class="container" style="text-align: center;">
+            <h2 style="font-size: 36px; margin-bottom: 16px;">🚀 Try the Interactive Demo</h2>
+            <p style="font-size: 18px; color: rgba(255,255,255,0.7); margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Experience the RS-79 in action. Process transactions, explore features, and see why businesses love ReggieStarr.
+            </p>
+            <a href="demo.html" class="cta-btn" style="font-size: 18px; padding: 16px 40px;">
+                🎮 Launch Full Demo →
+            </a>
+        </div>
+    </section>
+
+    <section class="demo-section" style="padding: 80px 0; text-align: center; background: rgba(255,255,255,0.02);">
+        <div class="container">
+            <h2 style="font-size: 32px; margin-bottom: 16px;">🤖 See Our AI in Action</h2>
+            <p style="color: rgba(255,255,255,0.7); margin-bottom: 24px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Check out Cryptobot — a live demo of our automated crypto trading agent powered by the same brain that runs ReggieStarr.
+            </p>
+            <a href="http://tappylewis.cloud/cryptobot.html" target="_blank" class="btn-secondary" style="display: inline-block; border-color: #ff6b35; color: #ff6b35;">
+                💰 View Cryptobot →
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 ReggieStarr — Performance Supply Depot LLC. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

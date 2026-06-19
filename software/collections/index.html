@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collections - Past Due Accounts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a2e;
+            --accent-cyan: #00E0FF;
+            --accent-orange: #FF7A00;
+            --accent-red: #ef4444;
+            --accent-yellow: #fbbf24;
+            --accent-green: #22c55e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border-color: #2a2a3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: right;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-value.danger { color: var(--accent-red); }
+        .stat-value.warning { color: var(--accent-yellow); }
+        .stat-value.success { color: var(--accent-green); }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-orange);
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .summary-value.danger { color: var(--accent-red); }
+        .summary-value.warning { color: var(--accent-yellow); }
+        .summary-value.success { color: var(--accent-green); }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--accent-orange);
+            color: var(--text-primary);
+        }
+
+        .filter-tab.active {
+            background: var(--accent-orange);
+            color: white;
+            border-color: var(--accent-orange);
+        }
+
+        .filter-tab .count {
+            background: rgba(255,255,255,0.2);
+            padding: 0.125rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1fr 120px;
+            background: var(--bg-tertiary);
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1fr 120px;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .table-row:hover {
+            background: rgba(255, 122, 0, 0.05);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-row.critical {
+            border-left: 4px solid var(--accent-red);
+        }
+
+        .customer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .customer-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .customer-address {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .invoice-number {
+            font-family: monospace;
+            color: var(--accent-cyan);
+        }
+
+        .amount {
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+
+        .status-overdue {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--accent-yellow);
+        }
+
+        .status-due-soon {
+            background: rgba(0, 224, 255, 0.2);
+            color: var(--accent-cyan);
+        }
+
+        .status-current {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent-green);
+        }
+
+        .days-overdue {
+            font-weight: 700;
+        }
+
+        .days-overdue.critical { color: var(--accent-red); }
+        .days-overdue.warning { color: var(--accent-yellow); }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-orange);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e66e00;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        .paid-badge {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent-green);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Letter Preview Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+        }
+
+        .letter-preview {
+            background: white;
+            color: #000;
+            padding: 3rem;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 8px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.6;
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #000;
+            padding-bottom: 1rem;
+        }
+
+        .letter-header h2 {
+            margin: 0;
+            font-size: 18pt;
+            color: #000;
+        }
+
+        .letter-header p {
+            margin: 0.5rem 0 0 0;
+            font-size: 10pt;
+            color: #333;
+        }
+
+        .letter-body {
+            margin: 2rem 0;
+        }
+
+        .letter-body p {
+            margin: 1rem 0;
+        }
+
+        .invoice-details {
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .invoice-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .invoice-details th,
+        .invoice-details td {
+            text-align: left;
+            padding: 0.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .letter-footer {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .close-modal {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .print-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.critical { background: var(--accent-red); }
+        .legend-dot.warning { background: var(--accent-yellow); }
+        .legend-dot.info { background: var(--accent-cyan); }
+        .legend-dot.success { background: var(--accent-green); }
+
+        /* Notes */
+        .notes-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .notes-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-orange);
+        }
+
+        .notes-list {
+            list-style: none;
+        }
+
+        .notes-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .notes-list li:last-child {
+            border-bottom: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 1200px) {
+            .table-header,
+            .table-row {
+                grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 1fr;
+            }
+            
+            .actions {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table-header,
+            .table-row {
+                min-width: 1000px;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .letter-preview, .letter-preview * {
+                visibility: visible;
+            }
+            .letter-preview {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .close-modal, .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">💰</div>
+                <div class="logo-text">Collections Department</div>
+            </div>
+            <div class="header-actions" style="display: flex; gap: 1rem; align-items: center;">
+                <button class="btn btn-secondary" onclick="clearCacheAndReload()" style="display: flex; align-items: center; gap: 0.5rem;">
+                    🧹 Clear Cache
+                </button>
+                <button class="btn btn-secondary" onclick="refreshData()" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span id="refresh-icon">🔄</span> Refresh
+                </button>
+                <button class="btn btn-primary" onclick="exportData()" style="display: flex; align-items: center; gap: 0.5rem;">
+                    📥 Export
+                </button>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-label">Total Outstanding</div>
+                    <div class="stat-value danger" id="total-outstanding">$0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Overdue Accounts</div>
+                    <div class="stat-value warning" id="overdue-count">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Due This Week</div>
+                    <div class="stat-value" id="due-this-week">0</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Accounts Receivable Monitor</h1>
+        <p class="page-subtitle">Track overdue invoices and payment collections</p>
+        <p class="last-updated">Last Updated: June 16, 2026 at 5:12 PM UTC | Performance Supply Depot</p>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-label">Critical (>30 days overdue)</div>
+                <div class="summary-value danger" id="critical-amount">$0</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Overdue (1-30 days)</div>
+                <div class="summary-value warning" id="overdue-amount">$0</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Due This Week</div>
+                <div class="summary-value" id="due-soon-amount">$0</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Current (Not Yet Due)</div>
+                <div class="summary-value success" id="current-amount">$0</div>
+            </div>
+            <div class="summary-card" style="grid-column: span 2;">
+                <div class="summary-label">📊 Paid (Last 30 Days)</div>
+                <div class="summary-value success" id="paid-30-days">$14,576.20</div>
+            </div>
+        </div>
+
+        <!-- Squarespace Summary Grid -->
+        <div class="summary-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="summary-card" style="border-left: 4px solid var(--accent-green);">
+                <div class="summary-label">✅ Not Overdue (22)</div>
+                <div class="summary-value success" id="not-overdue-amount">$11,165.20</div>
+            </div>
+            <div class="summary-card" style="border-left: 4px solid var(--accent-red);">
+                <div class="summary-label">🔴 Overdue (15)</div>
+                <div class="summary-value danger" id="overdue-summary-amount">$10,787.25</div>
+            </div>
+            <div class="summary-card" style="border-left: 4px solid var(--text-secondary);">
+                <div class="summary-label">📝 Drafts (5)</div>
+                <div class="summary-value" style="color: var(--text-secondary);" id="drafts-amount">$4,918.35</div>
+            </div>
+        </div>
+
+        <div class="filter-tabs">
+            <div class="filter-tab active" data-filter="all">
+                <span>All Accounts</span>
+                <span class="count" id="count-all">0</span>
+            </div>
+            <div class="filter-tab" data-filter="critical">
+                <span>🔴 Critical</span>
+                <span class="count" id="count-critical">0</span>
+            </div>
+            <div class="filter-tab" data-filter="overdue">
+                <span>🟡 Overdue</span>
+                <span class="count" id="count-overdue">0</span>
+            </div>
+            <div class="filter-tab" data-filter="due-soon">
+                <span>🔵 Due Soon</span>
+                <span class="count" id="count-due-soon">0</span>
+            </div>
+            <div class="filter-tab" data-filter="current">
+                <span>🟢 Current</span>
+                <span class="count" id="count-current">0</span>
+            </div>
+            <div class="filter-tab" data-filter="paid">
+                <span>✅ Paid</span>
+                <span class="count" id="count-paid">0</span>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <div>Customer</div>
+                <div>Invoice #</div>
+                <div>Amount</div>
+                <div>Location</div>
+                <div>Status</div>
+                <div>Days</div>
+                <div>Action</div>
+            </div>
+            <div id="table-body">
+                <!-- Rows populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-dot critical"></div>
+                <span>Critical (>30 days overdue)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot warning"></div>
+                <span>Overdue (1-30 days)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot info"></div>
+                <span>Due Soon (Within 7 days)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot success"></div>
+                <span>Current (Not yet due)</span>
+            </div>
+        </div>
+
+        <div class="notes-section">
+            <div class="notes-title">📋 Collections Notes - Updated June 16</div>
+            <ul class="notes-list">
+                <li><strong>Emmanual</strong> - Invoice #000008: 🔴 CRITICAL - 66 days overdue, NOT VIEWED - MICROSALE connection issues</li>
+                <li><strong>Fernando</strong> - Invoice #5126103: 34 days overdue - PRIORITY follow-up needed</li>
+                <li><strong>Travis Hauffman</strong> - Invoice #4166108: 27 days overdue</li>
+                <li><strong>Bo Thompson</strong> - Invoice #4166114: 25 days overdue, SUPPLY ONLY</li>
+                <li><strong>Oona open store</strong> - Invoice #060826003: 4 days overdue, VIEWED</li>
+                <li><strong>Morris Owner</strong> - Invoice #061326002: 1 day overdue, VIEWED - Sam4s POS system ($4,883.85)</li>
+                <li><strong>William Bishop</strong> - Invoice #061326006: 1 day overdue, NOT VIEWED - "If you approve, please process invoice"</li>
+                <li><strong>Kelly left msg</strong> - Invoice #061326004: 1 day overdue, NOT VIEWED</li>
+                <li><strong>Sam Owner</strong> - Invoice #061326003: 1 day overdue, NOT VIEWED</li>
+                <li><strong>Sarah Willams</strong> - Invoice #061326007: 1 day overdue, VIEWED</li>
+                <li><strong>Kevin Manager</strong> - Invoice #061326005: 1 day overdue, VIEWED</li>
+                <li><strong>Jen Yang</strong> - Invoice #4306104: 11 days overdue, SUPPLY ONLY</li>
+                <li><strong>Scott Walsh</strong> - Invoice #05056101: 10 days overdue, VIEWED</li>
+                <li><strong>Gabby Park Caféb Group</strong> - Invoice #061026002: Undelivered, NOT VIEWED</li>
+                <li><strong>Gilbert General Manager</strong> - Invoice #060826009: Undelivered, NOT VIEWED</li>
+                <li><strong>Cindy or Beth</strong> - Invoice #061026005: Cd @ 2 months, NOT VIEWED</li>
+                <li><strong>Renee</strong> (loscaporalestaqueria@outlook.com) - Invoice #000015: NOT VIEWED</li>
+                <li><strong>John</strong> - Invoice #060126003: NOT VIEWED</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Letter Preview Modal -->
+    <div class="modal-overlay" id="letterModal">
+        <button class="close-modal" onclick="closeLetter()">✕ Close</button>
+        <div class="letter-preview" id="letterContent">
+            <!-- Letter content populated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Load invoices from API
+        let invoices = [];
+        let isLoading = true;
+
+        // Embedded invoice data from Squarespace (June 16, 2026)
+        const EMBEDDED_INVOICES = [
+            {"invoice": "061326002", "customer": "Morris Owner", "amount": 4883.85, "date": "06/16/2026", "status": "Overdue", "days": 1, "viewed": true, "address": "Fairfield, CA", "note": "Sam4s POS system"},
+            {"invoice": "061326008", "customer": "Brent Warehouse", "amount": 2962.42, "date": "06/16/2026", "status": "Unpaid", "days": -13, "viewed": false, "address": "Fairfield, CA", "note": "Due in 14 days"},
+            {"invoice": "061326007", "customer": "Sarah Willams", "amount": 109.52, "date": "06/15/2026", "status": "Overdue", "days": 1, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "061326006", "customer": "William Bishop", "amount": 73.15, "date": "06/15/2026", "status": "Overdue", "days": 1, "viewed": false, "address": "Fairfield, CA", "note": "If you approve, please process invoice"},
+            {"invoice": "061326005", "customer": "Kevin Manager", "amount": 402.90, "date": "06/15/2026", "status": "Overdue", "days": 1, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "061326004", "customer": "Kelly left msg", "amount": 300.73, "date": "06/15/2026", "status": "Overdue", "days": 1, "viewed": false, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "4166114", "customer": "Bo Thompson SUPPLY ONLY", "amount": 329.75, "date": "06/15/2026", "status": "Overdue", "days": 25, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "061326003", "customer": "Sam Owner", "amount": 1272.00, "date": "06/15/2026", "status": "Overdue", "days": 1, "viewed": false, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "060826003", "customer": "Oona open store", "amount": 575.63, "date": "06/14/2026", "status": "Overdue", "days": 4, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "061026002", "customer": "Gabby Park Caféb Group", "amount": 410.19, "date": "06/14/2026", "status": "Undelivered", "days": -24, "viewed": false, "address": "Fairfield, CA", "note": "Due in 25 days"},
+            {"invoice": "060826009", "customer": "Gilbert General Manager", "amount": 539.67, "date": "06/12/2026", "status": "Undelivered", "days": -21, "viewed": false, "address": "Fairfield, CA", "note": "Due in 22 days"},
+            {"invoice": "061026005", "customer": "Cindy or Beth Cd @ 2 months", "amount": 756.01, "date": "06/12/2026", "status": "Unpaid", "days": -25, "viewed": false, "address": "Fairfield, CA", "note": "Due in 26 days"},
+            {"invoice": "061026003", "customer": "Laura", "amount": 213.68, "date": "06/11/2026", "status": "Unpaid", "days": -24, "viewed": true, "address": "Fairfield, CA", "note": "Due in 25 days"},
+            {"invoice": "052626007", "customer": "Tony Salinas", "amount": 457.99, "date": "06/11/2026", "status": "Unpaid", "days": -11, "viewed": true, "address": "Fairfield, CA", "note": "Due in 12 days"},
+            {"invoice": "061026001", "customer": "Myly", "amount": 929.23, "date": "06/11/2026", "status": "Unpaid", "days": -23, "viewed": true, "address": "Fairfield, CA", "note": "Due in 24 days"},
+            {"invoice": "060826007", "customer": "Maria Abundiz", "amount": 290.84, "date": "06/08/2026", "status": "Unpaid", "days": -21, "viewed": true, "address": "Fairfield, CA", "note": "Due in 22 days"},
+            {"invoice": "060826005", "customer": "Caffe Greco", "amount": 104.63, "date": "06/08/2026", "status": "Unpaid", "days": -21, "viewed": true, "address": "Fairfield, CA", "note": "Due in 22 days"},
+            {"invoice": "060826002", "customer": "John Caine", "amount": 928.98, "date": "06/08/2026", "status": "Unpaid", "days": -21, "viewed": true, "address": "Fairfield, CA", "note": "Due in 22 days"},
+            {"invoice": "000015", "customer": "Renee loscaporalestaqueria", "amount": 360.45, "date": "06/02/2026", "status": "Unpaid", "days": -15, "viewed": false, "address": "Fairfield, CA", "note": "Due in 16 days"},
+            {"invoice": "060226004", "customer": "Ema Kye", "amount": 150.36, "date": "06/02/2026", "status": "Unpaid", "days": -15, "viewed": true, "address": "Fairfield, CA", "note": "Due in 16 days"},
+            {"invoice": "060226003", "customer": "Joycelin Magno", "amount": 230.93, "date": "06/02/2026", "status": "Unpaid", "days": -15, "viewed": true, "address": "Fairfield, CA", "note": "Due in 16 days"},
+            {"invoice": "060126003", "customer": "John", "amount": 161.22, "date": "06/02/2026", "status": "Unpaid", "days": -15, "viewed": false, "address": "Fairfield, CA", "note": "Due in 16 days"},
+            {"invoice": "060126001", "customer": "Margarito General Manager", "amount": 512.41, "date": "06/02/2026", "status": "Unpaid", "days": -12, "viewed": true, "address": "Fairfield, CA", "note": "Due in 13 days"},
+            {"invoice": "052226002", "customer": "Cory Manager", "amount": 489.35, "date": "05/29/2026", "status": "Unpaid", "days": -4, "viewed": true, "address": "Fairfield, CA", "note": "Due in 5 days"},
+            {"invoice": "052626006", "customer": "Becky NCC", "amount": 249.14, "date": "05/27/2026", "status": "Unpaid", "days": -9, "viewed": true, "address": "Fairfield, CA", "note": "Due in 10 days"},
+            {"invoice": "052626001", "customer": "Travis Hauffman", "amount": 149.90, "date": "05/26/2026", "status": "Unpaid", "days": -8, "viewed": true, "address": "Fairfield, CA", "note": "Due in 9 days"},
+            {"invoice": "052626002", "customer": "Travis Hauffman", "amount": 149.90, "date": "05/26/2026", "status": "Unpaid", "days": -8, "viewed": true, "address": "Fairfield, CA", "note": "Due in 9 days"},
+            {"invoice": "052226003", "customer": "Michael General Manager", "amount": 386.90, "date": "05/23/2026", "status": "Unpaid", "days": -5, "viewed": true, "address": "Fairfield, CA", "note": "Due in 6 days"},
+            {"invoice": "052226001", "customer": "Katie Rondeau", "amount": 553.00, "date": "05/22/2026", "status": "Unpaid", "days": -4, "viewed": true, "address": "Fairfield, CA", "note": "ORDER # 639326 - Due in 5 days"},
+            {"invoice": "052026001", "customer": "Katie Rondeau", "amount": 178.00, "date": "05/20/2026", "status": "Unpaid", "days": -2, "viewed": true, "address": "Fairfield, CA", "note": "ORDER # 642281 - Due in 3 days"},
+            {"invoice": "5126103", "customer": "Fernando", "amount": 421.56, "date": "05/13/2026", "status": "Overdue", "days": 34, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "05056101", "customer": "Scott Walsh", "amount": 382.30, "date": "05/07/2026", "status": "Overdue", "days": 10, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "4306104", "customer": "Jen Yang SUPPLY ONLY", "amount": 520.86, "date": "05/07/2026", "status": "Overdue", "days": 11, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "4306102", "customer": "Travis Hauffman", "amount": 163.24, "date": "05/05/2026", "status": "Overdue", "days": 12, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "4276102", "customer": "Heather Manager", "amount": 434.09, "date": "04/30/2026", "status": "Overdue", "days": 17, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "4166108", "customer": "Travis Hauffman", "amount": 242.67, "date": "04/23/2026", "status": "Overdue", "days": 27, "viewed": true, "address": "Fairfield, CA", "note": ""},
+            {"invoice": "000008", "customer": "Emmanual", "amount": 675.00, "date": "04/11/2026", "status": "Overdue", "days": 66, "viewed": false, "address": "Fairfield, CA", "note": "CONNECTION ISSUES - MICROSALE"}
+        ];
+
+        // Fetch from database API
+        async function fetchFromDB() {
+            try {
+                const response = await fetch('/collections/api');
+                const data = await response.json();
+                if (data.success) {
+                    return data.invoices;
+                }
+                throw new Error(data.error || 'API error');
+            } catch (e) {
+                console.error('Failed to fetch from DB:', e);
+                return null;
+            }
+        }
+
+        // Load with fallback
+        async function loadData() {
+            // Try API first
+            const dbData = await fetchFromDB();
+            if (dbData && dbData.length > 0) {
+                invoices = dbData;
+            } else {
+                // Use embedded data as fallback
+                invoices = EMBEDDED_INVOICES.map(inv => ({...inv}));
+            }
+
+            // Merge with localStorage paid status and edits
+            const saved = localStorage.getItem('collections_invoices');
+            if (saved) {
+                const savedData = JSON.parse(saved);
+                invoices.forEach(inv => {
+                    const savedInv = savedData.find(s => s.invoice === inv.invoice);
+                    if (savedInv && savedInv.paid) {
+                        inv.paid = true;
+                        inv.paidDate = savedInv.paidDate;
+                        inv.paidAmount = savedInv.paidAmount;
+                    }
+                    // Preserve edited addresses
+                    if (savedInv && savedInv.address !== inv.address && savedInv.edited) {
+                        inv.address = savedInv.address;
+                        inv.edited = true;
+                    }
+                });
+            }
+            isLoading = false;
+            updateStats();
+            renderTable();
+        }
+
+        function formatCurrency(amount) {
+            return '$' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
+        function getStatusClass(days, status) {
+            if (days > 0) {
+                if (days > 30) return 'status-critical';
+                return 'status-overdue';
+            }
+            if (days >= -7) return 'status-due-soon';
+            return 'status-current';
+        }
+
+        function getStatusText(days, status) {
+            if (days > 0) {
+                if (days > 30) return 'Critical';
+                return 'Overdue';
+            }
+            if (days >= -7) return 'Due Soon';
+            if (status === 'Undelivered') return 'Undelivered';
+            return 'Current';
+        }
+
+        function generateReminderLetter(invoice) {
+            const dueText = invoice.days > 0 
+                ? `${invoice.days} days overdue` 
+                : `Due in ${Math.abs(invoice.days)} days`;
+            
+            return `
+                <div class="letter-header">
+                    <h2>PERFORMANCE SUPPLY DEPOT LLC</h2>
+                    <p>1880 Oak Point Court | Fairfield, CA 94534<br>
+                    Phone: 888-881-6834 | Email: info@psdepot.com</p>
+                </div>
+                
+                <div class="letter-body">
+                    <p style="text-align: right;">${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                    
+                    <p><strong>${invoice.customer}</strong><br>
+                    ${invoice.address.replace(/, /g, '<br>')}</p>
+                    
+                    <p><strong>RE: Payment Reminder - Invoice #${invoice.invoice}</strong></p>
+                    
+                    <p>Dear ${invoice.customer},\u003c/p>
+                    
+                    <p>We hope this letter finds you well. We are writing to remind you that payment for the following invoice is ${dueText} in our records.\u003c/p>
+                    
+                    <div class="invoice-details">
+                        <table>
+                            <tr>
+                                <th>Invoice Number:\u003c/th>
+                                <td>${invoice.invoice}</td>
+                            </tr>
+                            <tr>
+                                <th>Invoice Date:\u003c/th>
+                                <td>${invoice.date}</td>
+                            </tr>
+                            <tr>
+                                <th>Amount Due:\u003c/th>
+                                <td style="font-size: 14pt; font-weight: bold;">${formatCurrency(invoice.amount)}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:\u003c/th>
+                                <td>${getStatusText(invoice.days, invoice.status).toUpperCase()} - ${dueText.toUpperCase()}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <p>Please remit payment at your earliest convenience. We value your business and appreciate your prompt attention to this matter.\u003c/p>
+                    
+                    <p>If you have already submitted payment, please disregard this notice. If you have any questions or concerns regarding this invoice, please do not hesitate to contact our Accounts Payable department.\u003c/p>
+                    
+                    <p>We accept payment via:\u003c/p>
+                    <ul>
+                        <li>Check payable to: Performance Supply Depot LLC</li>
+                        <li>Credit card (Visa, MasterCard, American Express)\u003c/li>
+                        <li>ACH bank transfer\u003c/li>
+                        <li>Online portal: psdepot.com/pay\u003c/li>
+                    </ul>
+                    
+                    <p>Thank you for your continued business and cooperation.\u003c/p>
+                    
+                    <p>Sincerely,\u003cbr>
+                    <br>
+                    <strong>Accounts Payable Department</strong><br>
+                    Performance Supply Depot LLC</p>
+                </div>
+                
+                <div class="letter-footer">
+                    <p style="font-size: 9pt; color: #666;">This is a computer-generated notice. Please retain for your records.\u003cbr>
+                    Accounts Payable: info@psdepot.com | 888-881-6834</p>
+                </div>
+                
+                <button class="print-btn" onclick="window.print()">🖨️ Print Letter</button>
+            `;
+        }
+
+        function openLetter(invoiceId) {
+            const invoice = invoices.find(i => i.invoice === invoiceId);
+            if (!invoice) {
+                console.error('Invoice not found:', invoiceId);
+                showToast('❌ Invoice not found');
+                return;
+            }
+            
+            console.log('Generating letter for:', invoice.customer, '| Address:', invoice.address);
+            document.getElementById('letterContent').innerHTML = generateReminderLetter(invoice);
+            document.getElementById('letterModal').classList.add('active');
+        }
+
+        function closeLetter() {
+            document.getElementById('letterModal').classList.remove('active');
+        }
+
+        function renderTable(filter = 'all') {
+            const tbody = document.getElementById('table-body');
+            
+            let filtered = invoices.filter(i => !i.paid); // Default: exclude paid
+            if (filter === 'paid') filtered = invoices.filter(i => i.paid);
+            else if (filter === 'critical') filtered = invoices.filter(i => !i.paid && i.days > 30);
+            else if (filter === 'overdue') filtered = invoices.filter(i => !i.paid && i.days > 0 && i.days <= 30);
+            else if (filter === 'due-soon') filtered = invoices.filter(i => !i.paid && i.days <= 0 && i.days >= -14);
+            else if (filter === 'current') filtered = invoices.filter(i => !i.paid && i.days < -14);
+
+            if (filtered.length === 0) {
+                const icon = filter === 'paid' ? '💰' : '✅';
+                const message = filter === 'paid' ? 'No paid invoices yet' : 'No accounts in this category';
+                tbody.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">${icon}</div>
+                        <h3>${message}</h3>
+                    </div>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(inv => `
+                <div class="table-row ${inv.days > 30 ? 'critical' : ''}">
+                    <div class="customer-info">
+                        <div class="customer-name">${inv.customer}
+                            ${!inv.viewed ? '<span style="color: var(--accent-red); margin-left: 0.5rem;">👁️</span>' : ''}
+                        </div>
+                        <div class="customer-address" id="addr-${inv.invoice}">${inv.address}</div>
+                        <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; margin-top: 0.25rem;" onclick="editAddress('${inv.invoice}')">✏️ Edit Address</button>
+                        ${inv.note ? `<div style="font-size: 0.75rem; color: var(--accent-orange); margin-top: 0.25rem;">📝 ${inv.note}</div>` : ''}
+                    </div>
+                    <div class="invoice-number">${inv.invoice}</div>
+                    <div class="amount">${formatCurrency(inv.amount)}</div>
+                    <div class="customer-address">${inv.address.split(',')[1]}, ${inv.address.split(',')[2]}</div>
+                    <div>
+                        <span class="status-badge ${getStatusClass(inv.days, inv.status)}">
+                            ${getStatusText(inv.days, inv.status)}
+                        </span>
+                    </div>
+                    <div class="days-overdue ${inv.days > 30 ? 'critical' : inv.days > 0 ? 'warning' : inv.paid ? 'success' : ''}">
+                        ${inv.paid 
+                            ? `Paid on ${new Date(inv.paidDate).toLocaleDateString()}`
+                            : inv.days > 0 
+                                ? `${inv.days} days overdue` 
+                                : `${Math.abs(inv.days)} days left`
+                        }
+                    </div>
+                    <div class="actions">
+                        ${inv.paid 
+                            ? `<span class="paid-badge">✅ Paid</span>
+                               <button class="btn btn-secondary" onclick="undoPaid('${inv.invoice}')" style="padding: 0.5rem;">↩️ Undo</button>`
+                            : inv.days > 0 
+                                ? `<button class="btn btn-primary" onclick="openLetter('${inv.invoice}')">📄 Letter</button>
+                                   <button class="btn btn-success" onclick="markPaid('${inv.invoice}')">💰 Paid</button>`
+                                : `<button class="btn btn-secondary" onclick="markPaid('${inv.invoice}')">💰 Paid</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            // Only count unpaid invoices
+            const unpaid = invoices.filter(i => !i.paid);
+            const total = unpaid.reduce((sum, inv) => sum + inv.amount, 0);
+            const critical = unpaid.filter(i => i.days > 30);
+            const overdue = unpaid.filter(i => i.days > 0 && i.days <= 30);
+            const dueSoon = unpaid.filter(i => i.days <= 0 && i.days >= -7);
+            const current = unpaid.filter(i => i.days < -7);
+            const paid = invoices.filter(i => i.paid);
+
+            console.log('=== Collections Stats Debug ===');
+            console.log('Total invoices:', invoices.length);
+            console.log('Unpaid:', unpaid.length, 'Total:', total);
+            console.log('Critical (>30):', critical.length, '=', critical.reduce((s,i)=>s+i.amount,0));
+            console.log('Overdue (1-30):', overdue.length, '=', overdue.reduce((s,i)=>s+i.amount,0));
+            console.log('Due Soon (-7 to 0):', dueSoon.length, '=', dueSoon.reduce((s,i)=>s+i.amount,0));
+            console.log('Current (<-7):', current.length, '=', current.reduce((s,i)=>s+i.amount,0));
+            console.log('Paid:', paid.length);
+
+            document.getElementById('total-outstanding').textContent = formatCurrency(total);
+            document.getElementById('overdue-count').textContent = overdue.length + critical.length;
+            document.getElementById('due-this-week').textContent = dueSoon.length;
+            
+            document.getElementById('critical-amount').textContent = formatCurrency(critical.reduce((s, i) => s + i.amount, 0));
+            document.getElementById('overdue-amount').textContent = formatCurrency(overdue.reduce((s, i) => s + i.amount, 0));
+            document.getElementById('due-soon-amount').textContent = formatCurrency(dueSoon.reduce((s, i) => s + i.amount, 0));
+            document.getElementById('current-amount').textContent = formatCurrency(current.reduce((s, i) => s + i.amount, 0));
+
+            document.getElementById('count-all').textContent = unpaid.length;
+            document.getElementById('count-critical').textContent = critical.length;
+            document.getElementById('count-overdue').textContent = overdue.length;
+            document.getElementById('count-due-soon').textContent = unpaid.filter(i => i.days <= 0 && i.days >= -14).length;
+            document.getElementById('count-current').textContent = current.length;
+            
+            // Update paid count if element exists
+            const paidCountEl = document.getElementById('count-paid');
+            if (paidCountEl) {
+                paidCountEl.textContent = paid.length;
+            }
+
+            // Update subtitle to show paid count
+            const subtitle = document.querySelector('.page-subtitle');
+            if (paid.length > 0) {
+                subtitle.innerHTML = `Track overdue invoices and payment collections <span style="color: var(--accent-green);">• ${paid.length} paid (${formatCurrency(paid.reduce((s, i) => s + i.amount, 0))})</span>`;
+            }
+        }
+
+        // Mark an invoice as paid
+        function markPaid(invoiceId) {
+            const invoice = invoices.find(i => i.invoice === invoiceId);
+            if (!invoice) return;
+            
+            if (confirm(`Mark invoice #${invoiceId} for ${invoice.customer} as PAID?\nAmount: ${formatCurrency(invoice.amount)}`)) {
+                invoice.paid = true;
+                invoice.paidDate = new Date().toISOString();
+                invoice.paidAmount = invoice.amount;
+                
+                // Save to localStorage
+                localStorage.setItem('collections_invoices', JSON.stringify(invoices));
+                
+                // Update UI
+                updateStats();
+                const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+                renderTable(activeFilter);
+                
+                // Show success message
+                showToast(`✅ Invoice #${invoiceId} marked as paid!`);
+            }
+        }
+
+        // Undo marking as paid
+        function undoPaid(invoiceId) {
+            const invoice = invoices.find(i => i.invoice === invoiceId);
+            if (!invoice) return;
+            
+            if (confirm(`Undo payment for invoice #${invoiceId} - ${invoice.customer}?`)) {
+                invoice.paid = false;
+                delete invoice.paidDate;
+                delete invoice.paidAmount;
+                
+                // Save to localStorage
+                localStorage.setItem('collections_invoices', JSON.stringify(invoices));
+                
+                // Update UI
+                updateStats();
+                const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+                renderTable(activeFilter);
+                
+                // Show success message
+                showToast(`↩️ Invoice #${invoiceId} restored to unpaid!`);
+            }
+        }
+
+        // Clear cache and reload from embedded data
+        function clearCacheAndReload() {
+            if (confirm('Clear all local changes (paid status, edited addresses) and reload fresh data from Squarespace?')) {
+                localStorage.removeItem('collections_invoices');
+                invoices = EMBEDDED_INVOICES.map(inv => ({...inv}));
+                updateStats();
+                const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+                renderTable(activeFilter);
+                showToast('✅ Cache cleared! Fresh data loaded from Squarespace.');
+            }
+        }
+
+        // Refresh data (reload from server or reset)
+        async function refreshData() {
+            const refreshIcon = document.getElementById('refresh-icon');
+            refreshIcon.style.animation = 'spin 1s linear infinite';
+            
+            // Reload from embedded data and merge with localStorage
+            invoices = EMBEDDED_INVOICES.map(inv => ({...inv}));
+            
+            // Merge with localStorage paid status and edits
+            const saved = localStorage.getItem('collections_invoices');
+            if (saved) {
+                const savedData = JSON.parse(saved);
+                invoices.forEach(inv => {
+                    const savedInv = savedData.find(s => s.invoice === inv.invoice);
+                    if (savedInv && savedInv.paid) {
+                        inv.paid = true;
+                        inv.paidDate = savedInv.paidDate;
+                        inv.paidAmount = savedInv.paidAmount;
+                    }
+                    if (savedInv && savedInv.address !== inv.address && savedInv.edited) {
+                        inv.address = savedInv.address;
+                        inv.edited = true;
+                    }
+                });
+            }
+            
+            updateStats();
+            const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+            renderTable(activeFilter);
+            
+            refreshIcon.style.animation = '';
+            showToast('🔄 Data refreshed!');
+        }
+
+        // Export data to CSV
+        function exportData() {
+            const unpaid = invoices.filter(i => !i.paid);
+            const paid = invoices.filter(i => i.paid);
+            
+            let csv = 'Invoice #,Customer,Amount,Status,Days,Address,Note,Paid\n';
+            
+            [...unpaid, ...paid].forEach(inv => {
+                csv += `"${inv.invoice}","${inv.customer}",${inv.amount},"${inv.status}",${inv.days},"${inv.address}","${inv.note || ''}",${inv.paid ? 'Yes' : 'No'}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `collections_export_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast('📥 Export downloaded!');
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                background: var(--accent-green);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                font-weight: 600;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Add animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Edit address function
+        function editAddress(invoiceId) {
+            const invoice = invoices.find(i => i.invoice === invoiceId);
+            if (!invoice) return;
+            
+            const newAddress = prompt('Enter new address:', invoice.address);
+            if (newAddress && newAddress !== invoice.address) {
+                invoice.address = newAddress;
+                invoice.edited = true; // Mark as edited so it persists
+                localStorage.setItem('collections_invoices', JSON.stringify(invoices));
+                const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+                renderTable(activeFilter);
+                showToast('✅ Address updated! Letter will use new address.');
+            }
+        }
+
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                renderTable(tab.dataset.filter);
+            });
+        });
+
+        // Close modal on outside click
+        document.getElementById('letterModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('letterModal')) {
+                closeLetter();
+            }
+        });
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>

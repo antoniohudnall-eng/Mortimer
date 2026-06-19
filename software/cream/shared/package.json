@@ -1,0 +1,20 @@
+{
+  "name": "@cream/shared",
+  "version": "1.0.0",
+  "description": "Shared core logic for CREAM PIM - Time & Chaos Clone",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1",
+    "date-fns": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  }
+}
