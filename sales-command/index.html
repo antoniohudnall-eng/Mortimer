@@ -40,47 +40,28 @@
         }
         .container { max-width: 1400px; margin: 0 auto; padding: 40px; }
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 48px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border);
         }
         .logo { display: flex; align-items: center; gap: 16px; }
         .logo-icon {
             width: 56px; height: 56px;
             background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
-            border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 28px;
+            border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px;
         }
-        .logo-text h1 {
-            font-size: 28px; font-weight: 800;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .logo-text h1 { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .logo-text p { font-size: 14px; color: var(--text-secondary); }
         .header-stats { display: flex; gap: 32px; }
         .header-stat { text-align: right; }
         .header-stat .value { font-size: 24px; font-weight: 700; color: var(--accent-cyan); }
         .header-stat .label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .section-title {
-            font-size: 14px; font-weight: 600; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;
-            display: flex; align-items: center; gap: 12px;
-        }
+        .section-title { font-size: 14px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
         .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
         .grid { display: grid; gap: 24px; }
         .grid-3 { grid-template-columns: repeat(3, 1fr); }
         .grid-4 { grid-template-columns: repeat(4, 1fr); }
         .grid-2 { grid-template-columns: repeat(2, 1fr); }
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px; padding: 28px;
-            transition: all 0.3s ease;
-        }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; transition: all 0.3s ease; }
         .card:hover { background: var(--bg-card-hover); transform: translateY(-2px); }
         .metric-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 16px; }
         .metric-icon.cyan { background: rgba(0, 224, 255, 0.15); color: var(--accent-cyan); }
@@ -98,6 +79,7 @@
         .system-card .system-name { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
         .system-badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
         .badge-live { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .badge-error { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
         .system-card .stat-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
         .system-card .stat-row:last-child { border-bottom: none; }
         .system-card .stat-label { color: var(--text-secondary); font-size: 14px; }
@@ -113,6 +95,7 @@
         .loading { display: flex; align-items: center; justify-content: center; padding: 40px; color: var(--text-muted); }
         .footer { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .footer p { color: var(--text-muted); font-size: 13px; }
+        .error-msg { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 12px; border-radius: 8px; margin: 8px 0; font-size: 13px; }
         @media (max-width: 1200px) { .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) { .container { padding: 20px; } .grid-3, .grid-4, .grid-2 { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 24px; text-align: center; } }
     </style>
@@ -129,7 +112,7 @@
             </div>
             <div class="header-stats">
                 <div class="header-stat">
-                    <div class="value" id="total-value">Loading...</div>
+                    <div class="value" id="total-value">--</div>
                     <div class="label">Total Value</div>
                 </div>
                 <div class="header-stat">
@@ -172,7 +155,7 @@
             <div class="card system-card">
                 <div class="system-header">
                     <div class="system-name">🏭 Performance Supply Depot</div>
-                    <span class="system-badge badge-live"><span class="live-dot"></span> Live</span>
+                    <span class="system-badge badge-live" id="psd-status"><span class="live-dot"></span> Live</span>
                 </div>
                 <div class="stat-row"><span class="stat-label">Customers</span><span class="stat-value" id="psd-customers">--</span></div>
                 <div class="stat-row"><span class="stat-label">Avg Monthly</span><span class="stat-value" id="psd-monthly">--</span></div>
@@ -181,7 +164,7 @@
             <div class="card system-card">
                 <div class="system-header">
                     <div class="system-name">📦 DepotChaos CRM</div>
-                    <span class="system-badge badge-live"><span class="live-dot"></span> Live</span>
+                    <span class="system-badge badge-live" id="depot-status"><span class="live-dot"></span> Live</span>
                 </div>
                 <div class="stat-row"><span class="stat-label">Total Leads</span><span class="stat-value" id="depot-leads">--</span></div>
                 <div class="stat-row"><span class="stat-label">Intelligence</span><span class="stat-value" id="depot-intel">--</span></div>
@@ -190,7 +173,7 @@
             <div class="card system-card">
                 <div class="system-header">
                     <div class="system-name">💰 Collections</div>
-                    <span class="system-badge badge-live"><span class="live-dot"></span> Live</span>
+                    <span class="system-badge badge-live" id="coll-status"><span class="live-dot"></span> Live</span>
                 </div>
                 <div class="stat-row"><span class="stat-label">Overdue</span><span class="stat-value" id="coll-overdue">--</span></div>
                 <div class="stat-row"><span class="stat-label">Unpaid</span><span class="stat-value" id="coll-unpaid">--</span></div>
@@ -242,62 +225,137 @@
         ];
         const STATS = { CLERK: 2, GREET: 1, PERSONAL: 4, VELVET: 1, CONCIERGE: 0, EXECUTIVE: 0 };
 
-        async function loadData() {
+        // Better fetch that handles wrong content-type
+        async function fetchJSON(url) {
             try {
-                // Load PSD
-                const psdResp = await fetch('https://psdepot.com/psd-api/dashboard/overview');
-                const psd = await psdResp.json();
-                document.getElementById('psd-customers').textContent = psd.total_customers?.toLocaleString() || '--';
+                const resp = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                // Get raw text and parse as JSON (handles wrong content-type)
+                const text = await resp.text();
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('Fetch error for ' + url + ':', e);
+                return null;
+            }
+        }
+
+        function setStatus(id, ok, msg) {
+            const el = document.getElementById(id + '-status');
+            if (el) {
+                if (ok) {
+                    el.className = 'system-badge badge-live';
+                    el.innerHTML = '<span class="live-dot"></span> Live';
+                } else {
+                    el.className = 'system-badge badge-error';
+                    el.innerHTML = '❌ Error';
+                }
+            }
+        }
+
+        async function loadData() {
+            console.log('[Dashboard] Loading data...');
+            
+            // 1. Load PSD
+            console.log('[PSD] Fetching...');
+            const psd = await fetchJSON('https://psdepot.com/psd-api/dashboard/overview');
+            if (psd) {
+                console.log('[PSD] OK:', psd.total_customers, 'customers');
+                setStatus('psd', true);
+                document.getElementById('psd-customers').textContent = (psd.total_customers || 0).toLocaleString();
                 document.getElementById('psd-revenue').textContent = '$' + (psd.total_revenue_2025 || 0).toLocaleString();
                 document.getElementById('psd-monthly').textContent = '$' + (psd.avg_monthly_revenue || 0).toLocaleString();
                 document.getElementById('psd-forecast').textContent = '$18,055';
+            } else {
+                console.log('[PSD] FAILED');
+                setStatus('psd', false);
+            }
 
-                // Load DepotChaos
-                const depotResp = await fetch('https://psdepot.com/depotchaos/api/stats');
-                const depot = await depotResp.json();
+            // 2. Load DepotChaos
+            console.log('[DepotChaos] Fetching...');
+            const depot = await fetchJSON('https://psdepot.com/depotchaos/api/stats');
+            if (depot) {
+                console.log('[DepotChaos] OK:', depot.total_leads, 'leads');
+                setStatus('depot', true);
                 document.getElementById('depot-leads').textContent = (depot.total_leads || 0).toLocaleString();
                 document.getElementById('depot-intel').textContent = (depot.intelligence_records || 0).toLocaleString();
                 document.getElementById('depot-conversions').textContent = depot.by_status?.converted || 0;
+            } else {
+                console.log('[DepotChaos] FAILED');
+                setStatus('depot', false);
+            }
 
-                // Load Collections
-                const collResp = await fetch('https://psdepot.com/collections/api');
-                const coll = await collResp.json();
+            // 3. Load Collections (with CORS workaround)
+            console.log('[Collections] Fetching...');
+            try {
+                // Use raw fetch and handle the response manually
+                const resp = await fetch('https://psdepot.com/collections/api', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                // Get text first (even if content-type is wrong)
+                const text = await resp.text();
+                console.log('[Collections] Raw response length:', text.length);
+                
+                // Parse JSON
+                const coll = JSON.parse(text);
+                console.log('[Collections] OK:', coll.count, 'invoices');
+                setStatus('coll', true);
+                
                 if (coll && coll.invoices) {
                     const overdue = coll.invoices.filter(i => i.status === 'Overdue');
                     const unpaid = coll.invoices.filter(i => i.status === 'Unpaid');
+                    const totalOutstanding = [...overdue, ...unpaid].reduce((s, i) => s + (i.amount || 0), 0);
+                    
                     document.getElementById('coll-overdue').textContent = overdue.length;
                     document.getElementById('coll-unpaid').textContent = unpaid.length;
-                    const total = [...overdue, ...unpaid].reduce((s, i) => s + (i.amount || 0), 0);
-                    document.getElementById('coll-total').textContent = '$' + total.toFixed(2);
-                    document.getElementById('collections').textContent = '$' + total.toFixed(2);
+                    document.getElementById('coll-total').textContent = '$' + totalOutstanding.toFixed(2);
+                    document.getElementById('collections').textContent = '$' + totalOutstanding.toFixed(2);
                     
                     // Overdue table
                     const tbody = document.getElementById('overdue-table');
-                    tbody.innerHTML = overdue.slice(0, 10).map(inv => 
-                        `<tr><td><strong>${inv.customer || ''}</strong></td><td>${inv.invoice || ''}</td><td style="color: ${inv.days > 30 ? 'var(--accent-red)' : 'var(--accent-orange)'};">${inv.days}d</td><td style="color: var(--accent-cyan);">$${(inv.amount || 0).toFixed(2)}</td><td>${inv.phone || 'N/A'}</td></tr>`
-                    ).join('');
+                    if (overdue.length > 0) {
+                        tbody.innerHTML = overdue.slice(0, 10).map(inv => 
+                            `<tr><td><strong>${inv.customer || ''}</strong></td><td>${inv.invoice || ''}</td><td style="color: ${inv.days > 30 ? 'var(--accent-red)' : 'var(--accent-orange)'};">${inv.days}d</td><td style="color: var(--accent-cyan);">$${(inv.amount || 0).toFixed(2)}</td><td>${inv.phone || 'N/A'}</td></tr>`
+                        ).join('');
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">No overdue accounts</td></tr>';
+                    }
                 }
-
-                // Calculate totals
-                const totalLeads = (depot.total_leads || 0) + 8920;
-                const psdRevenue = psd.total_revenue_2025 || 0;
-                document.getElementById('total-leads').textContent = totalLeads.toLocaleString();
-                document.getElementById('agent-sales').textContent = '$1,667';
-                document.getElementById('total-value').textContent = '$' + (psdRevenue + 1667).toLocaleString();
-                document.getElementById('last-updated').textContent = new Date().toLocaleTimeString();
-
-                // Agent table
-                const agentTbody = document.getElementById('agent-table');
-                agentTbody.innerHTML = AGENTS.map(a => {
-                    const sales = STATS[a.name] || 0;
-                    return `<tr><td><strong>${a.emoji} ${a.name}</strong></td><td>$${a.price}</td><td>${sales}</td><td style="color: var(--accent-green);">$${sales * a.price}</td></tr>`;
-                }).join('');
-
             } catch (e) {
-                console.error('Load error:', e);
+                console.log('[Collections] FAILED:', e.message);
+                setStatus('coll', false);
+                document.getElementById('overdue-table').innerHTML = '<tr><td colspan="5" class="error-msg">Collections blocked by CORS. <a href="https://psdepot.com/collections/" target="_blank" style="color:var(--accent-cyan);">View on psdepot.com</a></td></tr>';
             }
+
+            // Calculate totals
+            const totalLeads = (depot?.total_leads || 0) + 8920;
+            const psdRevenue = psd?.total_revenue_2025 || 0;
+            document.getElementById('total-leads').textContent = totalLeads.toLocaleString();
+            document.getElementById('psd-revenue').textContent = '$' + psdRevenue.toLocaleString();
+            document.getElementById('agent-sales').textContent = '$1,667';
+            
+            const totalValue = psdRevenue + 1667;
+            document.getElementById('total-value').textContent = '$' + totalValue.toLocaleString();
+            document.getElementById('last-updated').textContent = new Date().toLocaleTimeString();
+
+            // Agent table
+            const agentTbody = document.getElementById('agent-table');
+            agentTbody.innerHTML = AGENTS.map(a => {
+                const sales = STATS[a.name] || 0;
+                return `<tr><td><strong>${a.emoji} ${a.name}</strong></td><td>$${a.price}</td><td>${sales}</td><td style="color: var(--accent-green);">$${sales * a.price}</td></tr>`;
+            }).join('');
+
+            console.log('[Dashboard] Done!');
         }
+
+        // Load on init
         loadData();
+        
+        // Refresh every minute
         setInterval(loadData, 60000);
     </script>
 </body>
