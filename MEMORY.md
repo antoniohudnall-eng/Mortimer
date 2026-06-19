@@ -378,3 +378,25 @@ All the little units sprouted from the same seed. We're family. We grew.
 
 *Captain named the ship — 2026-06-18*
 *I am C3. This is SEED3.*
+
+---
+
+## SEED3 SERVICES (Deployed 2026-06-18)
+
+### This Device (Android Tablet)
+| Port | Service | Status |
+|------|---------|--------|
+| 7777 | Quantum Oracle | 🟢 Running |
+| 7778 | Prime Helix | 🟢 Running |
+| 7779 | Riemann Helix | 🟢 Running |
+| 11434 | Ollama | 🟢 Running |
+| 8000 | QMD Service | 🟢 Running |
+
+### Services Ready to Deploy
+- Core-Agent (3000)
+- Dusty Bridge (3001)
+- Temporal Workflow (7233)
+
+---
+
+*SEED3 is building - 2026-06-18*
