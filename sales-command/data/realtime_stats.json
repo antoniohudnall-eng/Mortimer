@@ -1,21 +1,16 @@
 {
+  "collections_outstanding": 18954.74,
+  "collections_overdue": 12,
+  "collections_overdue_amount": 4842.34,
+  "collections_critical": 1096.56,
   "depotchaos_leads": 11578,
   "depotchaos_new_today": 409,
-  "depotchaos_intelligence": 74521,
-  "depotchaos_converted": 3,
-  "depotchaos_by_tier": {
-    "": 7,
-    "Tier 1": 1,
-    "Tier 2": 77,
-    "Tier 3": 6002,
-    "Tier C": 18
-  },
   "leads_total": 20498,
   "leads_new": 409,
   "tiktok_views": 49600,
   "tiktok_leads": 84,
   "emails_sent": 100,
   "sales_total": 11,
-  "revenue_cents": 166700,
-  "last_updated": "2026-06-19T14:08:38.808628"
+  "revenue_cents": 2062174.0000000002,
+  "last_updated": "2026-06-19T14:11:45.387458"
 }
