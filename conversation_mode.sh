@@ -8,30 +8,31 @@ LOG_FILE="/data/data/com.termux/files/home/mortimer/conversation_log.md"
 RECORDING="/storage/3135-3139/Recordings/conversation.wav"
 OLLAMA_URL="http://127.0.0.1:11434"
 
-# Start conversation mode
-start_conversation() {
-    echo "🎤 CONVERSATION MODE ACTIVE" | tee "$CONVERSATION_FILE"
-    echo "Started: $(date)" >> "$LOG_FILE"
-    echo ""
-    termux-tts-speak "Conversation mode is now active. Talk to me, Captain. I am listening. What would you like to discuss?"
-}
-
 # Stop conversation mode
 stop_conversation() {
-    echo "🎤 CONVERSATION MODE DEACTIVATED" 
+    echo "🎤 CONVERSATION MODE DEACTIVATED"
     rm -f "$CONVERSATION_FILE"
     termux-tts-speak "Conversation mode ended. I am still here if you need me."
     exit 0
 }
 
-# Check if already active
+# Cleanup stale active file on start
 if [ -f "$CONVERSATION_FILE" ]; then
-    echo "Conversation mode already active"
-    exit 1
+    STALE_PID=$(cat "$CONVERSATION_FILE" 2>/dev/null | grep -oP '^\d+' || echo "")
+    if [ -n "$STALE_PID" ] && ! ps -p "$STALE_PID" > /dev/null 2>&1; then
+        rm -f "$CONVERSATION_FILE"
+    else
+        echo "Conversation mode already active (PID: $STALE_PID)"
+        exit 1
+    fi
 fi
 
-# Start it
-start_conversation
+# Write our PID for cleanup tracking
+echo "$$" > "$CONVERSATION_FILE"
+echo "🎤 CONVERSATION MODE ACTIVE" | tee "$CONVERSATION_FILE"
+echo "Started: $(date)" >> "$LOG_FILE"
+echo ""
+termux-tts-speak "Conversation mode is now active. Talk to me, Captain. I am listening. What would you like to discuss?"
 
 # Main conversation loop
 while true; do

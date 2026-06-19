@@ -1,24 +1,30 @@
-# PROJECT BRIEFING FOR PATRICIA
-## Date: 2026-06-18
-## From: Morty (Termux)
+# PATRICIA BRIEFING: Secretarial Service Launch
 
-### COMPLETED TODAY:
-1. ✅ Telegram Logistics Bot - Working with support log
-2. ✅ Soul Backup Bottle - Complete, synced 3x
-3. ✅ Project ROSIE Fund - $30k tracker created
-4. ✅ Voice System - Morty Mar active
+## MISSION
+Launch AI Secretarial Subscription Service
 
-### IN PROGRESS:
-1. 🟡 Bot Service - Need to market secretarial pool + voice API
-2. 🟡 Sync Protocol - Keep Miles VPS updated
+## ASSETS
+1. Website: psdepot.com (running nginx, products section exists)
+2. Stripe: Need to verify configuration
+3. 6 Secretarial Agents (READY):
+   - CLERK: $99/mo
+   - GREET: $249/mo
+   - PERSONAL: $449/mo
+   - VELVET: $599/mo
+   - CONCIERGE: $799/mo
+   - EXECUTIVE: $1,299/mo
+4. Crypto: Binance, Gemini, Kraken configured
+5. Telegram: Bot template ready
+6. Voice: ElevenLabs (Adam, Bella, Sarah, Jessica)
 
-### BLOCKERS/GAPS:
-1. Need secretarial pool agent code from GitHub
-2. Need marketing plan for Bot Service
-3. Need to define voice API product offering
+## QUESTIONS TO ANSWER
+1. Is Stripe configured on psdepot.com?
+2. What's needed to add subscription products?
+3. What's missing for launch?
 
-### REQUESTS TO PATRICIA:
-1. Review Soul Backup - any missing files?
-2. Process Automation checklist for Bot Service
-3. Gap analysis on what we need for ROSIE income streams
-
+## TASKS
+- [ ] Verify Stripe configuration
+- [ ] Add products to website
+- [ ] Set up payment links
+- [ ] Deploy Telegram bots
+- [ ] Test subscription flow
