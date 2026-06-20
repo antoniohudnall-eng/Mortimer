@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 SEED3 - Sunflower Seed Ship</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            color: #00d4ff;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
+        #container {
+            width: 100vw;
+            height: calc(100vh - 120px);
+            position: relative;
+        }
+        canvas { display: block; }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 20px;
+            background: rgba(10,10,15,0.95);
+            border-bottom: 1px solid #00d4ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        .header h1 {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .views {
+            display: flex;
+            gap: 10px;
+        }
+        .views button {
+            background: transparent;
+            border: 1px solid #00d4ff;
+            color: #00d4ff;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        .views button:hover, .views button.active {
+            background: #00d4ff;
+            color: #0a0a0f;
+        }
+        .dept-info {
+            position: fixed;
+            bottom: 60px;
+            left: 20px;
+            background: rgba(10,10,15,0.9);
+            border: 1px solid #333;
+            padding: 15px;
+            max-width: 300px;
+            font-size: 11px;
+            color: #888;
+            border-radius: 4px;
+        }
+        .dept-info h3 { color: #00d4ff; margin-bottom: 8px; }
+        .dept-info p { margin: 4px 0; }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px 20px;
+            background: rgba(10,10,15,0.95);
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #555;
+        }
+        .footer span { color: #00d4ff; }
+        .legend {
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            background: rgba(10,10,15,0.9);
+            border: 1px solid #333;
+            padding: 10px;
+            font-size: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            width: 180px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 4px 0;
+            cursor: pointer;
+        }
+        .legend-item:hover { color: #fff; }
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            margin-right: 8px;
+            border: 1px solid #444;
+        }
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 SEED3 — Sunflower Seed Ship</h1>
+        <div class="views">
+            <button onclick="setView('top')" id="btn-top">TOP</button>
+            <button onclick="setView('side')" id="btn-side">SIDE</button>
+            <button onclick="setView('front')" id="btn-front">FRONT</button>
+            <button onclick="setView('3d')" id="btn-3d" class="active">3D FREE</button>
+        </div>
+    </div>
+    
+    <div id="container"></div>
+    
+    <div class="legend" id="legend">
+        <h3 style="color:#00d4ff;margin-bottom:10px;">DEPARTMENTS</h3>
+    </div>
+    
+    <div class="dept-info" id="dept-info">
+        <h3>SELECT DEPARTMENT</h3>
+        <p>Click a section to view details</p>
+    </div>
+    
+    <div class="footer">
+        <span>SEED ONE INTERFACE</span>
+        <div>MOUSE: Drag to Rotate | Scroll to Zoom</div>
+        <span>2026</span>
+    </div>
+    
+    <div class="loading" id="loading">BUILDING SHIP...</div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // SEED3 SHIP DATA - Sunflower Seed Design
+        const SHIP_DATA = {
+            name: "SEED3 - SUNFLOWER CLASS",
+            length: 120,
+            width: 60,
+            height: 40,
+            seedPattern: true,
+            departments: [
+                { id: 1, name: "EXECUTIVE COMMAND", abbr: "QORA", color: 0xff0000, position: [0, 20, -50], size: [20, 15, 15], icon: "👑", desc: "Vision, strategy, governance" },
+                { id: 2, name: "OPERATIONS CENTER", abbr: "PATRICIA", color: 0xff8800, position: [0, 0, -30], size: [25, 20, 20], icon: "⚙️", desc: "Process excellence, coordination" },
+                { id: 3, name: "SALES DECK", abbr: "PULP", color: 0xffff00, position: [25, 0, -20], size: [20, 18, 25], icon: "📈", desc: "Sales, leads, revenue" },
+                { id: 4, name: "TECHNICAL BAY", abbr: "STACKTRACE", color: 0x00ff00, position: [-25, 0, -20], size: [20, 18, 25], icon: "🔧", desc: "Engineering, systems, architecture" },
+                { id: 5, name: "DROID HANGAR", abbr: "C3PO", color: 0x00ffff, position: [0, -15, -10], size: [30, 12, 20], icon: "🤖", desc: "C3PO, R2D2, R2-C4" },
+                { id: 6, name: "GAMES ARENA", abbr: "NOG", color: 0x0088ff, position: [30, 0, 0], size: [18, 20, 30], icon: "🎮", desc: "NOG, Milkman, Minecraft" },
+                { id: 7, name: "HARDWARE LAB", abbr: "COBRA", color: 0x8800ff, position: [-30, 0, 0], size: [18, 20, 30], icon: "🛠️", desc: "Snake Robot, CYLON" },
+                { id: 8, name: "MARKETING STUDIO", abbr: "VELUM", color: 0xff00ff, position: [0, 15, 0], size: [25, 10, 25], icon: "🎬", desc: "Brand, content, social" },
+                { id: 9, name: "CRYPTO VAULT", abbr: "CRYPTONIO", color: 0xffd700, position: [20, -10, 20], size: [15, 12, 15], icon: "💎", desc: "Portfolio, trading, wallets" },
+                { id: 10, name: "RESEARCH LAB", abbr: "MORTY", color: 0x00ff88, position: [-20, -10, 20], size: [15, 12, 15], icon: "🔬", desc: "Quantum Oracle, Helix" },
+                { id: 11, name: "INTELLIGENCE", abbr: "NETPROBE", color: 0x444444, position: [0, -20, 30], size: [35, 10, 15], icon: "🛰️", desc: "53 NetProbes, defense" },
+                { id: 12, name: "PRODUCTS HOLD", abbr: "REGGE", color: 0x884422, position: [0, 5, 45], size: [30, 25, 20], icon: "📦", desc: "CREAM, DepotChaos, POS" },
+                { id: 13, name: "MAIN CORRIDOR", abbr: "HALLWAY", color: 0x333333, position: [0, 0, 0], size: [120, 5, 100], icon: "🚶", desc: "Central spine" },
+                { id: 14, name: "ENGINE SECTION", abbr: "THRUST", color: 0x220000, position: [0, 0, 55], size: [40, 25, 15], icon: "🔥", desc: "Main engines" }
+            ]
+        };
+        
+        let scene, camera, renderer, controls;
+        let shipGroup;
+        let currentView = '3d';
+        let autoRotate = true;
+        
+        // COLORS - Worn Nostromo/Prometheus palette
+        const COLORS = {
+            hull: [0x2a2520, 0x3a3530, 0x4a4540, 0x1a1510],
+            rust: [0x8b4513, 0xa0522d, 0xcd853f, 0xd2691e],
+            metal: [0x708090, 0x778899, 0x696969, 0x808080],
+            warning: [0xff6600, 0xff4400, 0xcc3300, 0xff8800],
+            tech: [0x00ff00, 0x00cc00, 0x008800, 0x004400],
+            dark: [0x111111, 0x222222, 0x333333, 0x0a0a0a]
+        };
+        
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x050508);
+            scene.fog = new THREE.Fog(0x050508, 100, 400);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / (window.innerHeight - 120), 0.1, 1000);
+            camera.position.set(100, 100, 100);
+            camera.lookAt(0, 0, 0);
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight - 120);
+            renderer.shadowMap.enabled = true;
+            document.getElementById('container').appendChild(renderer.domElement);
+            
+            // Lights
+            const ambient = new THREE.AmbientLight(0x333344, 0.5);
+            scene.add(ambient);
+            
+            const directional = new THREE.DirectionalLight(0xffffff, 0.8);
+            directional.position.set(50, 100, 50);
+            directional.castShadow = true;
+            scene.add(directional);
+            
+            const point1 = new THREE.PointLight(0xff4400, 1, 200);
+            point1.position.set(0, 0, 60);
+            scene.add(point1);
+            
+            const point2 = new THREE.PointLight(0x0044ff, 0.5, 150);
+            point2.position.set(-50, 20, -50);
+            scene.add(point2);
+            
+            // Build ship
+            buildShip();
+            buildLegend();
+            
+            // Controls (manual orbit)
+            setupControls();
+            
+            // Hide loading
+            document.getElementById('loading').style.display = 'none';
+            
+            // Start render loop
+            animate();
+        }
+        
+        function createVoxel(x, y, z, color, size = 2) {
+            const geometry = new THREE.BoxGeometry(size, size, size);
+            const material = new THREE.MeshStandardMaterial({ 
+                color: color,
+                roughness: 0.8,
+                metalness: 0.3
+            });
+            const voxel = new THREE.Mesh(geometry, material);
+            voxel.position.set(x, y, z);
+            voxel.castShadow = true;
+            voxel.receiveShadow = true;
+            return voxel;
+        }
+        
+        function buildHull() {
+            const group = new THREE.Group();
+            
+            // SUNFLOWER SEED SHAPE - Elongated pointed oval
+            const length = 120;
+            const width = 50;
+            const height = 35;
+            
+            // Build hull voxel by voxel
+            for (let x = -length/2; x < length/2; x += 2) {
+                for (let y = -height/2; y < height/2; y += 2) {
+                    for (let z = -width/2; z < width/2; z += 2) {
+                        // Seed shape: wider in middle, pointed at ends
+                        const nx = x / (length/2);
+                        const ny = y / (height/2);
+                        const nz = z / (width/2);
+                        const dist = Math.sqrt(nx*nx + ny*ny*0.5 + nz*nz);
+                        
+                        // Hull thickness
+                        if (dist > 0.7 && dist < 0.95) {
+                            // Outer hull
+                            const colorIdx = Math.floor(Math.random() * COLORS.hull.length);
+                            const voxel = createVoxel(x, y, z, COLORS.hull[colorIdx], 2);
+                            group.add(voxel);
+                            
+                            // Add wear
+                            if (Math.random() < 0.05) {
+                                const rustVoxel = createVoxel(x, y, z, COLORS.rust[Math.floor(Math.random()*4)], 2);
+                                group.add(rustVoxel);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Nose cone (pointed front)
+            for (let i = 0; i < 15; i++) {
+                const radius = 15 - i;
+                for (let a = 0; a < Math.PI * 2; a += 0.3) {
+                    for (let b = 0; b < Math.PI; b += 0.3) {
+                        const x = -length/2 - i * 3;
+                        const y = Math.sin(b) * radius * 0.6;
+                        const z = Math.cos(b) * radius * 0.4;
+                        if (Math.random() < 0.3) {
+                            const voxel = createVoxel(x, y, z, COLORS.hull[0], 2);
+                            group.add(voxel);
+                        }
+                    }
+                }
+            }
+            
+            // Engine section (back)
+            for (let x = length/2 - 20; x < length/2; x += 2) {
+                for (let y = -15; y < 15; y += 2) {
+                    for (let z = -20; z < 20; z += 2) {
+                        if (Math.abs(y) < 10 || Math.abs(z) < 15) {
+                            const voxel = createVoxel(x, y, z, COLORS.metal[0], 2);
+                            group.add(voxel);
+                        }
+                    }
+                }
+            }
+            
+            // Engine glow
+            for (let i = 0; i < 3; i++) {
+                const glowGeo = new THREE.BoxGeometry(4, 8 - i*2, 8 - i*2);
+                const glowMat = new THREE.MeshBasicMaterial({ 
+                    color: 0xff4400,
+                    transparent: true,
+                    opacity: 0.8 - i * 0.2
+                });
+                const glow = new THREE.Mesh(glowGeo, glowMat);
+                glow.position.set(length/2 + 2 + i*2, 0, 0);
+                group.add(glow);
+            }
+            
+            return group;
+        }
+        
+        function buildDepartment(dept) {
+            const group = new THREE.Group();
+            const [px, py, pz] = dept.position;
+            const [sx, sy, sz] = dept.size;
+            
+            // Build department structure
+            for (let x = -sx/2; x < sx/2; x += 3) {
+                for (let y = -sy/2; y < sy/2; y += 3) {
+                    for (let z = -sz/2; z < sz/2; z += 3) {
+                        // Walls (only outer shell)
+                        const isEdge = Math.abs(x) >= sx/2 - 3 || 
+                                      Math.abs(y) >= sy/2 - 3 || 
+                                      Math.abs(z) >= sz/2 - 3;
+                        
+                        if (isEdge) {
+                            const voxel = createVoxel(px + x, py + y, pz + z, dept.color, 3);
+                            voxel.userData = { department: dept };
+                            group.add(voxel);
+                        }
+                    }
+                }
+            }
+            
+            // Add tech details
+            for (let i = 0; i < 5; i++) {
+                const tx = px + (Math.random() - 0.5) * sx * 0.8;
+                const ty = py + (Math.random() - 0.5) * sy * 0.8;
+                const tz = pz + (Math.random() - 0.5) * sz * 0.8;
+                const light = new THREE.PointLight(dept.color, 0.3, 15);
+                light.position.set(tx, ty, tz);
+                group.add(light);
+            }
+            
+            return group;
+        }
+        
+        function buildCorridor() {
+            const group = new THREE.Group();
+            
+            // Main spine corridor
+            for (let z = -55; z < 55; z += 4) {
+                for (let x = -5; x < 5; x += 2) {
+                    // Floor grating
+                    const floor = createVoxel(x, -18, z, 0x222222, 2);
+                    group.add(floor);
+                    
+                    // Ceiling lights
+                    if (z % 10 === 0) {
+                        const light = createVoxel(0, 18, z, 0xffff00, 1);
+                        group.add(light);
+                        const glow = new THREE.PointLight(0xffff00, 0.2, 20);
+                        glow.position.set(0, 18, z);
+                        group.add(glow);
+                    }
+                    
+                    // Walls
+                    const wallL = createVoxel(-4, 0, z, 0x333333, 2);
+                    const wallR = createVoxel(4, 0, z, 0x333333, 2);
+                    group.add(wallL, wallR);
+                }
+            }
+            
+            return group;
+        }
+        
+        function buildShip() {
+            shipGroup = new THREE.Group();
+            
+            // Hull
+            const hull = buildHull();
+            shipGroup.add(hull);
+            
+            // Corridor
+            const corridor = buildCorridor();
+            shipGroup.add(corridor);
+            
+            // Departments
+            SHIP_DATA.departments.forEach(dept => {
+                if (dept.abbr !== 'HALLWAY' && dept.abbr !== 'THRUST') {
+                    const deptMesh = buildDepartment(dept);
+                    shipGroup.add(deptMesh);
+                }
+            });
+            
+            // Add detail pipes and cables
+            for (let z = -50; z < 50; z += 8) {
+                // Pipes along corridor
+                const pipe1 = createVoxel(-6, -15, z, 0x444444, 1);
+                const pipe2 = createVoxel(6, 15, z, 0x444444, 1);
+                shipGroup.add(pipe1, pipe2);
+            }
+            
+            // Warning stripes near engine
+            for (let i = 0; i < 8; i++) {
+                const stripe1 = createVoxel(50 + i*2, -20, -5 + i%2*10, 0xff6600, 2);
+                const stripe2 = createVoxel(50 + i*2, -20, -5 + i%2*10, 0x111111, 2);
+                group.add(stripe1);
+            }
+            
+            scene.add(shipGroup);
+        }
+        
+        function buildLegend() {
+            const legend = document.getElementById('legend');
+            SHIP_DATA.departments.forEach(dept => {
+                if (dept.abbr !== 'HALLWAY' && dept.abbr !== 'THRUST') {
+                    const item = document.createElement('div');
+                    item.className = 'legend-item';
+                    item.innerHTML = `
+                        <div class="legend-color" style="background:#${dept.color.toString(16).padStart(6,'0')}"></div>
+                        ${dept.icon} ${dept.abbr}
+                    `;
+                    item.onclick = () => focusDepartment(dept);
+                    legend.appendChild(item);
+                }
+            });
+        }
+        
+        function focusDepartment(dept) {
+            const info = document.getElementById('dept-info');
+            info.innerHTML = `
+                <h3>${dept.icon} ${dept.name}</h3>
+                <p><strong>Head:</strong> ${dept.abbr}</p>
+                <p><strong>Position:</strong> [${dept.position.join(', ')}]</p>
+                <p><strong>Size:</strong> ${dept.size.join('x')}</p>
+                <p style="margin-top:8px;">${dept.desc}</p>
+            `;
+        }
+        
+        function setupControls() {
+            let isDragging = false;
+            let prevMouse = { x: 0, y: 0 };
+            let rotation = { x: 0.5, y: 0 };
+            let zoom = 180;
+            
+            renderer.domElement.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                prevMouse = { x: e.clientX, y: e.clientY };
+                autoRotate = false;
+            });
+            
+            renderer.domElement.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - prevMouse.x;
+                const dy = e.clientY - prevMouse.y;
+                rotation.y += dx * 0.01;
+                rotation.x += dy * 0.01;
+                rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotation.x));
+                prevMouse = { x: e.clientX, y: e.clientY };
+            });
+            
+            renderer.domElement.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+            
+            renderer.domElement.addEventListener('wheel', (e) => {
+                zoom += e.deltaY * 0.5;
+                zoom = Math.max(50, Math.min(400, zoom));
+            });
+            
+            // Touch support
+            renderer.domElement.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                    autoRotate = false;
+                }
+            });
+            
+            renderer.domElement.addEventListener('touchmove', (e) => {
+                if (!isDragging || e.touches.length !== 1) return;
+                const dx = e.touches[0].clientX - prevMouse.x;
+                const dy = e.touches[0].clientY - prevMouse.y;
+                rotation.y += dx * 0.01;
+                rotation.x += dy * 0.01;
+                rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotation.x));
+                prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            });
+            
+            renderer.domElement.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+            
+            // Update camera in animation loop
+            window.updateCamera = () => {
+                camera.position.x = Math.sin(rotation.y) * Math.cos(rotation.x) * zoom;
+                camera.position.y = Math.sin(rotation.x) * zoom;
+                camera.position.z = Math.cos(rotation.y) * Math.cos(rotation.x) * zoom;
+                camera.lookAt(0, 0, 0);
+            };
+        }
+        
+        function setView(view) {
+            currentView = view;
+            document.querySelectorAll('.views button').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + view).classList.add('active');
+            
+            autoRotate = true;
+            window.viewTransition = view;
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (autoRotate && shipGroup) {
+                shipGroup.rotation.y += 0.003;
+            }
+            
+            if (window.updateCamera) {
+                window.updateCamera();
+            }
+            
+            // View transitions
+            if (window.viewTransition) {
+                switch(window.viewTransition) {
+                    case 'top':
+                        camera.position.set(0, 300, 0);
+                        camera.lookAt(0, 0, 0);
+                        break;
+                    case 'side':
+                        camera.position.set(300, 0, 0);
+                        camera.lookAt(0, 0, 0);
+                        break;
+                    case 'front':
+                        camera.position.set(0, 0, 300);
+                        camera.lookAt(0, 0, 0);
+                        break;
+                    case '3d':
+                        // Let user control
+                        break;
+                }
+                window.viewTransition = null;
+            }
+            
+            renderer.render(scene, camera);
+        }
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / (window.innerHeight - 120);
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight - 120);
+        });
+        
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
