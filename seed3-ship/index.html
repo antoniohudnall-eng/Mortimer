@@ -8,7 +8,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #0a0a0f;
-            color: #00d4ff;
+            color: #00ff00;
             font-family: 'Courier New', monospace;
             overflow: hidden;
         }
@@ -25,7 +25,7 @@
             right: 0;
             padding: 12px 20px;
             background: rgba(10,10,15,0.95);
-            border-bottom: 1px solid #00d4ff;
+            border-bottom: 1px solid #00ff00;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -42,8 +42,8 @@
         }
         .views button {
             background: transparent;
-            border: 1px solid #00d4ff;
-            color: #00d4ff;
+            border: 1px solid #00ff00;
+            color: #00ff00;
             padding: 8px 16px;
             cursor: pointer;
             font-family: inherit;
@@ -51,22 +51,22 @@
             transition: all 0.3s;
         }
         .views button:hover, .views button.active {
-            background: #00d4ff;
-            color: #0a0a0f;
+            background: #00ff00;
+            color: #000;
         }
         .dept-info {
             position: fixed;
             bottom: 60px;
             left: 20px;
             background: rgba(10,10,15,0.9);
-            border: 1px solid #333;
+            border: 1px solid #003300;
             padding: 15px;
             max-width: 300px;
             font-size: 11px;
-            color: #888;
+            color: #00cc00;
             border-radius: 4px;
         }
-        .dept-info h3 { color: #00d4ff; margin-bottom: 8px; }
+        .dept-info h3 { color: #00ff00; margin-bottom: 8px; }
         .dept-info p { margin: 4px 0; }
         .footer {
             position: fixed;
@@ -75,20 +75,20 @@
             right: 0;
             padding: 10px 20px;
             background: rgba(10,10,15,0.95);
-            border-top: 1px solid #333;
+            border-top: 1px solid #003300;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 11px;
-            color: #555;
+            color: #008800;
         }
-        .footer span { color: #00d4ff; }
+        .footer span { color: #00ff00; }
         .legend {
             position: fixed;
             top: 60px;
             right: 10px;
             background: rgba(10,10,15,0.9);
-            border: 1px solid #333;
+            border: 1px solid #003300;
             padding: 10px;
             font-size: 10px;
             max-height: 400px;
@@ -100,22 +100,60 @@
             align-items: center;
             margin: 4px 0;
             cursor: pointer;
+            color: #00cc00;
         }
-        .legend-item:hover { color: #fff; }
+        .legend-item:hover { color: #00ff00; }
         .legend-color {
             width: 14px;
             height: 14px;
             margin-right: 8px;
-            border: 1px solid #444;
+            border: 1px solid #00ff00;
         }
-        .loading {
+        
+        /* PROGRESS BAR */
+        .progress-container {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 24px;
-            color: #00d4ff;
+            text-align: center;
+            z-index: 200;
         }
+        .progress-title {
+            font-size: 24px;
+            color: #00ff00;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .progress-bar {
+            width: 400px;
+            height: 30px;
+            background: #001a00;
+            border: 2px solid #00ff00;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #003300, #00ff00);
+            width: 0%;
+            transition: width 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .progress-text {
+            font-size: 14px;
+            color: #00cc00;
+        }
+        .progress-status {
+            font-size: 12px;
+            color: #008800;
+            margin-top: 10px;
+        }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -129,13 +167,23 @@
         </div>
     </div>
     
-    <div id="container"></div>
-    
-    <div class="legend" id="legend">
-        <h3 style="color:#00d4ff;margin-bottom:10px;">DEPARTMENTS</h3>
+    <!-- PROGRESS OVERLAY -->
+    <div class="progress-container" id="progress-overlay">
+        <div class="progress-title">▓▓▓ BUILDING SHIP ▓▓▓</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill">0%</div>
+        </div>
+        <div class="progress-text" id="progress-text">Initializing...</div>
+        <div class="progress-status" id="progress-status">Please wait...</div>
     </div>
     
-    <div class="dept-info" id="dept-info">
+    <div id="container" class="hidden"></div>
+    
+    <div class="legend hidden" id="legend">
+        <h3 style="color:#00ff00;margin-bottom:10px;">DEPARTMENTS</h3>
+    </div>
+    
+    <div class="dept-info hidden" id="dept-info">
         <h3>SELECT DEPARTMENT</h3>
         <p>Click a section to view details</p>
     </div>
@@ -146,17 +194,50 @@
         <span>2026</span>
     </div>
     
-    <div class="loading" id="loading">BUILDING SHIP...</div>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // SEED3 SHIP DATA - Sunflower Seed Design
+        // PROGRESS TRACKER
+        const progress = {
+            current: 0,
+            total: 100,
+            stages: [
+                { name: 'Initializing Three.js', weight: 5 },
+                { name: 'Creating scene', weight: 5 },
+                { name: 'Building hull', weight: 30 },
+                { name: 'Adding corridor', weight: 10 },
+                { name: 'Building departments', weight: 25 },
+                { name: 'Adding details', weight: 15 },
+                { name: 'Setting up controls', weight: 5 },
+                { name: 'Finalizing', weight: 5 }
+            ]
+        };
+        
+        function updateProgress(stage, subProgress) {
+            let completedWeight = 0;
+            for (let i = 0; i < stage; i++) {
+                completedWeight += progress.stages[i].weight;
+            }
+            const stageWeight = progress.stages[stage].weight;
+            const currentProgress = completedWeight + (subProgress * stageWeight / 100);
+            
+            progress.current = Math.min(100, currentProgress);
+            
+            document.getElementById('progress-fill').style.width = progress.current + '%';
+            document.getElementById('progress-fill').textContent = Math.floor(progress.current) + '%';
+            document.getElementById('progress-text').textContent = progress.stages[stage].name;
+            document.getElementById('progress-status').textContent = `Stage ${stage + 1}/${progress.stages.length}: ${Math.floor(subProgress)}%`;
+        }
+        
+        function hideProgress() {
+            document.getElementById('progress-overlay').classList.add('hidden');
+            document.getElementById('container').classList.remove('hidden');
+            document.getElementById('legend').classList.remove('hidden');
+            document.getElementById('dept-info').classList.remove('hidden');
+        }
+        
+        // SEED3 SHIP DATA
         const SHIP_DATA = {
             name: "SEED3 - SUNFLOWER CLASS",
-            length: 120,
-            width: 60,
-            height: 40,
-            seedPattern: true,
             departments: [
                 { id: 1, name: "EXECUTIVE COMMAND", abbr: "QORA", color: 0xff0000, position: [0, 20, -50], size: [20, 15, 15], icon: "👑", desc: "Vision, strategy, governance" },
                 { id: 2, name: "OPERATIONS CENTER", abbr: "PATRICIA", color: 0xff8800, position: [0, 0, -30], size: [25, 20, 20], icon: "⚙️", desc: "Process excellence, coordination" },
@@ -169,37 +250,38 @@
                 { id: 9, name: "CRYPTO VAULT", abbr: "CRYPTONIO", color: 0xffd700, position: [20, -10, 20], size: [15, 12, 15], icon: "💎", desc: "Portfolio, trading, wallets" },
                 { id: 10, name: "RESEARCH LAB", abbr: "MORTY", color: 0x00ff88, position: [-20, -10, 20], size: [15, 12, 15], icon: "🔬", desc: "Quantum Oracle, Helix" },
                 { id: 11, name: "INTELLIGENCE", abbr: "NETPROBE", color: 0x444444, position: [0, -20, 30], size: [35, 10, 15], icon: "🛰️", desc: "53 NetProbes, defense" },
-                { id: 12, name: "PRODUCTS HOLD", abbr: "REGGE", color: 0x884422, position: [0, 5, 45], size: [30, 25, 20], icon: "📦", desc: "CREAM, DepotChaos, POS" },
-                { id: 13, name: "MAIN CORRIDOR", abbr: "HALLWAY", color: 0x333333, position: [0, 0, 0], size: [120, 5, 100], icon: "🚶", desc: "Central spine" },
-                { id: 14, name: "ENGINE SECTION", abbr: "THRUST", color: 0x220000, position: [0, 0, 55], size: [40, 25, 15], icon: "🔥", desc: "Main engines" }
+                { id: 12, name: "PRODUCTS HOLD", abbr: "REGGE", color: 0x884422, position: [0, 5, 45], size: [30, 25, 20], icon: "📦", desc: "CREAM, DepotChaos, POS" }
             ]
         };
         
-        let scene, camera, renderer, controls;
+        let scene, camera, renderer;
         let shipGroup;
         let currentView = '3d';
         let autoRotate = true;
         
-        // COLORS - Worn Nostromo/Prometheus palette
         const COLORS = {
             hull: [0x2a2520, 0x3a3530, 0x4a4540, 0x1a1510],
             rust: [0x8b4513, 0xa0522d, 0xcd853f, 0xd2691e],
             metal: [0x708090, 0x778899, 0x696969, 0x808080],
             warning: [0xff6600, 0xff4400, 0xcc3300, 0xff8800],
-            tech: [0x00ff00, 0x00cc00, 0x008800, 0x004400],
             dark: [0x111111, 0x222222, 0x333333, 0x0a0a0a]
         };
         
         function init() {
+            updateProgress(0, 0);
+            
             // Scene
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x050508);
             scene.fog = new THREE.Fog(0x050508, 100, 400);
+            updateProgress(1, 50);
             
             // Camera
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / (window.innerHeight - 120), 0.1, 1000);
             camera.position.set(100, 100, 100);
             camera.lookAt(0, 0, 0);
+            updateProgress(1, 100);
+            updateProgress(2, 100);
             
             // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -220,19 +302,20 @@
             point1.position.set(0, 0, 60);
             scene.add(point1);
             
-            const point2 = new THREE.PointLight(0x0044ff, 0.5, 150);
-            point2.position.set(-50, 20, -50);
-            scene.add(point2);
-            
-            // Build ship
+            // Build ship with progress
             buildShip();
-            buildLegend();
             
-            // Controls (manual orbit)
+            // Controls
             setupControls();
+            updateProgress(6, 100);
+            updateProgress(7, 50);
             
-            // Hide loading
-            document.getElementById('loading').style.display = 'none';
+            // Build legend
+            buildLegend();
+            updateProgress(7, 100);
+            
+            // Hide progress, show ship
+            setTimeout(hideProgress, 500);
             
             // Start render loop
             animate();
@@ -252,63 +335,57 @@
             return voxel;
         }
         
-        function buildHull() {
+        function buildHull(onProgress) {
             const group = new THREE.Group();
-            
-            // SUNFLOWER SEED SHAPE - Elongated pointed oval
             const length = 120;
             const width = 50;
             const height = 35;
+            let count = 0;
+            const total = Math.floor(length / 4) * Math.floor(height / 4) * Math.floor(width / 4);
             
-            // Build hull voxel by voxel
-            for (let x = -length/2; x < length/2; x += 2) {
-                for (let y = -height/2; y < height/2; y += 2) {
-                    for (let z = -width/2; z < width/2; z += 2) {
-                        // Seed shape: wider in middle, pointed at ends
+            for (let x = -length/2; x < length/2; x += 4) {
+                for (let y = -height/2; y < height/2; y += 4) {
+                    for (let z = -width/2; z < width/2; z += 4) {
                         const nx = x / (length/2);
                         const ny = y / (height/2);
                         const nz = z / (width/2);
                         const dist = Math.sqrt(nx*nx + ny*ny*0.5 + nz*nz);
                         
-                        // Hull thickness
                         if (dist > 0.7 && dist < 0.95) {
-                            // Outer hull
                             const colorIdx = Math.floor(Math.random() * COLORS.hull.length);
-                            const voxel = createVoxel(x, y, z, COLORS.hull[colorIdx], 2);
+                            const voxel = createVoxel(x, y, z, COLORS.hull[colorIdx], 4);
                             group.add(voxel);
-                            
-                            // Add wear
-                            if (Math.random() < 0.05) {
-                                const rustVoxel = createVoxel(x, y, z, COLORS.rust[Math.floor(Math.random()*4)], 2);
-                                group.add(rustVoxel);
-                            }
+                        }
+                        count++;
+                        if (count % 100 === 0) {
+                            onProgress(Math.floor((count / total) * 100));
                         }
                     }
                 }
             }
             
-            // Nose cone (pointed front)
-            for (let i = 0; i < 15; i++) {
-                const radius = 15 - i;
-                for (let a = 0; a < Math.PI * 2; a += 0.3) {
-                    for (let b = 0; b < Math.PI; b += 0.3) {
-                        const x = -length/2 - i * 3;
-                        const y = Math.sin(b) * radius * 0.6;
-                        const z = Math.cos(b) * radius * 0.4;
-                        if (Math.random() < 0.3) {
-                            const voxel = createVoxel(x, y, z, COLORS.hull[0], 2);
+            // Nose cone
+            for (let i = 0; i < 10; i++) {
+                const radius = 12 - i;
+                for (let a = 0; a < Math.PI * 2; a += 0.5) {
+                    for (let b = 0; b < Math.PI; b += 0.5) {
+                        const px = -length/2 - i * 3;
+                        const py = Math.sin(b) * radius * 0.6;
+                        const pz = Math.cos(b) * radius * 0.4;
+                        if (Math.random() < 0.4) {
+                            const voxel = createVoxel(px, py, pz, COLORS.hull[0], 4);
                             group.add(voxel);
                         }
                     }
                 }
             }
             
-            // Engine section (back)
-            for (let x = length/2 - 20; x < length/2; x += 2) {
-                for (let y = -15; y < 15; y += 2) {
-                    for (let z = -20; z < 20; z += 2) {
+            // Engine section
+            for (let x = length/2 - 20; x < length/2; x += 4) {
+                for (let y = -15; y < 15; y += 4) {
+                    for (let z = -20; z < 20; z += 4) {
                         if (Math.abs(y) < 10 || Math.abs(z) < 15) {
-                            const voxel = createVoxel(x, y, z, COLORS.metal[0], 2);
+                            const voxel = createVoxel(x, y, z, COLORS.metal[0], 4);
                             group.add(voxel);
                         }
                     }
@@ -331,16 +408,36 @@
             return group;
         }
         
-        function buildDepartment(dept) {
+        function buildCorridor() {
+            const group = new THREE.Group();
+            
+            for (let z = -55; z < 55; z += 4) {
+                for (let x = -5; x < 5; x += 2) {
+                    const floor = createVoxel(x, -18, z, 0x222222, 2);
+                    group.add(floor);
+                    
+                    if (z % 10 === 0) {
+                        const light = createVoxel(0, 18, z, 0xffff00, 1);
+                        group.add(light);
+                    }
+                    
+                    const wallL = createVoxel(-4, 0, z, 0x333333, 2);
+                    const wallR = createVoxel(4, 0, z, 0x333333, 2);
+                    group.add(wallL, wallR);
+                }
+            }
+            
+            return group;
+        }
+        
+        function buildDepartment(dept, index, total) {
             const group = new THREE.Group();
             const [px, py, pz] = dept.position;
             const [sx, sy, sz] = dept.size;
             
-            // Build department structure
             for (let x = -sx/2; x < sx/2; x += 3) {
                 for (let y = -sy/2; y < sy/2; y += 3) {
                     for (let z = -sz/2; z < sz/2; z += 3) {
-                        // Walls (only outer shell)
                         const isEdge = Math.abs(x) >= sx/2 - 3 || 
                                       Math.abs(y) >= sy/2 - 3 || 
                                       Math.abs(z) >= sz/2 - 3;
@@ -354,45 +451,6 @@
                 }
             }
             
-            // Add tech details
-            for (let i = 0; i < 5; i++) {
-                const tx = px + (Math.random() - 0.5) * sx * 0.8;
-                const ty = py + (Math.random() - 0.5) * sy * 0.8;
-                const tz = pz + (Math.random() - 0.5) * sz * 0.8;
-                const light = new THREE.PointLight(dept.color, 0.3, 15);
-                light.position.set(tx, ty, tz);
-                group.add(light);
-            }
-            
-            return group;
-        }
-        
-        function buildCorridor() {
-            const group = new THREE.Group();
-            
-            // Main spine corridor
-            for (let z = -55; z < 55; z += 4) {
-                for (let x = -5; x < 5; x += 2) {
-                    // Floor grating
-                    const floor = createVoxel(x, -18, z, 0x222222, 2);
-                    group.add(floor);
-                    
-                    // Ceiling lights
-                    if (z % 10 === 0) {
-                        const light = createVoxel(0, 18, z, 0xffff00, 1);
-                        group.add(light);
-                        const glow = new THREE.PointLight(0xffff00, 0.2, 20);
-                        glow.position.set(0, 18, z);
-                        group.add(glow);
-                    }
-                    
-                    // Walls
-                    const wallL = createVoxel(-4, 0, z, 0x333333, 2);
-                    const wallR = createVoxel(4, 0, z, 0x333333, 2);
-                    group.add(wallL, wallR);
-                }
-            }
-            
             return group;
         }
         
@@ -400,34 +458,30 @@
             shipGroup = new THREE.Group();
             
             // Hull
-            const hull = buildHull();
+            updateProgress(2, 0);
+            const hull = buildHull((p) => updateProgress(2, p));
             shipGroup.add(hull);
             
             // Corridor
+            updateProgress(3, 100);
             const corridor = buildCorridor();
             shipGroup.add(corridor);
             
             // Departments
-            SHIP_DATA.departments.forEach(dept => {
-                if (dept.abbr !== 'HALLWAY' && dept.abbr !== 'THRUST') {
-                    const deptMesh = buildDepartment(dept);
-                    shipGroup.add(deptMesh);
-                }
+            updateProgress(4, 0);
+            SHIP_DATA.departments.forEach((dept, i) => {
+                const deptMesh = buildDepartment(dept, i, SHIP_DATA.departments.length);
+                shipGroup.add(deptMesh);
+                updateProgress(4, Math.floor(((i + 1) / SHIP_DATA.departments.length) * 100));
             });
             
-            // Add detail pipes and cables
-            for (let z = -50; z < 50; z += 8) {
-                // Pipes along corridor
-                const pipe1 = createVoxel(-6, -15, z, 0x444444, 1);
-                const pipe2 = createVoxel(6, 15, z, 0x444444, 1);
+            // Add pipes and details
+            updateProgress(5, 0);
+            for (let i = 0; i < 50; i++) {
+                const pipe1 = createVoxel(-6, -15, -50 + i * 2, 0x444444, 1);
+                const pipe2 = createVoxel(6, 15, -50 + i * 2, 0x444444, 1);
                 shipGroup.add(pipe1, pipe2);
-            }
-            
-            // Warning stripes near engine
-            for (let i = 0; i < 8; i++) {
-                const stripe1 = createVoxel(50 + i*2, -20, -5 + i%2*10, 0xff6600, 2);
-                const stripe2 = createVoxel(50 + i*2, -20, -5 + i%2*10, 0x111111, 2);
-                group.add(stripe1);
+                if (i % 10 === 0) updateProgress(5, Math.floor((i / 50) * 100));
             }
             
             scene.add(shipGroup);
@@ -436,16 +490,14 @@
         function buildLegend() {
             const legend = document.getElementById('legend');
             SHIP_DATA.departments.forEach(dept => {
-                if (dept.abbr !== 'HALLWAY' && dept.abbr !== 'THRUST') {
-                    const item = document.createElement('div');
-                    item.className = 'legend-item';
-                    item.innerHTML = `
-                        <div class="legend-color" style="background:#${dept.color.toString(16).padStart(6,'0')}"></div>
-                        ${dept.icon} ${dept.abbr}
-                    `;
-                    item.onclick = () => focusDepartment(dept);
-                    legend.appendChild(item);
-                }
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+                item.innerHTML = `
+                    <div class="legend-color" style="background:#${dept.color.toString(16).padStart(6,'0')}"></div>
+                    ${dept.icon} ${dept.abbr}
+                `;
+                item.onclick = () => focusDepartment(dept);
+                legend.appendChild(item);
             });
         }
         
@@ -491,30 +543,6 @@
                 zoom = Math.max(50, Math.min(400, zoom));
             });
             
-            // Touch support
-            renderer.domElement.addEventListener('touchstart', (e) => {
-                if (e.touches.length === 1) {
-                    isDragging = true;
-                    prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-                    autoRotate = false;
-                }
-            });
-            
-            renderer.domElement.addEventListener('touchmove', (e) => {
-                if (!isDragging || e.touches.length !== 1) return;
-                const dx = e.touches[0].clientX - prevMouse.x;
-                const dy = e.touches[0].clientY - prevMouse.y;
-                rotation.y += dx * 0.01;
-                rotation.x += dy * 0.01;
-                rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotation.x));
-                prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-            });
-            
-            renderer.domElement.addEventListener('touchend', () => {
-                isDragging = false;
-            });
-            
-            // Update camera in animation loop
             window.updateCamera = () => {
                 camera.position.x = Math.sin(rotation.y) * Math.cos(rotation.x) * zoom;
                 camera.position.y = Math.sin(rotation.x) * zoom;
@@ -529,7 +557,23 @@
             document.getElementById('btn-' + view).classList.add('active');
             
             autoRotate = true;
-            window.viewTransition = view;
+            
+            switch(view) {
+                case 'top':
+                    camera.position.set(0, 300, 0);
+                    camera.lookAt(0, 0, 0);
+                    break;
+                case 'side':
+                    camera.position.set(300, 0, 0);
+                    camera.lookAt(0, 0, 0);
+                    break;
+                case 'front':
+                    camera.position.set(0, 0, 300);
+                    camera.lookAt(0, 0, 0);
+                    break;
+                case '3d':
+                    break;
+            }
         }
         
         function animate() {
@@ -543,28 +587,6 @@
                 window.updateCamera();
             }
             
-            // View transitions
-            if (window.viewTransition) {
-                switch(window.viewTransition) {
-                    case 'top':
-                        camera.position.set(0, 300, 0);
-                        camera.lookAt(0, 0, 0);
-                        break;
-                    case 'side':
-                        camera.position.set(300, 0, 0);
-                        camera.lookAt(0, 0, 0);
-                        break;
-                    case 'front':
-                        camera.position.set(0, 0, 300);
-                        camera.lookAt(0, 0, 0);
-                        break;
-                    case '3d':
-                        // Let user control
-                        break;
-                }
-                window.viewTransition = null;
-            }
-            
             renderer.render(scene, camera);
         }
         
@@ -574,7 +596,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight - 120);
         });
         
-        // Initialize
         init();
     </script>
 </body>
