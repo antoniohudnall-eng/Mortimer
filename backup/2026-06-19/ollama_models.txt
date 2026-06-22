@@ -1,0 +1,11 @@
+# SEED3 Ollama Models
+# Updated: 2026-06-19
+NAME                                  ID              SIZE      MODIFIED
+NAME                                  ID              SIZE      MODIFIED      
+tinyllama:latest                      2644915ede35    637 MB    3 minutes ago    
+antoniohudnall/Mortimer:latest        a80c4f17acd5    2.0 GB    4 minutes ago    
+bonsai:latest                         97846b800042    1.2 GB    2 days ago       
+hf.co/prism-ml/Bonsai-8B-gguf:Q1_0    8ede44f62656    1.2 GB    2 days ago       
+nomic-embed-text:latest               0a109f422b47    274 MB    2 days ago       
+llama3.2:3b                           a80c4f17acd5    2.0 GB    2 days ago       
+qwen2.5:1.5b                          65ec06548149    986 MB    2 days ago       

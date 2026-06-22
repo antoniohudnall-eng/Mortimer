@@ -1,0 +1,9 @@
+{
+  "id": "milkman-game_task_1781926788",
+  "agent": "milkman-game",
+  "task": "Game server health",
+  "schedule": "hourly",
+  "created": "2026-06-20 03:39 UTC",
+  "status": "pending",
+  "priority": "normal"
+}

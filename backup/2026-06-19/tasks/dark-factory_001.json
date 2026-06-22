@@ -1,0 +1,9 @@
+{
+  "id": "dark-factory_task_1781926788",
+  "agent": "dark-factory",
+  "task": "Manufacturing queue",
+  "schedule": "hourly",
+  "created": "2026-06-20 03:39 UTC",
+  "status": "pending",
+  "priority": "normal"
+}

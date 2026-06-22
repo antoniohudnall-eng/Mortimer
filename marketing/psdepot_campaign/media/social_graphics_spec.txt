@@ -1,0 +1,42 @@
+# SOCIAL MEDIA GRAPHICS SPECIFICATIONS
+
+## LinkedIn Banner (1200x627)
+- Blue gradient background (#003366 to #0066cc)
+- White text: "PERFORMANCE SUPPLY DEPOT"
+- Tagline: "California's Industrial Partner"
+- Orange CTA button: "Get Quote"
+
+## Facebook Cover (820x312)
+- Similar blue design
+- Company name large
+- Phone number visible
+
+## Instagram Post (1080x1080)
+- Bold headline
+- 50,000+ products graphic
+- Orange accent color
+- Phone number
+
+## Twitter Header (1500x500)
+- Sleek blue design
+- Tagline prominent
+
+## Ad Banners
+- 300x250 (Medium Rectangle)
+- 728x90 (Leaderboard)
+- 160x600 (Wide Skyscraper)
+
+---
+
+## GRAPHICS COLOR PALETTE
+- Primary Blue: #003366
+- Accent Blue: #0066cc
+- CTA Orange: #ff6600
+- White: #ffffff
+- Light Gray: #f5f5f5
+- Dark Text: #333333
+
+## LOGO
+- Text-based: "PERFORMANCE SUPPLY DEPOT"
+- Tagline: "Your Partner in Industrial Excellence"
+- Colors: Blue + Orange

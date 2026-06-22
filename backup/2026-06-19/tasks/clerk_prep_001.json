@@ -1,0 +1,10 @@
+{
+  "id": "clerk_prep_001",
+  "agent": "clerk",
+  "task": "Verify customer emails - remove bounces",
+  "details": "Check email validity for first 1000 CA customers",
+  "schedule": "daily",
+  "created": "2026-06-19 21:00 UTC",
+  "status": "pending",
+  "priority": "normal"
+}

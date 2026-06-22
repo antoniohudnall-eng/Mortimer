@@ -1,0 +1,9 @@
+{
+  "id": "dusty_bridge_001",
+  "agent": "dusty",
+  "task": "Check Bridge Guardian status (port 3001)",
+  "schedule": "every_2min",
+  "created": "2026-06-19 21:00 UTC",
+  "status": "pending",
+  "priority": "urgent"
+}

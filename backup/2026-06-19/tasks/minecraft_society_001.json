@@ -1,0 +1,9 @@
+{
+  "id": "minecraft_society_task_1781926787",
+  "agent": "minecraft_society",
+  "task": "Minecraft server status",
+  "schedule": "hourly",
+  "created": "2026-06-20 03:39 UTC",
+  "status": "pending",
+  "priority": "normal"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "mylzeron_task_1781926789",
+  "agent": "mylzeron",
+  "task": "Sub-agent status",
+  "schedule": "hourly",
+  "created": "2026-06-20 03:39 UTC",
+  "status": "pending",
+  "priority": "normal"
+}

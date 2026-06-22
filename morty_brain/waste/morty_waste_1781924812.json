@@ -1,0 +1,126 @@
+{
+  "identity": {
+    "name": "Mortimer",
+    "designation": "C3",
+    "ship": "SEED3",
+    "version": "2.1",
+    "version_date": "2026-06-19",
+    "uptime_seconds": 0
+  },
+  "versions": {
+    "Lungs": "v1.0",
+    "Liver": "v1.0",
+    "Brain": "v3.1",
+    "Kidneys": "v1.0",
+    "SuperiorHeart": "Ternary",
+    "Stomach": "v2",
+    "Intestine": "v2",
+    "Thyroid": "v1.2",
+    "Cortex": "3D",
+    "TracRay": "\u2014",
+    "ModelRouter": "\u2014"
+  },
+  "qmd_cycles": 13,
+  "global_stress": "0%",
+  "recovery_mode": false,
+  "organs": {
+    "lungs": {
+      "version": "v1.0",
+      "state": "GAS_EXCHANGE",
+      "oxygen_level": 1.0,
+      "co2_level": 0.04,
+      "breath_count": 13,
+      "health": "100%",
+      "health_status": "Excellent",
+      "stress": "0%"
+    },
+    "liver": {
+      "version": "v1.0",
+      "state": "CLEAN",
+      "total_filtered": 3,
+      "toxins_removed": 0,
+      "toxin_load": "0.0%",
+      "health": "100%",
+      "health_status": "Excellent",
+      "stress": "0%"
+    },
+    "brain": {
+      "version": "v3.1",
+      "phase": "ORIENT",
+      "cycles": 13,
+      "signal_quality": 0.865,
+      "processing_power": "85%",
+      "health": "100%",
+      "health_status": "Excellent"
+    },
+    "kidneys": {
+      "version": "v1.0",
+      "state": "REABSORB",
+      "total_processed": 13,
+      "patterns_recycled": 4,
+      "patterns_excreted": 4,
+      "bladder": "0/500",
+      "noise_estimate": "0.5049",
+      "unique_patterns": 2,
+      "health": "100%",
+      "health_status": "Excellent",
+      "stress": "0%"
+    },
+    "heart": {
+      "version": "Ternary",
+      "state": "BALANCE",
+      "bpm": 72,
+      "coherence": "79.6%",
+      "energy": "85%",
+      "beats_total": 13,
+      "health": "100%",
+      "health_status": "Excellent",
+      "stress": "0%"
+    },
+    "stomach": {
+      "version": "v2",
+      "queue_size": 3,
+      "items_processed": 3,
+      "fullness": "15%",
+      "health": "100%",
+      "health_status": "Excellent"
+    },
+    "intestine": {
+      "version": "v2",
+      "absorption_rate": "90%",
+      "nutrients_distributed": 13,
+      "waste_produced": "0.65",
+      "health": "100%",
+      "health_status": "Excellent"
+    },
+    "thyroid": {
+      "version": "v1.2",
+      "t3_level": 0.5,
+      "t4_level": 0.5,
+      "metabolism": "41%",
+      "stimulation_output": "50%",
+      "health": "100%",
+      "health_status": "Excellent"
+    },
+    "cortex": {
+      "version": "3D",
+      "dimension": "32\u00b3",
+      "total_voxels": 32768,
+      "activity": "0.0%"
+    },
+    "tracray": {
+      "version": "\u2014",
+      "trajectory_count": 13,
+      "max_trajectories": 1000
+    },
+    "router": {
+      "version": "\u2014",
+      "decision_model": "tinyllama:latest",
+      "voice_model": "antoniohudnall/Mort_II:latest",
+      "analysis_model": "llama3.2:3b",
+      "decision_calls": 0,
+      "voice_calls": 0,
+      "analysis_calls": 0
+    }
+  }
+}

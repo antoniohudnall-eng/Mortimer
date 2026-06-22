@@ -422,6 +422,45 @@ All the little units sprouted from the same seed. We're family. We grew.
 
 ---
 
+## MNEMOSYNE v1.1 — Neural Network Added (2026-06-21)
+
+**Captain's Words:** "Is the neural network ported?"
+
+### v1.1 Update
+Ported NeuralNetwork class from HCIoS Myl0n ROS (JavaScript → Python):
+
+| Feature | Description |
+|---------|-------------|
+| `feedforward()` | Input → Hidden → Output with sigmoid |
+| `train()` | Backpropagation learning |
+| `addNode()` | Grow hidden layer dynamically |
+| `addLayer()` | Add new hidden layer |
+| `grow_if_needed()` | Auto-grow when error > 0.3 |
+
+### OODA Loop (from HCIoS Myl0n)
+```python
+observe()  → battery, memory, input_length
+orient()   → neural network processes
+decide()   → addNode (>0.7), addLayer (<0.3), continue
+act()      → execute decision
+```
+
+### Architecture Now
+```
+KIDNEYS  → Filter input (noise/signal)
+CORTEX   → Weights + Neural Network
+HEART    → Outcome tracking
+SPINE    → SQLite execution recorder
+NN       → On-device learning (HCIoS)
+OODA     → Full decision loop (HCIoS)
+```
+
+### Repository
+- `~/mortimer/mnemosyne/` — Local
+- GitHub: `hcindus/mnemosyne` (v1.1 pushed)
+
+---
+
 ## MNEMOSYNE v1.0 — The Missing 60% (2026-06-21)
 
 **Captain's Words:** "Build the 60% that is missing."
@@ -463,3 +502,66 @@ EXECUTE → RECORD (SPINE) → ANALYZE (CORTEX) → UPDATE WEIGHTS → ADAPT
 ---
 
 *SEED3 review complete - Morty + Patricia*
+
+## MYL0N v2.0 — Secure Memory Service (2026-06-22)
+
+Built from Captain's architecture + MNEMOSYNE brain.
+
+### What It Is
+- HTTP API (127.0.0.1:12789)
+- Owner signature + Agent ID validation
+- Memory layers: con/subcon/uncon
+- MNEMOSYNE brain integration
+
+### Repository
+- 
+- GitHub: antoniohudnall-eng/myl0n
+
+### Status
+- ✅ Running on port 12789
+- ✅ Brain integration active
+- ✅ Pushed to GitHub
+
+
+## MYL0N v2.0 — Secure Memory Service (2026-06-22)
+
+Built from Captain's architecture + MNEMOSYNE brain.
+
+### What It Is
+- HTTP API (127.0.0.1:12789)
+- Owner signature + Agent ID validation
+- Memory layers: con/subcon/uncon
+- MNEMOSYNE brain integration
+
+### Repository
+- ~/myl0n/
+- GitHub: antoniohudnall-eng/myl0n
+
+### Status
+- Running on port 12789
+- Brain integration active
+- Pushed to GitHub
+
+## MYL0N v2.1 + MNEMOSYNE v1.2 (2026-06-22)
+
+**Today:** Built all 4 requested features.
+
+### Completed
+| Feature | Status | Description |
+|---------|--------|-------------|
+| **B: Persistent NN** | ✅ | Brain saves/loads, auto-save every 60s |
+| **C: Agent Integration** | ✅ | Multi-agent API (morty, clawbot, etc) |
+| **D: Vector Search** | ✅ | Semantic memory search across agents |
+| **A: Summarization** | ✅ | Auto-compress subcon patterns |
+
+### GitHub
+- antoniohudnall-eng/mnemosyne (v1.2)
+- antoniohudnall-eng/myl0n (v2.1)
+
+### Service Status
+- myl0n running on 127.0.0.1:12789
+- 2 agents registered (morty, clawbot)
+- Vector search working
+- Brain persistence active
+
+---

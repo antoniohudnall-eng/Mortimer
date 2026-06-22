@@ -1,0 +1,9 @@
+{
+  "id": "c3p0_comms_001",
+  "agent": "c3p0",
+  "task": "Check fleet communication status (Miles, cloud servers)",
+  "schedule": "hourly",
+  "created": "2026-06-19 20:50 UTC",
+  "status": "pending",
+  "priority": "normal"
+}

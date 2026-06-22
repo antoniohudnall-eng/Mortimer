@@ -1,0 +1,10 @@
+{
+  "id": "pulp_campaign_001",
+  "agent": "pulp",
+  "task": "Execute psdepot.com marketing campaign to DepotChaos customers",
+  "details": "Campaign located at ~/mortimer/marketing/psdepot_campaign/",
+  "schedule": "priority",
+  "created": "2026-06-19 21:00 UTC",
+  "status": "pending",
+  "priority": "urgent"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "jane_outreach_001",
+  "agent": "jane",
+  "task": "Prepare outreach list - CA customers (3,694 targets)",
+  "details": "Focus on restaurants with emails, prioritize by city",
+  "schedule": "priority",
+  "created": "2026-06-19 21:00 UTC",
+  "status": "pending",
+  "priority": "high"
+}

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥛 Milk Man - Dairy Avenger</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+        }
+        .header {
+            background: #fff;
+            padding: 15px 30px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 0 #333;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #222;
+            text-shadow: 2px 2px 0 #ffd700;
+        }
+        .header p {
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+        }
+        #game-container {
+            margin: 20px;
+            border: 4px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 8px 0 #222;
+        }
+        canvas {
+            display: block;
+            background: #87CEEB;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 15px;
+        }
+        .btn {
+            background: linear-gradient(180deg, #ffd700 0%, #ff8c00 100%);
+            border: 3px solid #333;
+            padding: 15px 30px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 0 #333;
+        }
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #333;
+        }
+        .instructions {
+            background: #fff;
+            padding: 15px;
+            margin: 10px 20px;
+            border: 3px solid #333;
+            border-radius: 8px;
+            font-size: 10px;
+            line-height: 1.8;
+        }
+        .instructions h3 {
+            color: #ff8c00;
+            margin-bottom: 10px;
+        }
+        .instructions span {
+            color: #ff0000;
+            font-weight: bold;
+        }
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin: 10px;
+            font-size: 12px;
+        }
+        .stat {
+            background: #fff;
+            padding: 10px 20px;
+            border: 2px solid #333;
+            border-radius: 4px;
+        }
+        .health { color: #ff0000; }
+        .score { color: #ffd700; }
+        .level { color: #00ff00; }
+        .footer {
+            margin: 20px;
+            font-size: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🥛 MILK MAN 🥛</h1>
+        <p>The Dairy Avenger of Dairyopolis</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat health">❤️ <span id="health">100</span></div>
+        <div class="stat score">⭐ <span id="score">0</span></div>
+        <div class="stat level">🏠 Level <span id="level">1</span></div>
+    </div>
+    
+    <div id="game-container">
+        <canvas id="game" width="800" height="400"></canvas>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onmousedown="moveLeft()" onmouseup="stopMove()" ontouchstart="moveLeft()" ontouchend="stopMove()">◀️ LEFT</button>
+        <button class="btn" onmousedown="jump()" ontouchstart="jump()">⬆️ JUMP</button>
+        <button class="btn" onmousedown="shoot()" ontouchstart="shoot()">🥛 SHOOT</button>
+        <button class="btn" onmousedown="moveRight()" onmouseup="stopMove()" ontouchstart="moveRight()" ontouchend="stopMove()">RIGHT ▶️</button>
+    </div>
+    
+    <div class="instructions">
+        <h3>🎮 HOW TO PLAY</h3>
+        <p><span>← →</span> Move left/right</p>
+        <p><span>SPACE</span> or <span>JUMP</span> button to jump</p>
+        <p><span>SHOOT</span> button or <span>Z</span> to spray milk</p>
+        <p><span>Goal:</span> Defend Dairyopolis from the evil Vil Laine!</p>
+    </div>
+    
+    <div class="footer">
+        Powered by Mortimer (SEED3) | MILK MAN GAMES © 2026
+    </div>
+    
+    <script>
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+        
+        // Game state
+        let game = {
+            running: true,
+            score: 0,
+            level: 1,
+            gravity: 0.6,
+            groundY: 350
+        };
+        
+        // Player - Milk Man
+        let player = {
+            x: 100,
+            y: game.groundY,
+            width: 50,
+            height: 60,
+            speed: 5,
+            vy: 0,
+            jumping: false,
+            health: 100,
+            direction: 1,
+            frame: 0,
+            shooting: false
+        };
+        
+        // Arrays
+        let projectiles = [];
+        let enemies = [];
+        let particles = [];
+        let clouds = [];
+        
+        // Input
+        let keys = { left: false, right: false };
+        
+        // Initialize clouds
+        for (let i = 0; i < 5; i++) {
+            clouds.push({
+                x: Math.random() * 800,
+                y: 30 + Math.random() * 80,
+                speed: 0.2 + Math.random() * 0.3
+            });
+        }
+        
+        // Spawn initial enemies
+        function spawnEnemy() {
+            enemies.push({
+                x: 850,
+                y: game.groundY,
+                width: 40,
+                height: 40,
+                speed: 2 + Math.random() * 2,
+                health: 20,
+                type: 'scout',
+                frame: 0
+            });
+        }
+        
+        // Spawn enemy periodically
+        setInterval(() => {
+            if (game.running && enemies.length < 5) {
+                spawnEnemy();
+            }
+        }, 3000);
+        
+        // Draw functions
+        function drawCloud(x, y) {
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(x, y, 25, 0, Math.PI * 2);
+            ctx.arc(x + 25, y - 10, 20, 0, Math.PI * 2);
+            ctx.arc(x + 50, y, 25, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function drawGround() {
+            // Grass
+            ctx.fillStyle = '#228B22';
+            ctx.fillRect(0, game.groundY + player.height, 800, 50);
+            
+            // Dirt
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(0, game.groundY + player.height + 20, 800, 30);
+            
+            // Grass blades
+            ctx.fillStyle = '#32CD32';
+            for (let i = 0; i < 800; i += 20) {
+                ctx.fillRect(i, game.groundY + player.height - 5, 3, 10);
+            }
+        }
+        
+        function drawMilkMan() {
+            ctx.save();
+            ctx.translate(player.x + player.width/2, player.y + player.height/2);
+            ctx.scale(player.direction, 1);
+            
+            // Body (white milk suit)
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(-20, -15, 40, 35);
+            
+            // Cape
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            ctx.moveTo(-20, -10);
+            ctx.lineTo(-35, 20);
+            ctx.lineTo(-20, 15);
+            ctx.fill();
+            
+            // Head
+            ctx.fillStyle = '#FFE4C4';
+            ctx.beginPath();
+            ctx.arc(0, -22, 15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Milk carton hat
+            ctx.fillStyle = '#fff';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.fillRect(-12, -45, 24, 20);
+            ctx.strokeRect(-12, -45, 24, 20);
+            ctx.fillStyle = '#00BFFF';
+            ctx.fillRect(-8, -40, 16, 12);
+            
+            // Eyes
+            ctx.fillStyle = '#000';
+            ctx.fillRect(-8, -26, 5, 5);
+            ctx.fillRect(3, -26, 5, 5);
+            
+            // Mask
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(-12, -28, 24, 8);
+            
+            // Boots
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(-18, 18, 15, 12);
+            ctx.fillRect(3, 18, 15, 12);
+            
+            // Milk bottle on back
+            ctx.fillStyle = '#fff';
+            ctx.strokeStyle = '#00BFFF';
+            ctx.fillRect(15, -10, 12, 20);
+            ctx.strokeRect(15, -10, 12, 20);
+            ctx.fillStyle = '#00BFFF';
+            ctx.fillRect(17, -5, 8, 10);
+            
+            ctx.restore();
+        }
+        
+        function drawEnemy(e) {
+            ctx.save();
+            ctx.translate(e.x + e.width/2, e.y + e.height/2);
+            
+            // Boy Scout body
+            ctx.fillStyle = '#556B2F'; // Olive uniform
+            ctx.fillRect(-15, -15, 30, 30);
+            
+            // Head
+            ctx.fillStyle = '#FFE4C4';
+            ctx.beginPath();
+            ctx.arc(0, -20, 12, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Scout hat
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(-14, -35, 28, 12);
+            
+            // Evil eyes
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(-8, -24, 4, 4);
+            ctx.fillRect(4, -24, 4, 4);
+            
+            // Evil grin
+            ctx.fillStyle = '#000';
+            ctx.fillRect(-6, -16, 12, 4);
+            
+            ctx.restore();
+        }
+        
+        function drawProjectile(p) {
+            // Milk drop
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.ellipse(p.x, p.y, 8, 12, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#E6F3FF';
+            ctx.beginPath();
+            ctx.ellipse(p.x - 2, p.y - 3, 3, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function drawParticle(p) {
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.life;
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+            ctx.globalAlpha = 1;
+        }
+        
+        function update() {
+            if (!game.running) return;
+            
+            // Player movement
+            if (keys.left) {
+                player.x -= player.speed;
+                player.direction = -1;
+            }
+            if (keys.right) {
+                player.x += player.speed;
+                player.direction = 1;
+            }
+            
+            // Boundaries
+            player.x = Math.max(0, Math.min(800 - player.width, player.x));
+            
+            // Gravity
+            player.vy += game.gravity;
+            player.y += player.vy;
+            
+            // Ground collision
+            if (player.y >= game.groundY) {
+                player.y = game.groundY;
+                player.vy = 0;
+                player.jumping = false;
+            }
+            
+            // Update enemies
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                enemies[i].x -= enemies[i].speed;
+                
+                // Enemy reaches player
+                if (enemies[i].x < player.x + player.width && 
+                    enemies[i].x + enemies[i].width > player.x) {
+                    player.health -= 5;
+                    enemies.splice(i, 1);
+                    updateUI();
+                    
+                    // Damage particles
+                    for (let j = 0; j < 5; j++) {
+                        particles.push({
+                            x: player.x + player.width/2,
+                            y: player.y,
+                            vx: (Math.random() - 0.5) * 5,
+                            vy: -Math.random() * 5,
+                            life: 1,
+                            color: '#ff0000',
+                            size: 5
+                        });
+                    }
+                    
+                    if (player.health <= 0) {
+                        endGame();
+                    }
+                }
+                
+                // Enemy off screen
+                if (enemies[i].x < -50) {
+                    enemies.splice(i, 1);
+                }
+            }
+            
+            // Update projectiles
+            for (let i = projectiles.length - 1; i >= 0; i--) {
+                projectiles[i].x += projectiles[i].vx;
+                projectiles[i].y += projectiles[i].vy;
+                
+                // Hit enemy
+                for (let j = enemies.length - 1; j >= 0; j--) {
+                    if (projectiles[i].x > enemies[j].x &&
+                        projectiles[i].x < enemies[j].x + enemies[j].width &&
+                        projectiles[i].y > enemies[j].y &&
+                        projectiles[i].y < enemies[j].y + enemies[j].height) {
+                        
+                        enemies[j].health -= 10;
+                        
+                        if (enemies[j].health <= 0) {
+                            enemies.splice(j, 1);
+                            game.score += 100;
+                            
+                            // Death particles
+                            for (let k = 0; k < 10; k++) {
+                                particles.push({
+                                    x: enemies[j].x + enemies[j].width/2,
+                                    y: enemies[j].y,
+                                    vx: (Math.random() - 0.5) * 8,
+                                    vy: -Math.random() * 8,
+                                    life: 1,
+                                    color: '#32CD32',
+                                    size: 6
+                                });
+                            }
+                        }
+                        
+                        projectiles.splice(i, 1);
+                        break;
+                    }
+                }
+                
+                // Off screen
+                if (projectiles[i].x > 850 || projectiles[i].x < -50) {
+                    projectiles.splice(i, 1);
+                }
+            }
+            
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].x += particles[i].vx;
+                particles[i].y += particles[i].vy;
+                particles[i].vy += 0.2;
+                particles[i].life -= 0.02;
+                
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            
+            // Update clouds
+            clouds.forEach(cloud => {
+                cloud.x -= cloud.speed;
+                if (cloud.x < -80) cloud.x = 850;
+            });
+            
+            updateUI();
+        }
+        
+        function draw() {
+            // Clear
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, 800, 400);
+            
+            // Sun
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(700, 60, 40, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Clouds
+            clouds.forEach(cloud => drawCloud(cloud.x, cloud.y));
+            
+            // Ground
+            drawGround();
+            
+            // Enemies
+            enemies.forEach(e => drawEnemy(e));
+            
+            // Player
+            drawMilkMan();
+            
+            // Projectiles
+            projectiles.forEach(p => drawProjectile(p));
+            
+            // Particles
+            particles.forEach(p => drawParticle(p));
+            
+            // Game over
+            if (!game.running) {
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(0, 0, 800, 400);
+                ctx.fillStyle = '#fff';
+                ctx.font = '48px "Press Start 2P", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('GAME OVER', 400, 180);
+                ctx.font = '20px "Press Start 2P", monospace';
+                ctx.fillStyle = '#ffd700';
+                ctx.fillText('Score: ' + game.score, 400, 230);
+                ctx.fillStyle = '#fff';
+                ctx.font = '14px "Press Start 2P", monospace';
+                ctx.fillText('Click to restart', 400, 280);
+            }
+        }
+        
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function updateUI() {
+            document.getElementById('health').textContent = Math.max(0, player.health);
+            document.getElementById('score').textContent = game.score;
+            document.getElementById('level').textContent = game.level;
+        }
+        
+        function endGame() {
+            game.running = false;
+        }
+        
+        // Input handlers
+        function moveLeft() { keys.left = true; }
+        function moveRight() { keys.right = true; }
+        function stopMove() { keys.left = false; keys.right = false; }
+        
+        function jump() {
+            if (!player.jumping && player.y >= game.groundY) {
+                player.vy = -14;
+                player.jumping = true;
+            }
+        }
+        
+        function shoot() {
+            projectiles.push({
+                x: player.x + player.width/2,
+                y: player.y + 10,
+                vx: 10 * player.direction,
+                vy: 0
+            });
+        }
+        
+        // Keyboard controls
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = true;
+            if (e.key === 'ArrowRight' || e.key === 'd') keys.right = true;
+            if (e.key === ' ' || e.key === 'w') { e.preventDefault(); jump(); }
+            if (e.key === 'z' || e.key === 'j') shoot();
+        });
+        
+        document.addEventListener('keyup', e => {
+            if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
+            if (e.key === 'ArrowRight' || e.key === 'd') keys.right = false;
+        });
+        
+        // Click to restart
+        canvas.addEventListener('click', () => {
+            if (!game.running) {
+                player.health = 100;
+                player.x = 100;
+                player.y = game.groundY;
+                game.score = 0;
+                game.running = true;
+                enemies = [];
+                projectiles = [];
+            }
+        });
+        
+        // Touch controls
+        let touchStartX = 0;
+        canvas.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+        });
+        
+        canvas.addEventListener('touchmove', e => {
+            e.preventDefault();
+            const touchX = e.touches[0].clientX;
+            const diff = touchX - touchStartX;
+            if (diff > 20) moveRight();
+            else if (diff < -20) moveLeft();
+        });
+        
+        canvas.addEventListener('touchend', () => {
+            stopMove();
+        });
+        
+        // Start game
+        updateUI();
+        gameLoop();
+        
+        // Spawn initial enemies
+        setTimeout(() => spawnEnemy(), 1000);
+    </script>
+</body>
+</html>

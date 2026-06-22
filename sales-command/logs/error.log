@@ -1,0 +1,1 @@
+2026/06/19 20:21:59 [error] 10755#10755: *28 connect() failed (110: Connection timed out) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /api/psd-api HTTP/1.1", upstream: "http://31.97.6.40:5000/api/psd-api", host: "127.0.0.1:3333"

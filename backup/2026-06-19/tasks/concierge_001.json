@@ -1,0 +1,9 @@
+{
+  "id": "concierge_task_1781926787",
+  "agent": "concierge",
+  "task": "Check client satisfaction scores",
+  "schedule": "hourly",
+  "created": "2026-06-20 03:39 UTC",
+  "status": "pending",
+  "priority": "normal"
+}

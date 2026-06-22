@@ -1,0 +1,7 @@
+⚠️ websockets not available - using HTTP polling only
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/mortimer/agents/the-great-cryptonio/dashboard_server.py", line 27, in <module>
+    from cryptonio_multi_exchange import UnifiedExchangeManager, Config as BotConfig
+  File "/data/data/com.termux/files/home/mortimer/agents/the-great-cryptonio/cryptonio_multi_exchange.py", line 38, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'

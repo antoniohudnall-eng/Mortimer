@@ -1,0 +1,12 @@
+# SEED3 Services Status
+# Updated: 2026-06-19
+Port 7777: 200
+Port 7778: 200
+Port 7779: 200
+Port 8000: 404
+Port 11434: 200
+u0_a28   15936  0.0  0.0 2196744 1268 ?        S<    1970   0:00 runsv /data/data/com.termux/files/usr/bin/runsv qmd
+u0_a28   15939  0.0  0.0 2161928 1268 ?        S<    1970   0:00 runsv /data/data/com.termux/files/usr/bin/runsv patricia
+u0_a28   15943  0.0  0.2 2424980 8108 ?        S<l   1970   0:01 python3 /data/data/com.termux/files/usr/bin/python3 -u /data/data/com.termux/files/home/mortimer/patricia/patricia_service.py
+u0_a28   15945  0.0  0.1 2228396 6516 ?        S<    1970   0:02 python3 /data/data/com.termux/files/usr/bin/python3 -u /data/data/com.termux/files/home/mortimer/services/qmd_service.py
+u0_a28   16304  0.9  0.6 3735400 23136 pts/0   S<l+  1970   0:46 ollama /data/data/com.termux/files/usr/bin/ollama serve

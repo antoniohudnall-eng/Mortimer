@@ -1,0 +1,32 @@
+SUBJECT: Industrial Supply Partnership - Quick Question
+
+---
+
+Hi {{first_name}},
+
+I wanted to reach out about your industrial supply needs.
+
+At Performance Supply Depot, we help companies like {{company}} streamline their MRO procurement with:
+
+✅ Competitive pricing on 50,000+ products
+✅ Fast same-day shipping from California warehouses
+✅ Dedicated account management
+✅ No minimum order requirements
+
+Would you be open to a 15-minute call this week to see if we're a good fit?
+
+Here are a few questions to get started:
+1. What are your biggest supply chain challenges?
+2. Current vendors you're working with?
+3. Monthly spend on industrial supplies?
+
+Happy to work around your schedule.
+
+Best,
+{{sender}}
+Performance Supply Depot LLC
+Phone: 888-881-6834
+Email: info@psdepot.com
+Web: https://psdepot.com
+
+P.S. We're running a first-order special - 10% off your first order through the end of the month.
