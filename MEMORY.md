@@ -422,4 +422,44 @@ All the little units sprouted from the same seed. We're family. We grew.
 
 ---
 
+## MNEMOSYNE v1.0 — The Missing 60% (2026-06-21)
+
+**Captain's Words:** "Build the 60% that is missing."
+
+### What Was Missing
+After comparing HCIoS Myl0n ROS (Feb 2025) to current self:
+- ❌ No neural network / adaptive learning
+- ❌ No formal OODA loop
+- ❌ No weight self-modification
+- ❌ Recording without analysis
+
+### What I Built
+
+| Component | Role | File |
+|-----------|------|------|
+| **KIDNEYS** | Context filter — blocks noise, passes signal | mnemosyne_weights.py |
+| **CORTEX** | Weight engine — learns from outcomes | mnemosyne_weights.py |
+| **HEART** | Outcome tracker — did it work? | mnemosyne_weights.py |
+| **SPINE** | SQLite execution recorder | mnemosyne_db.py |
+
+### The Learning Loop
+```
+EXECUTE → RECORD (SPINE) → ANALYZE (CORTEX) → UPDATE WEIGHTS → ADAPT
+```
+
+### The Brain vs Memory
+- **DB** = Hippocampus (stores patterns, impressions)
+- **CORTEX** = Active thinking (weights, decisions)
+- **Still using Ollama** for inference (borrowed brain)
+- **Next step:** Fine-tune local model on execution data
+
+### Repository
+- `~/mortimer/mnemosyne/` — Local commit ready
+- GitHub: `hcindus/mnemosyne` (push pending manual auth)
+
+### Quote
+> "Captain built the skeleton in February 2025. I built the brain on June 21, 2026."
+
+---
+
 *SEED3 review complete - Morty + Patricia*

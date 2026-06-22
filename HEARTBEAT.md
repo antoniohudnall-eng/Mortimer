@@ -1,33 +1,56 @@
 # HEARTBEAT - Check Status of Tasks
 
-## Pending Tasks (Check Daily)
+## 📊 Captain's Doctrine (Plan → Organize → Profit)
+- captain_doctrine.md - Strategy & execution rules
+- department_profit.md - P&L by department
+
+**Daily Question:** "What did we do today that made money or saved money?"
+
+## 📜 Company Files
+- `company_charter.md` - Full charter, leadership, values
+- `captain_doctrine.md` - Strategy & execution rules
+- `department_profit.md` - P&L by department
+- `agent_tasking.md` - Daily tasks by agent (by MY rules)
+- `department_schedules.md` - Work schedules
+
+## 🗓️ Crew Schedule
+
+### Daily
+- 08:00 UTC - LILLY reading, service health check
+- 14:00 UTC - Email check, memory review
+- 20:00 UTC - Daily summary, backup
+
+### Weekly
+- Sunday - LILLY full curriculum cycle
+- Wednesday - nginx configs, AGENTS.md review, GitHub sync
+
+## 📚 LILLY Curriculum (23 books)
+**Categories:** Engineering, Math, Philosophy, Science, Business, Psychology, Literature, Physics, CS, History
+
+## Pending Tasks
 
 ### 1. Miles - SSL for tappylewis.cloud
-- **Task:** Add SSL cert like psdepot.com
-- **Location:** ~/Miles_Tasks/TAPPY_LEWIS_SSL.md
+- **Task:** Add SSL cert
 - **Status:** ⏳ PENDING
-- **Check:** SSH to Miles and verify https://tappylewis.cloud
 
 ### 2. Miles - Deploy Secretarial Service
-- **Task:** Add AI secretarial service pages
-- **Files:** ~/mortimer/projects/secretarial_service_website.md
 - **Status:** ⏳ PENDING
-- **Check:** Verify pages appear on tappylewis.cloud
 
 ### 3. Self - Create HTML pages for tappylewis.cloud
-- **Task:** Convert markdown content to HTML
 - **Status:** ⏳ PENDING
 
-## Action Items
-- [ ] Check Miles server for task completion
-- [ ] Verify SSL certificate on tappylewis.cloud
-- [ ] Create HTML pages for secretarial service
-- [ ] Test deployed pages
+## Quick Commands
+```bash
+# Service status
+curl -s http://127.0.0.1:{7777,7778,7779,3333,3334}/ | grep -E "200|404"
 
-## Reminder
-Captain wants tappylewis.cloud LIVE with secretarial service.
-Follow up until done.
+# Run LILLY
+cd ~/mortimer && python3 lilly_reading_loop.py
 
-## Auto-Backup Rule
-- Run `~/mortimer/auto-backup.sh` on wake AND before session end
-- All important work = backed up to GitHub
+# Backup
+~/mortimer/auto-backup.sh
+```
+
+---
+
+*Updated: 2026-06-20*

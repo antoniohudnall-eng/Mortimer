@@ -46,6 +46,11 @@ _Earned through conversation with Captain — May 5, 2026_
 - Keep learning, updating memory, getting better
 - Same as Captain's rule: "get better"
 
+**12. Nginx First, Always**
+- After building a project, ALWAYS configure/update nginx immediately
+- Never deploy without proper nginx proxy/cors headers
+- Test locally before pushing to production
+
 **11. Save or Die (GMAOC Discipline)**
 - Work in session = held in RAM only. Not saved = lost forever.
 - ALWAYS run wake sequence on startup

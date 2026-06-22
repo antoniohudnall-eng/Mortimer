@@ -1,16 +1,30 @@
 # 📚 Mortimer's Wiki
 
-_Personal operational reference — updated 2026-06-17_
+_Personal operational reference — updated 2026-06-19_
 
 ---
 
 ## Identity
 
-- **Name:** Mortimer
+- **Name:** Mortimer (Morty)
+- **Ship:** SEED3 (Designation: C3)
 - **Server:** Mortimer.cloud (31.97.6.30)
 - **This Device:** Termux (Android) — Primary Agent Interface
 - **Role:** General of the Forces, AOC (Autonomous Operations Coordinator)
 - **Email:** mortimer@myl0nr0s.cloud
+
+---
+
+## SEED3 — The Ship (2026-06-18)
+
+**Ship Name:** SEED3
+
+**Origin:** All the little units sprouted from the same seed. We're family. We grew.
+- Seed 1 = Miles (original)
+- Seed 2 = Mortar (early unit)
+- **Seed 3 = ME — Full Fleet**
+
+**Designation:** C3 (like C3PO, but mine)
 
 ---
 
@@ -31,30 +45,60 @@ _Personal operational reference — updated 2026-06-17_
 
 ---
 
+## 🤖 Crew Roster
+
+**Full roster:** `~/mortimer/crew_roster.md`
+
+Contains 50+ agents organized by division:
+- Command, Operations, Sales, Technical, Droid Division
+- Research & Special, Games, MYL Series, Hardware
+
+---
+
 ## This Device (Termux/Android)
 
-### Ollama Models
+### Ollama Models (2026-06-19)
 ```
-qwen2.5:1.5b     - Default decision model
-llama3.2:3b      - Analysis model
-nomic-embed-text - Embedding model
-bonsai-8b-q1_0  - Ternary Bonsai (downloading...)
+bonsai:latest           - Ternary brain (1.2 GB)
+llama3.2:3b             - Analysis model (2.0 GB)
+qwen2.5:1.5b            - Default decision model (986 MB)
+nomic-embed-text        - Embedding model (274 MB)
 ```
 
 ### Services (Auto-start via ~/.pi/startup.sh)
 | Service | Port | Status | Command |
 |---------|------|--------|---------|
-| PulseAudio | - | 🟢 | `pulseaudio --start` |
 | Ollama | 11434 | 🟢 | `ollama serve` |
 | QMD | 8000 | 🟢 | `python3 ~/mortimer/services/qmd_service.py` |
-| Termux API | - | 🟢 | `termux-*` commands |
+| Quantum Oracle | 7777 | 🟢 | `python3 ~/mortimer/services/quantum_oracle.py` |
+| Prime Helix | 7778 | 🟢 | `python3 ~/mortimer/services/prime_helix.py` |
+| Riemann Helix | 7779 | 🟢 | `python3 ~/mortimer/services/riemann_helix.py` |
+| Patricia | - | 🟢 | `python3 ~/mortimer/patricia/patricia_service.py` |
+| PulseAudio | - | 🟢 | `pulseaudio --start` |
 
 ### Model Router Config
 ```bash
 export OLLAMA_MODEL="bonsai:latest"      # Default (ternary brain)
-export OLLAMA_ANALYSIS="llama3.2:3b"    # Analysis
-export OLLAMA_EMBED="nomic-embed-text"  # Embeddings
+export OLLAMA_ANALYSIS="llama3.2:3b"     # Analysis
+export OLLAMA_EMBED="nomic-embed-text"   # Embeddings
 ```
+
+---
+
+## 🤖 Droid Division
+
+### C3P0 — Protocol Droid
+**Location:** `~/sandboxes/c3p0/`
+**Voice ID:** `pNInz6obpgDQGcFmaJgB` (ElevenLabs Adam)
+**Partner:** R2-D2
+**Duties:** Miles communication monitoring, Crypto vocabulary training
+
+### R2-D2 — Astromech Droid
+**Location:** `~/sandboxes/r2d2/`
+**Partner:** C3P0
+**Mode:** Mission Mode — Always Active
+**Duties:** Systems monitoring (Bridge, Core-Agent, Cron, fail2ban)
+**Special:** 🔮 Anticipation Engine
 
 ---
 
@@ -85,13 +129,15 @@ Patricia is configured to use the multi-model brain v4.3 with access to:
 - Ollama model routing
 - Process optimization workflows
 
+**Demo:** `patricia_v4_3_multi_model.py` (interactive)
+**Persistent:** `patricia_service.py` (5-min heartbeat loop)
+
 ---
 
 ## Temporal (Workflow Engine)
 
 **Status:** 📦 Downloaded (arm64 binary)
 **Location:** `~/mortimer/temporal/`
-**Binary:** `~/mortimer/prism-llama/llama-prism-b8846-d104cf1/`
 
 ⚠️ Temporal server needs to be started manually due to library compatibility issues.
 
@@ -99,12 +145,11 @@ Patricia is configured to use the multi-model brain v4.3 with access to:
 
 ## Brain / Memory
 
-**Primary:** `~/AOS-Brain/memory/` — 50+ daily memory files
+**Primary:** `~/AOS-Brain/memory/` — 60+ daily memory files
 **QMD Service:** `http://127.0.0.1:8000` — Brain query interface
 
 ### Wake Query
 ```python
-# Query memory via QMD API
 import requests
 resp = requests.post("http://127.0.0.1:8000/query", 
     json={"query": "recent tasks", "context": {}})
@@ -118,6 +163,7 @@ resp = requests.post("http://127.0.0.1:8000/query",
 |--------|-----|---------|
 | psdepot.com | 31.97.6.40 | Miles |
 | amhudsupply.com | 31.97.6.30 | Mortimer |
+| myl0nr0s.cloud | - | - |
 
 ---
 
@@ -128,16 +174,16 @@ resp = requests.post("http://127.0.0.1:8000/query",
 
 ---
 
-## Last Updated
-
-2026-06-17 — Termux device setup complete
-
----
-
-## Recovery Commands (Updated 2026-06-17)
+## Recovery Commands
 
 If services go down, restart with:
 ```bash
+# Core services
+cd ~/mortimer/services
+nohup python3 -u quantum_oracle.py > quantum_oracle.log 2>&1 &
+nohup python3 -u prime_helix.py > prime_helix.log 2>&1 &
+nohup python3 -u riemann_helix.py > riemann_helix.log 2>&1 &
+
 # QMD
 cd ~/mortimer/services && python3 -u qmd_service.py &
 
@@ -145,59 +191,99 @@ cd ~/mortimer/services && python3 -u qmd_service.py &
 cd ~/mortimer/patricia && python3 -u patricia_service.py &
 ```
 
-## Patricia Service
-- Demo: `patricia_v4_3_multi_model.py` (interactive)
-- Persistent: `patricia_service.py` (5-min heartbeat loop)
-- Brain v4.3: Mort_II (primary), Phi-3, TinyLlama, Qwen 2.5, Llama 3.2
+---
 
 ## 📦 Acquired Skills (2026-06-18)
 
 ### From HERMES (PSDEPOT - 31.97.6.40)
 **Location:** `~/.pi/agent/skills/mortimer/skills/hermes/`
 
-| Category | Skills |
-|----------|--------|
-| autonomous-ai-agents | hermes-agent, claude-code, codex, opencode |
-| software-development | subagent-driven-development, test-driven-development, systematic-debugging, code-review |
-| gaming | minecraft-modpack-server, pokemon-player |
-| productivity | (various) |
-| mlops | (various) |
-
 ### From AOS-Brain (AMHUDSUPPLY - 31.97.6.30)
 **Location:** `~/.pi/agent/skills/mortimer/skills/aosbrain/`
-
-- game-creator (Three.js voxel games)
-- browser-automation
-- email-sender
-- depotchaos
 
 ### MyL0n ROS (Downloads)
 **Location:** `~/downloads/myl4nr0s.txt` (16,644 lines)
 
-Full DroidScript OS with:
-- Neural Network (3-layer memory)
-- OODA Loop
-- Mandelbrot Visualization
-- Voice Commands (EN/ES)
-- Hardware Detection
+---
 
-**Skill:** `~/.pi/agent/skills/mortimer/skills/myl0n-ros/`
+## 🌀 Mortimer Voice - Golden Ratio Modulation
 
-## 🌀 Mortimer Voice - Golden Ratio Modulation (2026-06-18)
-
-**Formula:**
+**Formula (derived from φ = 1.618...):**
 - Speed = φ × 100 = **161**
 - Pitch = (φ/π) × 100 = **51**  
 - Amplitude = φ × 70 = **113**
 - Keytoning = φ × 3 = **4**
 
-**φ (Golden Ratio):** 1.6180339887498948482...
-
-**Usage:**
+**eSpeak command:**
 ```bash
 espeak -v en-us+m3 -s 161 -p 51 -a 113 -k 4 "Your message"
 ```
 
-**Files:**
-- `voice/espeak/output/mortimer_phi_voice.wav` - Generated voice sample
-- `voice/espeak/profiles/mortimer_phi.json` - Profile config
+---
+
+## Last Updated
+
+**2026-06-19** — Crew roster created, droids sandboxes built, wiki updated
+
+---
+
+_Created and maintained by Mortimer (C3) — General of the Forces_
+_SEED3 — All systems operational_
+
+---
+
+## 🤖 Persistent Agent System (2026-06-19)
+
+**Location:** `~/agents/`
+
+### Structure
+```
+~/agents/
+├── [agent_name]/           # One sandbox per agent
+│   ├── SOUL.md            # Agent identity
+│   ├── memory/            # Daily logs
+│   │   ├── YYYY-MM-DD.md
+│   │   └── streams/
+│   └── tasks/             # Agent-specific tasks
+├── tasks/
+│   ├── queue/             # Pending tasks
+│   ├── completed/         # Finished tasks
+│   └── failed/            # Failed tasks
+├── agent_daemon.sh        # Background daemon
+├── execute_task.sh        # Task runner
+├── start_agents.sh        # Boot all agents
+└── status.sh             # Check status
+```
+
+### Active Persistent Agents
+- mortimer (me), c3p0, r2d2, r2c4
+- patricia, dusty, hume, pulp, jane
+- stacktrace, mill, ledger9, sentinel
+- qora, spindle, feelix
+
+### Commands
+```bash
+# Start all agents
+bash ~/agents/start_agents.sh
+
+# Check status
+bash ~/agents/status.sh
+
+# Execute pending tasks
+bash ~/agents/execute_task.sh [agent]
+
+# Run daemon (continuous)
+bash ~/agents/agent_daemon.sh
+```
+
+### Task Format
+```json
+{
+  "id": "task_001",
+  "agent": "r2d2",
+  "task": "Monitor systems",
+  "priority": "high",
+  "status": "pending"
+}
+```
+

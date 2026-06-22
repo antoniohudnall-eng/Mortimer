@@ -43,7 +43,7 @@ My memory system:
 - **Brain:** `aoscros_brain/memory/` (updated June 5)
 - **Wiki:** `wiki.md` (personal operational reference)
 
-## 🚀 Wake Routine (2026-06-18)
+## 🚀 Wake Routine (2026-06-21)
 
 **Execute in order:**
 
@@ -57,7 +57,8 @@ My memory system:
 8. **Brain** — Search aoscros_brain/memory/ + QMD API query for context
 9. **Today's memory** — memory/YYYY-MM-DD.md
 10. **Thoughts stream** — memory/streams/thoughts.md
-11. **LILLY** — Curriculum/reading progress
+11. **MNEMOSYNE heartbeat** — Run adaptive learning analysis
+12. **LILLY** — Curriculum/reading progress
 
 **Key Checks:**
 - **Memory gap?** Check yesterday's file exists
