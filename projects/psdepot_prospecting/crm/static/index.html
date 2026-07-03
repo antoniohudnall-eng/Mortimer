@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🖥️ Mortimer's CRM - PSDEPOT Prospecting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #12182a;
+            --bg-tertiary: #1a2235;
+            --accent: #e94560;
+            --accent-hover: #ff6b6b;
+            --text-primary: #eaeaea;
+            --text-secondary: #8892a8;
+            --text-muted: #4a5568;
+            --border: #2a3348;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            padding: 20px 30px;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        
+        .header h1 span {
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+        
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 90px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .sidebar-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        /* Search */
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            padding-left: 40px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            opacity: 0.5;
+        }
+        
+        /* Filters */
+        .filter-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .filter-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+        
+        .filter-item:hover {
+            background: var(--bg-primary);
+            border-left: 3px solid var(--accent);
+        }
+        
+        .filter-item.active {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .filter-item .count {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Status Filters */
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .status-dot.new { background: var(--info); }
+        .status-dot.contacted { background: var(--warning); }
+        .status-dot.quoting { background: var(--success); }
+        .status-dot.qualified { background: var(--accent); }
+        .status-dot.lost { background: var(--text-muted); }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Toolbar */
+        .toolbar {
+            background: var(--bg-secondary);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-primary);
+            border-color: var(--accent);
+        }
+        
+        .results-count {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .results-count span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        /* Table */
+        .table-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 25px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+        
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .lead-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .lead-address {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+        
+        .badge-bar { background: #4a1d1d; color: #ff8a8a; }
+        .badge-mexican { background: #1d4a2e; color: #6bffaa; }
+        .badge-cafe { background: #1d3d4a; color: #8affff; }
+        .badge-pizza { background: #4a3d1d; color: #ffdb6b; }
+        .badge-japanese { background: #3d1d4a; color: #d96bff; }
+        .badge-thai { background: #4a4a1d; color: #ffff6b; }
+        .badge-chinese { background: #4a1d2e; color: #ff6b9d; }
+        .badge-other { background: #2a3348; color: #8892a8; }
+        .badge-vietnamese { background: #1d4a4a; color: #6bffff; }
+        .badge-indian { background: #4a3d1d; color: #ffb86b; }
+        .badge-italian { background: #3d4a1d; color: #c8ff6b; }
+        .badge-mediterranean { background: #1d3d4a; color: #6bdbff; }
+        .badge-bakery { background: #4a2d1d; color: #ffaa6b; }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .status-new { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .status-contacted { background: rgba(245,158,11,0.2); color: #fbbf24; }
+        .status-quoting { background: rgba(16,185,129,0.2); color: #34d399; }
+        .status-qualified { background: rgba(233,69,96,0.2); color: #f87171; }
+        .status-lost { background: rgba(74,85,104,0.2); color: #94a3b8; }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+        
+        .page-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .page-btn:hover, .page-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .page-info {
+            color: var(--text-secondary);
+            font-size: 14px;
+            padding: 0 15px;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+        
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 20px;
+        }
+        
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        
+        /* Detail Modal */
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 25px;
+        }
+        
+        .detail-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .info-item {
+            background: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .info-item label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .info-item span {
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .tab:hover {
+            color: var(--text-primary);
+        }
+        
+        .tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Map Tab */
+        #map {
+            height: 400px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        /* Activity Log */
+        .activity-item {
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .activity-type {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+        
+        .activity-notes {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .activity-date {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+            z-index: 2000;
+        }
+        
+        .toast.error {
+            background: var(--error);
+        }
+        
+        .toast.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Checkbox */
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            color: var(--text-secondary);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🖥️ Mortimer's CRM <span>- PSDEPOT Prospecting</span></h1>
+        <div class="header-stats">
+            <div class="stat">
+                <div class="stat-value" id="totalLeads">0</div>
+                <div class="stat-label">Total Leads</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="withPhone">0</div>
+                <div class="stat-label">With Phone</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="recentLeads">0</div>
+                <div class="stat-label">This Week</div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search leads...">
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Categories</div>
+                <div class="filter-list" id="categoryFilters">
+                    <div class="filter-item active" data-category="all">
+                        <span>All Categories</span>
+                        <span class="count" id="cat-all">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Status</div>
+                <div class="filter-list" id="statusFilters">
+                    <div class="filter-item" data-status="all">
+                        <span>All Statuses</span>
+                        <span class="count" id="status-all">0</span>
+                    </div>
+                    <div class="status-item" data-status="new">
+                        <span class="status-dot new"></span>
+                        <span>New</span>
+                        <span class="count" id="status-new">0</span>
+                    </div>
+                    <div class="status-item" data-status="contacted">
+                        <span class="status-dot contacted"></span>
+                        <span>Contacted</span>
+                        <span class="count" id="status-contacted">0</span>
+                    </div>
+                    <div class="status-item" data-status="quoting">
+                        <span class="status-dot quoting"></span>
+                        <span>Quoting</span>
+                        <span class="count" id="status-quoting">0</span>
+                    </div>
+                    <div class="status-item" data-status="qualified">
+                        <span class="status-dot qualified"></span>
+                        <span>Qualified</span>
+                        <span class="count" id="status-qualified">0</span>
+                    </div>
+                    <div class="status-item" data-status="lost">
+                        <span class="status-dot lost"></span>
+                        <span>Lost</span>
+                        <span class="count" id="status-lost">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Quick Filters</div>
+                <div class="filter-list">
+                    <div class="filter-item" onclick="filterWithPhone()">
+                        <span>📱 Has Phone Number</span>
+                    </div>
+                    <div class="filter-item" onclick="exportData()">
+                        <span>📥 Export to CSV</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="content">
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <button class="btn btn-primary" onclick="openAddModal()">
+                        ➕ Add Lead
+                    </button>
+                    <button class="btn btn-secondary" onclick="openImportModal()">
+                        📤 Import CSV
+                    </button>
+                </div>
+                <div class="results-count">
+                    Showing <span id="visibleCount">0</span> of <span id="totalCount">0</span> leads
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30"></th>
+                            <th>Business</th>
+                            <th>Location</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Phone</th>
+                            <th width="120">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTable">
+                        <tr><td colspan="7" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <button class="page-btn" onclick="changePage(-1)">◀</button>
+                <span class="page-info" id="pageInfo">Page 1 of 1</span>
+                <button class="page-btn" onclick="changePage(1)">▶</button>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Add/Edit Modal -->
+    <div class="modal-overlay" id="leadModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Lead</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="leadForm">
+                    <input type="hidden" id="leadId">
+                    <div class="form-group">
+                        <label>Business Name *</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" id="phone">
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="text" id="website">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" id="address">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="city">
+                        </div>
+                        <div class="form-group">
+                            <label>State</label>
+                            <input type="text" id="state" value="CA">
+                        </div>
+                        <div class="form-group">
+                            <label>ZIP</label>
+                            <input type="text" id="zip">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="category_type">
+                                <option value="other">Other</option>
+                                <option value="bar">Bar</option>
+                                <option value="mexican">Mexican</option>
+                                <option value="cafe">Cafe</option>
+                                <option value="pizza">Pizza</option>
+                                <option value="japanese">Japanese</option>
+                                <option value="chinese">Chinese</option>
+                                <option value="thai">Thai</option>
+                                <option value="vietnamese">Vietnamese</option>
+                                <option value="indian">Indian</option>
+                                <option value="italian">Italian</option>
+                                <option value="mediterranean">Mediterranean</option>
+                                <option value="bakery">Bakery</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="status">
+                                <option value="new">New</option>
+                                <option value="contacted">Contacted</option>
+                                <option value="quoting">Quoting</option>
+                                <option value="qualified">Qualified</option>
+                                <option value="lost">Lost</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="notes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveLead()">Save Lead</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="detailTitle">Lead Details</h2>
+                <button class="modal-close" onclick="closeDetailModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('info')">Info</button>
+                    <button class="tab" onclick="switchTab('map')">Map</button>
+                    <button class="tab" onclick="switchTab('activity')">Activity</button>
+                </div>
+                
+                <div id="tab-info" class="tab-content active">
+                    <div class="detail-info">
+                        <div class="info-item">
+                            <label>Business</label>
+                            <span id="detail-name">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Phone</label>
+                            <span id="detail-phone">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Address</label>
+                            <span id="detail-address">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Category</label>
+                            <span id="detail-category">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Status</label>
+                            <span id="detail-status">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Source</label>
+                            <span id="detail-source">-</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="detail-notes" rows="3"></textarea>
+                    </div>
+                </div>
+                
+                <div id="tab-map" class="tab-content">
+                    <div id="detailMap"></div>
+                </div>
+                
+                <div id="tab-activity" class="tab-content">
+                    <div id="activityList"></div>
+                    <div style="margin-top: 20px;">
+                        <h4 style="margin-bottom: 10px; color: var(--text-secondary);">Add Activity</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <select id="activityType">
+                                    <option value="call">Phone Call</option>
+                                    <option value="email">Email</option>
+                                    <option value="meeting">Meeting</option>
+                                    <option value="note">Note</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="activityNotes" placeholder="Activity notes...">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="addActivity()">Add Activity</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDetailModal()">Close</button>
+                <button class="btn btn-primary" onclick="saveDetailChanges()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import Modal -->
+    <div class="modal-overlay" id="importModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Import Leads from CSV</h2>
+                <button class="modal-close" onclick="closeImportModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Select CSV File</label>
+                    <input type="file" id="importFile" accept=".csv">
+                </div>
+                <p style="color: var(--text-secondary); font-size: 13px; margin-top: 15px;">
+                    Expected columns: name, phone, address, city, state, zip, website, category_type, categories
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeImportModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="importCSV()">Import</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        // State
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentCategory = 'all';
+        let currentStatus = 'all';
+        let currentSearch = '';
+        let hasPhoneFilter = false;
+        let currentDetailId = null;
+        let map = null;
+        let marker = null;
+        
+        const API = 'http://localhost:8088/api';
+        
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadLeads();
+            
+            document.getElementById('searchInput').addEventListener('input', debounce(() => {
+                currentSearch = document.getElementById('searchInput').value;
+                currentPage = 1;
+                loadLeads();
+            }, 300));
+        });
+        
+        function debounce(fn, delay) {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => fn(...args), delay);
+            };
+        }
+        
+        // Load Stats
+        async function loadStats() {
+            try {
+                const resp = await fetch(`${API}/stats`);
+                const data = await resp.json();
+                
+                document.getElementById('totalLeads').textContent = data.total;
+                document.getElementById('withPhone').textContent = data.with_phone;
+                document.getElementById('recentLeads').textContent = data.recent;
+                document.getElementById('totalCount').textContent = data.total;
+                
+                // Categories
+                const catFilter = document.getElementById('categoryFilters');
+                let catHTML = '';
+                data.categories.forEach(cat => {
+                    catHTML += `
+                        <div class="filter-item" data-category="${cat.category_type}" onclick="filterCategory('${cat.category_type}')">
+                            <span>${cat.category_type}</span>
+                            <span class="count">${cat.count}</span>
+                        </div>
+                    `;
+                });
+                catFilter.innerHTML = `
+                    <div class="filter-item ${currentCategory === 'all' ? 'active' : ''}" data-category="all" onclick="filterCategory('all')">
+                        <span>All Categories</span>
+                        <span class="count">${data.total}</span>
+                    </div>
+                    ${catHTML}
+                `;
+                
+                // Statuses
+                let statusTotal = 0;
+                data.statuses.forEach(s => {
+                    statusTotal += s.count;
+                    const el = document.getElementById(`status-${s.status}`);
+                    if (el) el.textContent = s.count;
+                });
+                document.getElementById('status-all').textContent = data.total;
+                
+            } catch (err) {
+                console.error('Stats error:', err);
+            }
+        }
+        
+        // Load Leads
+        async function loadLeads() {
+            const tbody = document.getElementById('leadsTable');
+            tbody.innerHTML = '<tr><td colspan="7" class="loading">Loading...</td></tr>';
+            
+            try {
+                let url = `${API}/leads?page=${currentPage}&per_page=50`;
+                if (currentCategory !== 'all') url += `&category=${currentCategory}`;
+                if (currentStatus !== 'all') url += `&status=${currentStatus}`;
+                if (currentSearch) url += `&search=${encodeURIComponent(currentSearch)}`;
+                if (hasPhoneFilter) url += `&has_phone=true`;
+                
+                const resp = await fetch(url);
+                const data = await resp.json();
+                
+                document.getElementById('visibleCount').textContent = data.total;
+                totalPages = data.pages;
+                document.getElementById('pageInfo').textContent = `Page ${data.page} of ${data.pages || 1}`;
+                
+                if (data.leads.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <h3>No leads found</h3>
+                                    <p>Try adjusting your filters or add new leads.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                data.leads.forEach(lead => {
+                    html += `
+                        <tr>
+                            <td><input type="checkbox" class="checkbox" onchange="toggleSelect(${lead.id})"></td>
+                            <td>
+                                <div class="lead-name">${lead.name}</div>
+                                ${lead.website ? `<div class="lead-address"><a href="${lead.website}" target="_blank" style="color: var(--accent);">🌐</a></div>` : ''}
+                            </td>
+                            <td>
+                                <div>${lead.city || '-'}</div>
+                                <div class="lead-address">${lead.address || ''}</div>
+                            </td>
+                            <td><span class="badge badge-${lead.category_type}">${lead.category_type}</span></td>
+                            <td><span class="status-badge status-${lead.status}">${lead.status}</span></td>
+                            <td>${lead.phone || '-'}</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="action-btn" title="View" onclick="viewLead(${lead.id})">👁️</button>
+                                    <button class="action-btn" title="Edit" onclick="editLead(${lead.id})">✏️</button>
+                                    <button class="action-btn" title="Delete" onclick="deleteLead(${lead.id})">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+                
+            } catch (err) {
+                console.error('Load error:', err);
+                tbody.innerHTML = '<tr><td colspan="7" class="loading">Error loading leads. Is the server running?</td></tr>';
+            }
+        }
+        
+        // Filters
+        function filterCategory(cat) {
+            currentCategory = cat;
+            currentPage = 1;
+            
+            document.querySelectorAll('#categoryFilters .filter-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.category === cat);
+            });
+            
+            loadLeads();
+        }
+        
+        function filterStatus(status) {
+            currentStatus = status;
+            currentPage = 1;
+            
+            document.querySelectorAll('#statusFilters .filter-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.status === status);
+            });
+            
+            loadLeads();
+        }
+        
+        function filterWithPhone() {
+            hasPhoneFilter = !hasPhoneFilter;
+            loadLeads();
+        }
+        
+        // Pagination
+        function changePage(delta) {
+            const newPage = currentPage + delta;
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                loadLeads();
+            }
+        }
+        
+        // Modal Functions
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'Add New Lead';
+            document.getElementById('leadForm').reset();
+            document.getElementById('leadId').value = '';
+            document.getElementById('state').value = 'CA';
+            document.getElementById('leadModal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('leadModal').classList.remove('active');
+        }
+        
+        async function editLead(id) {
+            try {
+                const resp = await fetch(`${API}/leads/${id}`);
+                const lead = await resp.json();
+                
+                document.getElementById('modalTitle').textContent = 'Edit Lead';
+                document.getElementById('leadId').value = lead.id;
+                document.getElementById('name').value = lead.name || '';
+                document.getElementById('phone').value = lead.phone || '';
+                document.getElementById('address').value = lead.address || '';
+                document.getElementById('city').value = lead.city || '';
+                document.getElementById('state').value = lead.state || 'CA';
+                document.getElementById('zip').value = lead.zip || '';
+                document.getElementById('website').value = lead.website || '';
+                document.getElementById('category_type').value = lead.category_type || 'other';
+                document.getElementById('status').value = lead.status || 'new';
+                document.getElementById('notes').value = lead.notes || '';
+                
+                document.getElementById('leadModal').classList.add('active');
+            } catch (err) {
+                showToast('Error loading lead', true);
+            }
+        }
+        
+        async function saveLead() {
+            const id = document.getElementById('leadId').value;
+            const data = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                zip: document.getElementById('zip').value,
+                website: document.getElementById('website').value,
+                category_type: document.getElementById('category_type').value,
+                status: document.getElementById('status').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            try {
+                const url = id ? `${API}/leads/${id}` : `${API}/leads`;
+                const method = id ? 'PUT' : 'POST';
+                
+                await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                closeModal();
+                loadLeads();
+                loadStats();
+                showToast(id ? 'Lead updated!' : 'Lead created!');
+            } catch (err) {
+                showToast('Error saving lead', true);
+            }
+        }
+        
+        async function deleteLead(id) {
+            if (!confirm('Delete this lead?')) return;
+            
+            try {
+                await fetch(`${API}/leads/${id}`, { method: 'DELETE' });
+                loadLeads();
+                loadStats();
+                showToast('Lead deleted');
+            } catch (err) {
+                showToast('Error deleting lead', true);
+            }
+        }
+        
+        // Detail Modal
+        async function viewLead(id) {
+            currentDetailId = id;
+            
+            try {
+                const resp = await fetch(`${API}/leads/${id}`);
+                const lead = await resp.json();
+                
+                document.getElementById('detailTitle').textContent = lead.name;
+                document.getElementById('detail-name').textContent = lead.name;
+                document.getElementById('detail-phone').textContent = lead.phone || '-';
+                document.getElementById('detail-address').textContent = `${lead.address || ''}, ${lead.city || ''}, ${lead.state || ''} ${lead.zip || ''}`;
+                document.getElementById('detail-category').innerHTML = `<span class="badge badge-${lead.category_type}">${lead.category_type}</span>`;
+                document.getElementById('detail-status').innerHTML = `<span class="status-badge status-${lead.status}">${lead.status}</span>`;
+                document.getElementById('detail-source').textContent = lead.source || '-';
+                document.getElementById('detail-notes').value = lead.notes || '';
+                
+                // Activity
+                const activityList = document.getElementById('activityList');
+                if (lead.interactions && lead.interactions.length > 0) {
+                    activityList.innerHTML = lead.interactions.map(i => `
+                        <div class="activity-item">
+                            <div class="activity-type">${i.type}</div>
+                            <div class="activity-notes">${i.notes}</div>
+                            <div class="activity-date">${new Date(i.created_at).toLocaleString()}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    activityList.innerHTML = '<p style="color: var(--text-muted);">No activity yet</p>';
+                }
+                
+                document.getElementById('detailModal').classList.add('active');
+                
+                // Init map
+                switchTab('info');
+                
+            } catch (err) {
+                showToast('Error loading lead', true);
+            }
+        }
+        
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+            currentDetailId = null;
+        }
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            
+            document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            
+            if (tab === 'map') {
+                initDetailMap();
+            }
+        }
+        
+        async function initDetailMap() {
+            if (!currentDetailId || map) return;
+            
+            map = L.map('detailMap').setView([36.7783, -119.4179], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+        }
+        
+        async function addActivity() {
+            const type = document.getElementById('activityType').value;
+            const notes = document.getElementById('activityNotes').value;
+            
+            if (!notes) return;
+            
+            try {
+                await fetch(`${API}/leads/${currentDetailId}/interactions`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type, notes })
+                });
+                
+                document.getElementById('activityNotes').value = '';
+                viewLead(currentDetailId);
+                showToast('Activity added');
+            } catch (err) {
+                showToast('Error adding activity', true);
+            }
+        }
+        
+        async function saveDetailChanges() {
+            if (!currentDetailId) return;
+            
+            try {
+                await fetch(`${API}/leads/${currentDetailId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        notes: document.getElementById('detail-notes').value
+                    })
+                });
+                
+                closeDetailModal();
+                loadLeads();
+                showToast('Changes saved');
+            } catch (err) {
+                showToast('Error saving changes', true);
+            }
+        }
+        
+        // Import
+        function openImportModal() {
+            document.getElementById('importModal').classList.add('active');
+        }
+        
+        function closeImportModal() {
+            document.getElementById('importModal').classList.remove('active');
+        }
+        
+        async function importCSV() {
+            const file = document.getElementById('importFile').files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const resp = await fetch(`${API}/import`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await resp.json();
+                
+                closeImportModal();
+                loadLeads();
+                loadStats();
+                showToast(`Imported ${data.imported} leads`);
+            } catch (err) {
+                showToast('Import failed', true);
+            }
+        }
+        
+        // Export
+        function exportData() {
+            window.location.href = `${API}/export`;
+        }
+        
+        // Toast
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.toggle('error', isError);
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Status filter clicks
+        document.querySelectorAll('#statusFilters .status-item, #statusFilters .filter-item').forEach(el => {
+            el.addEventListener('click', () => {
+                const status = el.dataset.status;
+                if (status) filterStatus(status);
+            });
+        });
+    </script>
+</body>
+</html>
