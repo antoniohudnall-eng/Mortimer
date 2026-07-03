@@ -1,0 +1,57 @@
+# PSDEPOT Flyer Reminders - Add to your calendar
+# =============================================
+
+# Labor Day
+EVENT: "📧 SEND: Labor Day Flyer"
+DATE: 2026-08-31
+TIME: 09:00 PST
+DESCRIPTION: "Send Labor Day flyer to leads. Subject: 'Labor Day: Honor the Worker, Support the Trade 🇺🇸'"
+
+# Halloween
+EVENT: "📧 SEND: Halloween Flyer"
+DATE: 2026-10-24
+TIME: 10:00 PST
+DESCRIPTION: "Send Halloween flyer. Subject: 'No Tricks, Just Treats for Your Business! 🎃'"
+
+# Thanksgiving
+EVENT: "📧 SEND: Thanksgiving Flyer"
+DATE: 2026-11-19
+TIME: 09:00 PST
+DESCRIPTION: "Send Thanksgiving flyer. Subject: 'Grateful for You This Thanksgiving 🦃'"
+
+# Christmas
+EVENT: "📧 SEND: Christmas Flyer"
+DATE: 2026-12-18
+TIME: 09:00 PST
+DESCRIPTION: "Send Christmas flyer. Subject: 'Deck the Halls — Stock Up Before the Rush! 🎄'"
+
+# New Year
+EVENT: "📧 SEND: New Year Flyer"
+DATE: 2026-12-24
+TIME: 10:00 PST
+DESCRIPTION: "Send New Year flyer. Subject: 'Ring in the New Year Prepared! 🎆'"
+
+# Valentine's
+EVENT: "📧 SEND: Valentine's Day Flyer"
+DATE: 2027-02-07
+TIME: 10:00 PST
+DESCRIPTION: "Send Valentine's flyer. Subject: 'Love Your Business — We've Got You Covered 💝'"
+
+# Back to School
+EVENT: "📧 SEND: Back to School Flyer"
+DATE: 2027-08-03
+TIME: 09:00 PST
+DESCRIPTION: "Send Back to School flyer. Subject: 'Back to School, Back to Business! 📚'"
+
+# Memorial Day
+EVENT: "📧 SEND: Memorial Day Flyer"
+DATE: 2027-05-18
+TIME: 09:00 PST
+DESCRIPTION: "Send Memorial Day flyer. Subject: 'Remember & Honor — Memorial Day 🕯️'"
+
+# July 4th
+EVENT: "📧 SEND: July 4th Flyer"
+DATE: 2027-06-27
+TIME: 10:00 PST
+DESCRIPTION: "Send July 4th flyer. Subject: 'Land of the Tree, Home of the Trade 🇺🇸'"
+

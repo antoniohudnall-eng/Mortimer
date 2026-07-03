@@ -1,0 +1,31 @@
+# Add these to crontab on a server with crontab access:
+# crontab -e
+
+# PSDEPOT Flyer Reminders - 7 days before each send
+
+# Labor Day - Aug 24
+0 9 24 8 * ~/mortimer/scripts/flyer_reminder.sh 7 "Labor Day"
+
+# Halloween - Oct 17
+0 9 17 10 * ~/mortimer/scripts/flyer_reminder.sh 7 "Halloween"
+
+# Thanksgiving - Nov 12
+0 9 12 11 * ~/mortimer/scripts/flyer_reminder.sh 7 "Thanksgiving"
+
+# Christmas - Dec 11
+0 9 11 12 * ~/mortimer/scripts/flyer_reminder.sh 7 "Christmas"
+
+# New Year - Dec 17
+0 9 17 12 * ~/mortimer/scripts/flyer_reminder.sh 7 "New Year"
+
+# Valentine's - Jan 31
+0 9 31 1 * ~/mortimer/scripts/flyer_reminder.sh 7 "Valentine's Day"
+
+# Back to School - Jul 27
+0 9 27 7 * ~/mortimer/scripts/flyer_reminder.sh 7 "Back to School"
+
+# Memorial Day - May 11
+0 9 11 5 * ~/mortimer/scripts/flyer_reminder.sh 7 "Memorial Day"
+
+# July 4th - Jun 20
+0 9 20 6 * ~/mortimer/scripts/flyer_reminder.sh 7 "July 4th"
