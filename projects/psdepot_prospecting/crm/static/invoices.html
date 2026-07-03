@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧾 Invoices - PSDEPOT CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #12182a;
+            --bg-tertiary: #1a2235;
+            --accent: #e94560;
+            --accent-hover: #ff6b6b;
+            --text-primary: #eaeaea;
+            --text-secondary: #8892a8;
+            --text-muted: #4a5568;
+            --border: #2a3348;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            padding: 20px 30px;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        
+        .header-nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .header-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .header-nav a:hover, .header-nav a.active {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+        
+        /* Stats */
+        .stats-bar {
+            background: var(--bg-secondary);
+            padding: 20px 30px;
+            display: flex;
+            gap: 30px;
+        }
+        
+        .stat-card {
+            background: var(--bg-tertiary);
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+        
+        /* Main */
+        .main {
+            padding: 30px;
+        }
+        
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        /* Table */
+        .invoice-table {
+            width: 100%;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .invoice-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 15px 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        tr:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .invoice-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .customer-name {
+            font-weight: 500;
+        }
+        
+        .amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-draft { background: rgba(136,146,168,0.2); color: #8892a8; }
+        .status-sent { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .status-paid { background: rgba(16,185,129,0.2); color: #34d399; }
+        .status-overdue { background: rgba(239,68,68,0.2); color: #f87171; }
+        .status-cancelled { background: rgba(74,85,104,0.2); color: #94a3b8; }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        .modal-close:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+        
+        /* Product selector */
+        .product-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        
+        .product-item {
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+        
+        .product-item:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        
+        .product-name {
+            font-weight: 500;
+        }
+        
+        .product-price {
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Line items */
+        .line-items {
+            margin: 20px 0;
+        }
+        
+        .line-item {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            padding: 10px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .line-item-name {
+            flex: 2;
+        }
+        
+        .line-item-qty {
+            width: 60px;
+        }
+        
+        .line-item input {
+            width: 100%;
+            padding: 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            text-align: center;
+        }
+        
+        .line-item-price {
+            flex: 1;
+            text-align: right;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .line-item-total {
+            flex: 1;
+            text-align: right;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .remove-item {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: var(--error);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        /* Totals */
+        .totals {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+        }
+        
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        
+        .totals-row.total {
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .totals-row.total span:last-child {
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        
+        /* View Modal */
+        .invoice-preview {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 8px;
+        }
+        
+        .invoice-preview .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        
+        .invoice-preview .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e94560;
+        }
+        
+        .invoice-preview table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .invoice-preview th {
+            background: #1a1a2e;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .invoice-preview td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .toast.show {
+            display: block;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 80px;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🧾 PSDEPOT Invoices</h1>
+        <nav class="header-nav">
+            <a href="index.html">📋 Leads</a>
+            <a href="invoices.html" class="active">🧾 Invoices</a>
+        </nav>
+    </header>
+    
+    <div class="stats-bar">
+        <div class="stat-card">
+            <div class="stat-value" id="statTotal">0</div>
+            <div class="stat-label">Total Invoices</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statPaid">$0</div>
+            <div class="stat-label">Collected</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statOutstanding">$0</div>
+            <div class="stat-label">Outstanding</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statThisMonth">0</div>
+            <div class="stat-label">This Month</div>
+        </div>
+    </div>
+    
+    <div class="main">
+        <div class="toolbar">
+            <div>
+                <button class="btn btn-primary" onclick="openCreateModal()">
+                    ➕ New Invoice
+                </button>
+            </div>
+        </div>
+        
+        <div class="invoice-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Due</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="invoicesList">
+                    <tr><td colspan="7" class="empty-state">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Create Invoice Modal -->
+    <div class="modal-overlay" id="createModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Create Invoice</h2>
+                <button class="modal-close" onclick="closeCreateModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Customer Name *</label>
+                        <input type="text" id="customerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="customerEmail">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="customerPhone">
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" id="customerAddress">
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" id="customerCity">
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" id="customerState" value="CA">
+                    </div>
+                    <div class="form-group">
+                        <label>ZIP</label>
+                        <input type="text" id="customerZip">
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 15px; color: var(--text-secondary);">Add Products</h3>
+                
+                <div class="product-list" id="productList"></div>
+                
+                <h3 style="margin: 25px 0 15px; color: var(--text-secondary);">Line Items</h3>
+                <div class="line-items" id="lineItems"></div>
+                
+                <div class="totals">
+                    <div class="totals-row">
+                        <span>Subtotal</span>
+                        <span id="calcSubtotal">$0.00</span>
+                    </div>
+                    <div class="totals-row" id="discountRow" style="display:none;">
+                        <span>Discount (10%)</span>
+                        <span id="calcDiscount">-$0.00</span>
+                    </div>
+                    <div class="totals-row">
+                        <span>Tax (8.25%)</span>
+                        <span id="calcTax">$0.00</span>
+                    </div>
+                    <div class="totals-row total">
+                        <span>Total</span>
+                        <span id="calcTotal">$0.00</span>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>Notes</label>
+                    <textarea id="invoiceNotes" rows="3" placeholder="Payment terms, special instructions..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCreateModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="createInvoice()">Create Invoice</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- View Invoice Modal -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal" style="max-width: 1000px;">
+            <div class="modal-header">
+                <h2 id="viewTitle">Invoice</h2>
+                <button class="modal-close" onclick="closeViewModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-preview" id="invoicePreview"></div>
+            </div>
+            <div class="modal-footer">
+                <select id="updateStatus" onchange="updateInvoiceStatus()">
+                    <option value="draft">Draft</option>
+                    <option value="sent">Sent</option>
+                    <option value="paid">Paid</option>
+                    <option value="overdue">Overdue</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                <button class="btn btn-secondary" onclick="closeViewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        const API = 'http://localhost:8088/api';
+        let products = [];
+        let lineItems = [];
+        let currentInvoiceId = null;
+        
+        // Load on start
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadInvoices();
+            loadProducts();
+        });
+        
+        async function loadStats() {
+            try {
+                const resp = await fetch(`${API}/invoices/stats`);
+                const stats = await resp.json();
+                
+                document.getElementById('statTotal').textContent = stats.total || 0;
+                
+                const paid = stats.by_status?.paid?.total || 0;
+                document.getElementById('statPaid').textContent = '$' + paid.toLocaleString('en-US', {minimumFractionDigits: 0});
+                
+                const outstanding = stats.outstanding?.total || 0;
+                document.getElementById('statOutstanding').textContent = '$' + outstanding.toLocaleString('en-US', {minimumFractionDigits: 0});
+                
+                document.getElementById('statThisMonth').textContent = stats.this_month?.count || 0;
+            } catch (err) {
+                console.error('Stats error:', err);
+            }
+        }
+        
+        async function loadInvoices() {
+            const tbody = document.getElementById('invoicesList');
+            tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Loading...</td></tr>';
+            
+            try {
+                const resp = await fetch(`${API}/invoices`);
+                const invoices = await resp.json();
+                
+                if (invoices.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><h3>No invoices yet</h3><p>Create your first invoice to get started</p></td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                invoices.forEach(inv => {
+                    const date = new Date(inv.created_at).toLocaleDateString();
+                    const due = new Date(inv.due_date).toLocaleDateString();
+                    
+                    html += `
+                    <tr>
+                        <td><span class="invoice-number">${inv.invoice_number}</span></td>
+                        <td><span class="customer-name">${inv.customer_name}</span></td>
+                        <td>${date}</td>
+                        <td>${due}</td>
+                        <td><span class="amount">$${inv.total.toFixed(2)}</span></td>
+                        <td><span class="status-badge status-${inv.status}">${inv.status}</span></td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn" title="View" onclick="viewInvoice(${inv.id})">👁️</button>
+                                <button class="action-btn" title="Edit Status" onclick="setInvoiceStatus(${inv.id})">✏️</button>
+                                <button class="action-btn" title="Delete" onclick="deleteInvoice(${inv.id})">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            } catch (err) {
+                console.error('Load error:', err);
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Error loading invoices</td></tr>';
+            }
+        }
+        
+        async function loadProducts() {
+            try {
+                const resp = await fetch(`${API}/products`);
+                products = await resp.json();
+                renderProductList();
+            } catch (err) {
+                console.error('Products error:', err);
+            }
+        }
+        
+        function renderProductList() {
+            const container = document.getElementById('productList');
+            let html = '';
+            
+            // Group by category
+            const categories = {};
+            products.forEach(p => {
+                const cat = p.category || 'other';
+                if (!categories[cat]) categories[cat] = [];
+                categories[cat].push(p);
+            });
+            
+            for (const [cat, items] of Object.entries(categories)) {
+                html += `<div style="padding:10px;background:var(--bg-primary);font-weight:600;font-size:12px;text-transform:uppercase;color:var(--text-muted);">${cat}</div>`;
+                items.forEach(p => {
+                    html += `
+                    <div class="product-item" onclick="addLineItem('${p.sku}')">
+                        <div>
+                            <div class="product-name">${p.name}</div>
+                            <div style="font-size:12px;color:var(--text-muted);">${p.description?.substring(0, 50)}...</div>
+                        </div>
+                        <div class="product-price">$${p.price.toFixed(2)}</div>
+                    </div>
+                    `;
+                });
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function addLineItem(sku) {
+            const product = products.find(p => p.sku === sku);
+            if (!product) return;
+            
+            // Check if already in list
+            const existing = lineItems.find(i => i.sku === sku);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                lineItems.push({
+                    sku: product.sku,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                });
+            }
+            
+            renderLineItems();
+        }
+        
+        function renderLineItems() {
+            const container = document.getElementById('lineItems');
+            
+            if (lineItems.length === 0) {
+                container.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center;">Click products above to add items</div>';
+                updateTotals();
+                return;
+            }
+            
+            let html = '';
+            lineItems.forEach((item, idx) => {
+                const total = item.price * item.quantity;
+                html += `
+                <div class="line-item">
+                    <div class="line-item-name">${item.name}</div>
+                    <input type="number" class="line-item-qty" value="${item.quantity}" min="1" onchange="updateQty(${idx}, this.value)">
+                    <div class="line-item-price">$${item.price.toFixed(2)}</div>
+                    <div class="line-item-total">$${total.toFixed(2)}</div>
+                    <button class="remove-item" onclick="removeLineItem(${idx})">×</button>
+                </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            updateTotals();
+        }
+        
+        function updateQty(idx, qty) {
+            lineItems[idx].quantity = parseInt(qty) || 1;
+            renderLineItems();
+        }
+        
+        function removeLineItem(idx) {
+            lineItems.splice(idx, 1);
+            renderLineItems();
+        }
+        
+        function updateTotals() {
+            let subtotal = 0;
+            lineItems.forEach(item => {
+                subtotal += item.price * item.quantity;
+            });
+            
+            let discount = 0;
+            if (subtotal >= 500) {
+                discount = subtotal * 0.10;
+                document.getElementById('discountRow').style.display = 'flex';
+            } else {
+                document.getElementById('discountRow').style.display = 'none';
+            }
+            
+            const taxable = subtotal - discount;
+            const tax = taxable * 0.0825;
+            const total = taxable + tax;
+            
+            document.getElementById('calcSubtotal').textContent = '$' + subtotal.toFixed(2);
+            document.getElementById('calcDiscount').textContent = '-$' + discount.toFixed(2);
+            document.getElementById('calcTax').textContent = '$' + tax.toFixed(2);
+            document.getElementById('calcTotal').textContent = '$' + total.toFixed(2);
+        }
+        
+        function openCreateModal() {
+            lineItems = [];
+            renderLineItems();
+            document.getElementById('createModal').classList.add('active');
+        }
+        
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+        }
+        
+        async function createInvoice() {
+            if (lineItems.length === 0) {
+                showToast('Add at least one product', true);
+                return;
+            }
+            
+            const data = {
+                customer_name: document.getElementById('customerName').value,
+                customer_email: document.getElementById('customerEmail').value,
+                customer_phone: document.getElementById('customerPhone').value,
+                address: document.getElementById('customerAddress').value,
+                city: document.getElementById('customerCity').value,
+                state: document.getElementById('customerState').value,
+                zip_code: document.getElementById('customerZip').value,
+                items: lineItems,
+                notes: document.getElementById('invoiceNotes').value
+            };
+            
+            try {
+                const resp = await fetch(`${API}/invoices`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await resp.json();
+                
+                closeCreateModal();
+                loadInvoices();
+                loadStats();
+                showToast(`Invoice ${result.invoice_number} created!`);
+            } catch (err) {
+                showToast('Error creating invoice', true);
+            }
+        }
+        
+        async function viewInvoice(id) {
+            currentInvoiceId = id;
+            
+            try {
+                const resp = await fetch(`${API}/invoices/${id}`);
+                const inv = await resp.json();
+                
+                document.getElementById('viewTitle').textContent = inv.invoice_number;
+                document.getElementById('updateStatus').value = inv.status;
+                
+                // Generate preview HTML
+                let itemsHtml = '';
+                inv.items.forEach(item => {
+                    itemsHtml += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td style="text-align:center;">${item.quantity}</td>
+                        <td style="text-align:right;">$${item.unit_price.toFixed(2)}</td>
+                        <td style="text-align:right;">$${item.line_total.toFixed(2)}</td>
+                    </tr>
+                    `;
+                });
+                
+                const statusColor = {
+                    draft: '#888', sent: '#3b82f6', paid: '#10b981',
+                    overdue: '#ef4444', cancelled: '#666'
+                }[inv.status];
+                
+                document.getElementById('invoicePreview').innerHTML = `
+                    <div class="invoice-header">
+                        <div>
+                            <div class="logo">🖥️ PSDEPOT</div>
+                            <p>Performance Supply Depot LLC</p>
+                            <p>orders@psdepot.com</p>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:20px;font-weight:bold;">${inv.invoice_number}</div>
+                            <p>Date: ${new Date(inv.created_at).toLocaleDateString()}</p>
+                            <p>Due: ${new Date(inv.due_date).toLocaleDateString()}</p>
+                            <span style="display:inline-block;padding:4px 12px;background:${statusColor};color:white;border-radius:20px;font-size:11px;text-transform:uppercase;">${inv.status}</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:30px;">
+                        <strong>Bill To:</strong><br>
+                        ${inv.customer_name}<br>
+                        ${inv.billing_address || ''}<br>
+                        ${inv.billing_city || ''} ${inv.billing_state || ''} ${inv.billing_zip || ''}
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th style="text-align:center;">Qty</th>
+                                <th style="text-align:right;">Price</th>
+                                <th style="text-align:right;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>${itemsHtml}</tbody>
+                    </table>
+                    <div style="margin-left:auto;width:250px;">
+                        <div style="display:flex;justify-content:space-between;padding:8px 0;"><span>Subtotal</span><span>$${inv.subtotal.toFixed(2)}</span></div>
+                        ${inv.discount > 0 ? `<div style="display:flex;justify-content:space-between;padding:8px 0;color:#10b981;"><span>Discount</span><span>-$${inv.discount.toFixed(2)}</span></div>` : ''}
+                        <div style="display:flex;justify-content:space-between;padding:8px 0;"><span>Tax</span><span>$${inv.tax.toFixed(2)}</span></div>
+                        <div style="display:flex;justify-content:space-between;padding:15px 0;border-top:2px solid #333;font-size:20px;font-weight:bold;"><span>Total</span><span style="color:#e94560;">$${inv.total.toFixed(2)}</span></div>
+                    </div>
+                    ${inv.notes ? `<div style="margin-top:30px;"><strong>Notes:</strong><br>${inv.notes}</div>` : ''}
+                    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #eee;text-align:center;color:#888;font-size:12px;">
+                        Thank you for your business!<br>
+                        Performance Supply Depot LLC | orders@psdepot.com
+                    </div>
+                `;
+                
+                document.getElementById('viewModal').classList.add('active');
+            } catch (err) {
+                showToast('Error loading invoice', true);
+            }
+        }
+        
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.remove('active');
+        }
+        
+        async function updateInvoiceStatus() {
+            if (!currentInvoiceId) return;
+            
+            const status = document.getElementById('updateStatus').value;
+            
+            try {
+                await fetch(`${API}/invoices/${currentInvoiceId}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                });
+                
+                loadInvoices();
+                loadStats();
+                showToast('Status updated');
+            } catch (err) {
+                showToast('Error updating status', true);
+            }
+        }
+        
+        function setInvoiceStatus(id) {
+            currentInvoiceId = id;
+            viewInvoice(id);
+        }
+        
+        async function deleteInvoice(id) {
+            if (!confirm('Delete this invoice?')) return;
+            
+            try {
+                await fetch(`${API}/invoices/${id}`, { method: 'DELETE' });
+                loadInvoices();
+                loadStats();
+                showToast('Invoice deleted');
+            } catch (err) {
+                showToast('Error deleting invoice', true);
+            }
+        }
+        
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.background = isError ? 'var(--error)' : 'var(--success)';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
