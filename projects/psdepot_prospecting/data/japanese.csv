@@ -1,0 +1,50 @@
+name,phone,address,city,state,zip,website,category_type,categories,rating,review_count,source,date_found
+Teriyaki Madness,(559) 570-2370,"1916 E Copper Ave, Ste 104, Fresno, CA 93730",Fresno,CA,93730,https://www.yelp.com/biz/teriyaki-madness-fresno-2?adjust_creative=BkJcGSdN3A98X2H7gLpQjA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BkJcGSdN3A98X2H7gLpQjA,japanese,"Japanese, Asian Fusion",3.5,23,Yelp,2026-07-02
+Blufin Sushi & Izakaya,(559) 412-4919,"7033 N Cedar Ave, Fresno, CA 93720",Fresno,CA,93720,https://www.yelp.com/biz/blufin-sushi-and-izakaya-fresno-4?adjust_creative=BkJcGSdN3A98X2H7gLpQjA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BkJcGSdN3A98X2H7gLpQjA,japanese,"Sushi Bars, Japanese, Vegan",3.6,322,Yelp,2026-07-02
+Tuna House,(415) 928-9989,"2146 Irving St, San Francisco, CA 94122",San Francisco,CA,94122,https://www.yelp.com/biz/tuna-house-san-francisco?adjust_creative=BkJcGSdN3A98X2H7gLpQjA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BkJcGSdN3A98X2H7gLpQjA,japanese,Japanese,3.6,16,Yelp,2026-07-02
+SOBAR,(310) 439-1029,"12404 W Washington Blvd, Los Angeles, CA 90066",Los Angeles,CA,90066,https://www.yelp.com/biz/sobar-los-angeles?adjust_creative=BkJcGSdN3A98X2H7gLpQjA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BkJcGSdN3A98X2H7gLpQjA,japanese,"Japanese, Noodles, Bars",4.1,194,Yelp,2026-07-02
+Blue Ribbon Sushi Bar & Grill - The Grove,(323) 352-9300,"189 The Grove Dr, Los Angeles, CA 90036",Los Angeles,CA,90036,https://www.yelp.com/biz/blue-ribbon-sushi-bar-and-grill-the-grove-los-angeles?adjust_creative=BkJcGSdN3A98X2H7gLpQjA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BkJcGSdN3A98X2H7gLpQjA,japanese,"Sushi Bars, Japanese, Cocktail Bars",3.7,758,Yelp,2026-07-02
+Cafe Blue Sky Blue,(323) 928-2221,"4429 Beverly Blvd, Los Angeles, CA 90004",Los Angeles,CA,90004,https://www.yelp.com/biz/cafe-blue-sky-blue-los-angeles?adjust_creative=BkJcGSdN3A98X2H7gLpQjA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BkJcGSdN3A98X2H7gLpQjA,japanese,"Coffee & Tea, Juice Bars & Smoothies, Sushi Bars",4.9,39,Yelp,2026-07-02
+Sakana Sushi Bar and Restaurant,+61747210189,"373 Flinders St, Townsville City Queensland 4810, Australia",Townsville City,QLD,4810,https://www.yelp.com/biz/sakana-sushi-bar-and-restaurant-townsville-city?adjust_creative=BkJcGSdN3A98X2H7gLpQjA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BkJcGSdN3A98X2H7gLpQjA,japanese,"Sushi Bars, Japanese",5.0,3,Yelp,2026-07-02
+Harmony Cuisine 2B1,(858) 737-4777,"3904 Convoy St, Ste 117, San Diego, CA 92111",San Diego,CA,92111,https://www.yelp.com/biz/harmony-cuisine-2b1-san-diego-5?adjust_creative=BkJcGSdN3A98X2H7gLpQjA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=BkJcGSdN3A98X2H7gLpQjA,japanese,"Japanese, Sushi Bars, Asian Fusion",4.7,321,Yelp,2026-07-02
+Teriyaki Madness,,6121 Sunrise Blvd,Citrus Heights,CA,95610,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1798 Commons,Folsom,CA,95630,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,(559) 570-2370,"1916 E Copper Ave, Ste 104",Fresno,CA,93730,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1535 Herndon Ave,Fresno,CA,93611,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,2919 West Capital Ave,West Sacramento,CA,95691,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,4000 S Frontage Rd,Modesto,CA,95356,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,(831) 324-4932,110 General Stilwell Dr,Marina,CA,93933,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,2424 San Pablo Ave,Novato,CA,94945,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1 South Market Dr,San Jose,CA,95134,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1525 N Milpitas Blvd,Milpitas,CA,95035,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,4000 Dublin Blvd,Dublin,CA,94568,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,3100 Hopyard Rd,Pleasanton,CA,94588,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,4502 1st St,Livermore,CA,94550,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,901 First St,Manteca,CA,95336,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,3333 EI Camino Real,Santa Clara,CA,95051,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1655 Branham Lane,San Jose,CA,95118,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,2600 El Camino Real,Redwood City,CA,94061,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,21227 Hawthorne Blvd #130,Torrance,CA,90503,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,(714) 593-0200,20100 Magnolia St,Huntington Beach,CA,92646,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,4954 Van Nuys Blvd #103,Sherman Oaks,CA,91403,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,(661) 309-4810,16408 Village Way,Santa Clarita,CA,91387,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,28227 Newhall Ranch Rd,Santa Clarita,CA,91355,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1240 Truman St #165,San Fernando,CA,91340,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,(213) 265-7290,1120 W 6th St Unit 105,Los Angeles,CA,90017,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1525 Columbus St Ste 100,Bakersfield,CA,93305,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,5353 Gosford Rd,Bakersfield,CA,93313,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,2905 H St,Bakersfield,CA,93301,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,22910 Alessandro Blvd,Moreno Valley,CA,92553,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,12970 Hesperia Rd,Victorville,CA,92395,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,4059 E Tulare Ave,Visalia,CA,93277,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,22970 Clinton Keith Rd,Wildomar,CA,92595,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,2311 E Avenue S,Palmdale,CA,93550,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1340 N McCawley Rd,Chatsworth,CA,91311,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,12874顽 12874 Van Nuys Blvd,Sylmar,CA,91342,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,29379 The Old Road,Stevenson Ranch,CA,91381,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1305 S Brand Blvd,Glendale,CA,91204,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,2650 E Thousand Oaks Blvd,Thousand Oaks,CA,91362,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1350 W 7th St,San Bernardino,CA,92411,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1188 E Mission Blvd,Ontario,CA,91761,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,1525 2nd St,San Fernando,CA,91340,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02
+Teriyaki Madness,,3180imp 3180imp Sepulveda Blvd,Los Angeles,CA,90034,,japanese,Japanese/Korean,,,TeriyakiMadness.com,2026-07-02

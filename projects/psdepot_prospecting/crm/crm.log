@@ -1,0 +1,48 @@
+[+] Imported 768 leads from CSV
+
+╔═══════════════════════════════════════════════════════════╗
+║  🖥️ Mortimer's PSDEPOT CRM                                 ║
+║  Lead Management + Products + Invoicing                    ║
+║  Running on http://localhost:8088                          ║
+╠═══════════════════════════════════════════════════════════╣
+║  📋 Leads:     http://localhost:8088/                     ║
+║  🧾 Invoices:  http://localhost:8088/invoices             ║
+║  📊 API:       http://localhost:8088/api/                 ║
+╚═══════════════════════════════════════════════════════════╝
+    
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8088
+ * Running on http://10.0.0.197:8088
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 128-408-487
+127.0.0.1 - - [02/Jul/2026 20:18:27] "GET /invoices HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 20:18:28] "GET /api/invoices/stats HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 20:18:28] "GET /api/products HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 20:18:28] "GET /api/invoices HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 20:18:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [02/Jul/2026 20:18:34] "[33mGET /index.html HTTP/1.1[0m" 404 -
+127.0.0.1 - - [02/Jul/2026 20:18:36] "[33mGET /index.html HTTP/1.1[0m" 404 -
+127.0.0.1 - - [02/Jul/2026 20:18:37] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 20:18:41] "[33mGET /invoices.html HTTP/1.1[0m" 404 -
+ * Detected change in '/data/data/com.termux/files/home/mortimer/projects/psdepot_prospecting/crm/app.py', reloading
+
+╔═══════════════════════════════════════════════════════════╗
+║  🖥️ Mortimer's PSDEPOT CRM                                 ║
+║  Lead Management + Products + Invoicing                    ║
+║  Running on http://localhost:8088                          ║
+╠═══════════════════════════════════════════════════════════╣
+║  📋 Leads:     http://localhost:8088/                     ║
+║  🧾 Invoices:  http://localhost:8088/invoices             ║
+║  📊 API:       http://localhost:8088/api/                 ║
+╚═══════════════════════════════════════════════════════════╝
+    
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 372-167-324
+127.0.0.1 - - [02/Jul/2026 20:19:26] "[33mGET /index.html HTTP/1.1[0m" 404 -
+127.0.0.1 - - [02/Jul/2026 20:19:27] "[33mGET /index.html HTTP/1.1[0m" 404 -
