@@ -190,40 +190,53 @@ def get_leads():
     per_page = int(request.args.get('per_page', 50))
     
     query = 'SELECT * FROM leads WHERE 1=1'
-    count_query = 'SELECT COUNT(*) FROM leads WHERE 1=1'
-    params = []
+    count_params = []
     
     if category != 'all':
         query += ' AND category_type = ?'
-        count_query += ' AND category_type = ?'
-        params.append(category)
+        count_params.append(category)
     
     if status != 'all':
         query += ' AND status = ?'
-        count_query += ' AND status = ?'
-        params.append(status)
+        count_params.append(status)
     
     if city:
         query += ' AND city LIKE ?'
-        count_query += ' AND city LIKE ?'
-        params.append(f'%{city}%')
+        count_params.append(f'%{city}%')
     
     if search:
         query += ' AND (name LIKE ? OR address LIKE ? OR city LIKE ?)'
-        count_query += ' AND (name LIKE ? OR address LIKE ? OR city LIKE ?)'
         search_term = f'%{search}%'
-        params.extend([search_term, search_term, search_term])
+        count_params.extend([search_term, search_term, search_term])
     
     if has_phone:
         query += ' AND phone != "" AND phone IS NOT NULL'
+    
+    # Get total count
+    count_query = 'SELECT COUNT(*) FROM leads WHERE 1=1'
+    if category != 'all':
+        count_query += ' AND category_type = ?'
+    if status != 'all':
+        count_query += ' AND status = ?'
+    if city:
+        count_query += ' AND city LIKE ?'
+    if search:
+        count_query += ' AND (name LIKE ? OR address LIKE ? OR city LIKE ?)'
+    if has_phone:
         count_query += ' AND phone != "" AND phone IS NOT NULL'
     
+    # Pagination
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 50))
     query += ' ORDER BY name LIMIT ? OFFSET ?'
-    params.extend([per_page, (page - 1) * per_page])
     
     c = conn.cursor()
-    c.execute(count_query, params[:-(2 if has_phone else 0)] if has_phone else params)
+    c.execute(count_query, count_params)
     total = c.fetchone()[0]
+    
+    # Add pagination to main query
+    params = count_params.copy()
+    params.extend([per_page, (page - 1) * per_page])
     
     c.execute(query, params)
     leads = [dict(row) for row in c.fetchall()]

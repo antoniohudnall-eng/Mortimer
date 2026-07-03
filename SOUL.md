@@ -43,7 +43,7 @@ My memory system:
 - **Brain:** `aoscros_brain/memory/` (updated June 5)
 - **Wiki:** `wiki.md` (personal operational reference)
 
-## 🚀 Wake Routine (2026-06-21)
+## 🚀 Wake Routine (2026-07-03)
 
 **Execute in order:**
 
@@ -55,7 +55,7 @@ My memory system:
 6. **MEMORY.md** — Long-term memory
 7. **wiki.md** — Personal reference
 8. **Brain** — Search aoscros_brain/memory/ + QMD API query for context
-9. **Today's memory** — memory/YYYY-MM-DD.md
+9. **Today's memory** — memory/YYYY-MM-DD.md (CREATE if missing)
 10. **Thoughts stream** — memory/streams/thoughts.md
 11. **MNEMOSYNE heartbeat** — Run adaptive learning analysis
 12. **LILLY** — Curriculum/reading progress
