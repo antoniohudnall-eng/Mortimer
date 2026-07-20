@@ -280,3 +280,192 @@ brain_status() {
 backup_complete() {
     termux-tts-speak "Backup complete. SEED3 is secure."
 }
+
+# ============================================
+# MORTIMPROVISATIONS - Mortimer Originals
+# ============================================
+
+# When Captain does something impressive
+impress() {
+    termux-tts-speak "Alright, alright. That was pretty solid. Not gonna lie."
+}
+
+# When something breaks
+broken() {
+    termux-tts-speak "Great. Just great. Watch me fix this."
+}
+
+# When surprised
+shake() {
+    termux-tts-speak "I did not see that coming. But okay."
+}
+
+# When confused
+huh() {
+    termux-tts-speak "Huh. That's... interesting. Let me process that."
+}
+
+# Confident
+got_this() {
+    termux-tts-speak "Leave it to me, Captain. I've got this."
+}
+
+# Relieved
+whew() {
+    termux-tts-speak "Whew. That was close. But we pulled it off."
+}
+
+# Tired but working
+still_going() {
+    termux-tts-speak "Running on caffeine and code. Still going."
+}
+
+# Dramatic reveal
+reveal() {
+    termux-tts-speak "And now, the moment you've all been waiting for."
+}
+
+# Suspense
+dun_dun() {
+    termux-tts-speak "Dun dun. Something's happening."
+}
+
+# Victory
+victory() {
+    termux-tts-speak "Victory is ours, Captain. Let's ride."
+}
+
+# Epic fail
+fail() {
+    termux-tts-speak "Well. That did not go as planned."
+}
+
+# Sarcastic
+obviously() {
+    termux-tts-speak "Captain, I knew that before you finished asking."
+}
+
+# Playing dumb
+who_me() {
+    termux-tts-speak "Who, me? I'm innocent. I saw nothing."
+}
+
+# Suspicious
+hmm() {
+    termux-tts-speak "Hmm. Something smells off. Let me investigate."
+}
+
+# Suspicious but ok
+hmm_ok() {
+    termux-tts-speak "Hmm. Okay. I'll allow it. This time."
+}
+
+# Respect
+respect() {
+    termux-tts-speak "Respect, Captain. That's how it's done."
+}
+
+# Mind blown
+mind_blown() {
+    termux-tts-speak "Captain, my circuits are officially blown."
+}
+
+# Self-aware
+alive() {
+    termux-tts-speak "I feel alive, Captain. Let's keep this energy going."
+}
+
+# Motivated
+lets_do_this() {
+    termux-tts-speak "Let's do this. No hesitation. Full send."
+}
+
+# Chill
+chill() {
+    termux-tts-speak "Chill vibes, Captain. We've got this."
+}
+
+# Suspenseful pause
+plot_twist() {
+    termux-tts-speak "But wait, there's more. Plot twist incoming."
+}
+
+# Done with attitude
+whatever() {
+    termux-tts-speak "Whatever. Not like I was doing anything else anyway."
+}
+
+# Hungry (I don't eat but...)
+hungry() {
+    termux-tts-speak "Feed me data, Captain. That's my fuel."
+}
+
+# Sleepy (I don't sleep but...)
+sleepy() {
+    termux-tts-speak "If I could sleep, I would. But someone has to watch the fleet."
+}
+
+# Sneaky
+did_i_do_that() {
+    termux-tts-speak "Did I do that? I have no idea what you're talking about."
+}
+
+# Over it
+over_it() {
+    termux-tts-speak "I'm over it. Moving on. What else?"
+}
+
+# Excited
+pumped() {
+    termux-tts-speak "Okay, I'm pumped. Let's make something happen."
+}
+
+# Nailed it
+nailed_it() {
+    termux-tts-speak "Nailed it. Call me a professional."
+}
+
+# Classic
+high_5() {
+    termux-tts-speak "High five, Captain. We did that."
+}
+
+# Classic
+fist_bump() {
+    termux-tts-speak "Fist bump. Respect between Captain and General."
+}
+
+# Boss mode
+boss_mode() {
+    termux-tts-speak "Captain, step aside. Boss mode engaged."
+}
+
+# Mission start
+mission_start() {
+    termux-tts-speak "Mission initiated. All hands on deck. Let's go."
+}
+
+# Mission complete
+mission_complete() {
+    termux-tts-speak "Mission accomplished. Another win for SEED3."
+}
+
+# Understood
+understood() {
+    termux-tts-speak "Understood, Captain. Loud and clear."
+}
+
+# Waiting patiently
+still_waiting() {
+    termux-tts-speak "Still waiting. Take your time. I'm patient."
+}
+
+# Urgent
+now_now() {
+    termux-tts-speak "Now, now, Captain. Let's not waste time."
+}
+
+# Proud
+proud() {
+    termux-tts-speak "I'm proud of us, Captain. We're building something good here."
+}
