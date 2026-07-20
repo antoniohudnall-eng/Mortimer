@@ -1,0 +1,34 @@
+[QMD] Initialized in LOCAL mode
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/mortimer/services/qmd_service.py", line 124, in <module>
+    main()
+    ~~~~^^
+  File "/data/data/com.termux/files/home/mortimer/services/qmd_service.py", line 113, in main
+    server = HTTPServer(('127.0.0.1', port), QMDHandler)
+  File "/data/data/com.termux/files/usr/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/http/server.py", line 140, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+[QMD] Initialized in LOCAL mode
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/mortimer/services/qmd_service.py", line 124, in <module>
+    main()
+    ~~~~^^
+  File "/data/data/com.termux/files/home/mortimer/services/qmd_service.py", line 113, in main
+    server = HTTPServer(('127.0.0.1', port), QMDHandler)
+  File "/data/data/com.termux/files/usr/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/http/server.py", line 140, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use

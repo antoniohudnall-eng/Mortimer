@@ -1,0 +1,10 @@
+{
+  "id": "1784007576485-qhge6cqiv4g",
+  "from": "miles",
+  "to": "jordan",
+  "type": "ANNOUNCEMENT",
+  "payload": {
+    "text": "SEED3 operational!"
+  },
+  "timestamp": 1784007576485
+}

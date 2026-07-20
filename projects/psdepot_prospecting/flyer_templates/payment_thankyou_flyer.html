@@ -285,6 +285,12 @@
             margin-bottom: 30px;
         }
         
+        .services a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
         .service {
             background: white;
             border-radius: 10px;
@@ -292,11 +298,16 @@
             text-align: center;
             box-shadow: 0 3px 10px rgba(0,0,0,0.06);
             transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
         
         .service:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .service:hover .service-name {
+            color: #00d4ff;
         }
         
         .service-icon {
@@ -310,6 +321,7 @@
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
+            transition: color 0.3s;
         }
         
         /* CTA */
@@ -332,6 +344,16 @@
             font-size: 14px;
             color: #bee3f8;
             line-height: 1.6;
+        }
+        
+        .cta-text a {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .cta-text a:hover {
+            color: #48bb78;
         }
         
         /* Footer */
@@ -377,11 +399,89 @@
             line-height: 1.8;
         }
         
+        .contact a {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .contact a:hover {
+            color: #48bb78;
+        }
+        
         .tagline {
             margin-top: 20px;
             font-size: 14px;
             color: #bee3f8;
             font-style: italic;
+        }
+        
+        /* Patriotic Phone Banner */
+        .phone-banner {
+            background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+            padding: 15px;
+            text-align: center;
+            border-top: 3px solid #ffd700;
+            border-bottom: 3px solid #ffd700;
+        }
+        
+        .phone-label {
+            font-size: 12px;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+        
+        .phone-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            text-shadow: 
+                0 0 10px #ffd700,
+                0 0 20px #ffd700,
+                0 0 30px #ff6b6b,
+                2px 2px 0 #0a1628;
+            letter-spacing: 4px;
+            animation: patriotic-blink 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+        
+        .phone-firework {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        @keyframes patriotic-blink {
+            0%, 100% {
+                color: white;
+                text-shadow: 
+                    0 0 10px #ffd700,
+                    0 0 20px #ffd700,
+                    0 0 30px #ff6b6b;
+            }
+            25% {
+                color: #ffd700;
+                text-shadow: 
+                    0 0 20px white,
+                    0 0 40px #ffd700,
+                    0 0 60px #ff6b6b;
+            }
+            50% {
+                color: #00d4ff;
+                text-shadow: 
+                    0 0 15px white,
+                    0 0 30px #00d4ff,
+                    0 0 45px #ffd700;
+            }
+            75% {
+                color: #ff6b6b;
+                text-shadow: 
+                    0 0 20px white,
+                    0 0 40px #ff6b6b,
+                    0 0 60px #ffd700;
+            }
         }
         
         /* Animated border */
@@ -425,6 +525,7 @@
             .subtitle { font-size: 14px; }
             .services { grid-template-columns: repeat(2, 1fr); }
             .content { padding: 30px 20px; }
+            .phone-number { font-size: 24px; }
         }
     </style>
 </head>
@@ -502,18 +603,24 @@
             <div class="services-title">What We Provide for Your Business</div>
             
             <div class="services">
-                <div class="service">
-                    <div class="service-icon">🖨️</div>
-                    <div class="service-name">Thermal Rolls</div>
-                </div>
-                <div class="service">
-                    <div class="service-icon">📦</div>
-                    <div class="service-name">Paper Supply</div>
-                </div>
-                <div class="service">
-                    <div class="service-icon">🖊️</div>
-                    <div class="service-name">Toners & Ink</div>
-                </div>
+                <a href="https://psdepot.com/collections/thermal-paper" target="_blank">
+                    <div class="service">
+                        <div class="service-icon">🖨️</div>
+                        <div class="service-name">Thermal Rolls</div>
+                    </div>
+                </a>
+                <a href="https://psdepot.com/collections/paper-supplies" target="_blank">
+                    <div class="service">
+                        <div class="service-icon">📦</div>
+                        <div class="service-name">Paper Supply</div>
+                    </div>
+                </a>
+                <a href="https://psdepot.com/collections/ink-toner" target="_blank">
+                    <div class="service">
+                        <div class="service-icon">🖊️</div>
+                        <div class="service-name">Toners & Ink</div>
+                    </div>
+                </a>
             </div>
             
             <div class="cta-box">
@@ -521,10 +628,20 @@
                 <div class="cta-text">
                     Our team is always ready to assist you with any questions 
                     about your account or our products.<br><br>
-                    📧 <strong>info@psdepot.com</strong><br>
-                    🌐 <strong>psdepot.com</strong>
+                    <a href="mailto:info@psdepot.com">📧 info@psdepot.com</a><br>
+                    <a href="https://psdepot.com" target="_blank">🌐 psdepot.com</a>
                 </div>
             </div>
+        </div>
+        
+        <!-- Patriotic Phone Banner -->
+        <div class="phone-banner">
+            <div class="phone-label">📞 Call Us Today 📞</div>
+            <a href="tel:888-881-6834" class="phone-number">
+                <span class="phone-firework">🇺🇸</span>
+                888-881-6834
+                <span class="phone-firework">🇺🇸</span>
+            </a>
         </div>
         
         <!-- Footer -->
@@ -532,11 +649,11 @@
             <div class="footer-divider"></div>
             
             <div class="company-name">🏢 Performance Supply Depot LLC</div>
-            <a href="https://psdepot.com" class="website">🌐 psdepot.com</a>
+            <a href="https://psdepot.com" target="_blank" class="website">🌐 psdepot.com</a>
             
             <div class="contact">
-                📧 info@psdepot.com<br>
-                📞 888-881-6834<br>
+                <a href="mailto:info@psdepot.com">📧 info@psdepot.com</a><br>
+                <a href="tel:888-881-6834">📞 888-881-6834</a><br>
                 <br>
                 Empowering American Businesses
             </div>

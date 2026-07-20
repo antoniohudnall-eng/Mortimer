@@ -1,0 +1,41 @@
+[2026-07-13 22:53:13] Patricia v4.3 Service starting...
+🧠🔄 Brain v4.3 initializing...
+Active model: antoniohudnall/Mort_II:latest
+Available models: 5
+  ✅ ACTIVE Mort_II (Primary) (antoniohudnall/Mort_II:latest)
+  ⏳ standby Phi-3 (Fast) (phi3:latest)
+  ⏳ standby TinyLlama (Tiny) (tinyllama:latest)
+  ⏳ standby Qwen 2.5 (qwen2.5:3b)
+  ⏳ standby Llama 3.2 (llama3.2:latest)
+🎓 Continuous learning with multi-model support
+
+✅ Brain v4.3 ready
+
+To switch models:
+  brain.switch_to_model('phi3:latest')
+  brain.switch_to_model('tinyllama:latest')
+[2026-07-13 22:53:13] ✅ Brain ready - Active model: antoniohudnall/Mort_II:latest
+[2026-07-13 22:53:13] 💓 Heartbeat - Brain active
+[2026-07-13 22:58:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:03:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:08:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:13:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:18:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:23:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:28:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:33:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:38:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:43:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:48:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:53:13] 💓 Heartbeat - Brain active
+[2026-07-13 23:58:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:03:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:08:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:13:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:18:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:23:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:28:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:33:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:38:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:43:13] 💓 Heartbeat - Brain active
+[2026-07-14 00:48:13] 💓 Heartbeat - Brain active
