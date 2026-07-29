@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Nature-Life Simulator — SEED3</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a;
+  color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#status {
+  width: 90%;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #0f0;
+  background: #111;
+  border-bottom: 1px solid #1a3a1a;
+  min-height: 40px;
+  white-space: pre-wrap;
+}
+#nature-canvas {
+  width: 90%;
+  height: 35vh;
+  display: block;
+  border: 1px solid #1a3a1a;
+}
+#mandelbrot-canvas {
+  width: 90%;
+  height: 35vh;
+  display: block;
+  border: 1px solid #1a3a1a;
+  margin-top: 2px;
+}
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px;
+  width: 90%;
+  justify-content: center;
+}
+button {
+  padding: 10px 16px;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  background: #1a1a1a;
+  color: #0f0;
+  border: 1px solid #2a5a2a;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover { background: #2a2a2a; }
+button:active { background: #0a3a0a; }
+button.recording { background: #3a0000; border-color: #f00; color: #f00; }
+#voice-status {
+  font-size: 10px;
+  color: #555;
+  text-align: center;
+  width: 90%;
+  padding: 4px;
+}
+</style>
+</head>
+<body>
+
+<div id="status">Nature-Life Simulator v2.0 — SEED3 — Loading...</div>
+<canvas id="nature-canvas"></canvas>
+<canvas id="mandelbrot-canvas"></canvas>
+<div id="controls">
+  <button id="btn-sim">Run Simulation</button>
+  <button id="btn-save">Save Weights</button>
+  <button id="btn-load">Load Weights</button>
+  <button id="btn-save-nature">Save Nature</button>
+  <button id="btn-voice" title="Voice control (pause, resume, spawn, eat, grow grass)">🎤 Voice</button>
+</div>
+<div id="voice-status"></div>
+
+<script>
+// ============================================================================
+// Nature-Life Simulator + Mandelbrot OODA Engine — BROWSER EDITION v2.0
+// Mortimer/Morty — SEED3 — 2026-07-26
+// DroidScript API → Canvas/Web API port
+// ============================================================================
+
+// ── Universal Constants ────────────────────────────────────────────────────
+const SPEED_OF_LIGHT = 299792458;
+const GRAVITY_CONSTANT = 6.674e-11;
+const PLANCK_CONSTANT = 6.626e-34;
+const ELEMENTARY_CHARGE = 1.602e-19;
+const BOLTZMANN_CONSTANT = 1.381e-23;
+const AVOGADRO_CONSTANT = 6.022e23;
+const GAS_CONSTANT = 8.314;
+const PERMITTIVITY_FREE = 8.854e-12;
+const PERMEABILITY_FREE = 1.257e-6;
+const FINE_STRUCTURE = 0.007297;
+const ELECTRON_MASS = 9.109e-31;
+const PROTON_MASS = 1.673e-27;
+const NEUTRON_MASS = 1.675e-27;
+const PLANCK_LENGTH = 1.616e-35;
+const PLANCK_TIME = 5.391e-44;
+const COULOMB_CONSTANT = 8.987e9;
+const STEFAN_BOLTZMANN = 5.670e-8;
+const WIEN_DISPLACEMENT = 2.897e-3;
+const RYDBERG_CONSTANT = 1.097e7;
+const BOHR_RADIUS = 5.292e-11;
+const BOHR_MAGNETON = 9.274e-24;
+const ELECTRIC_CONSTANT = 8.854e-12;
+const HUBBLE_CONSTANT = 70;
+const COSMOLOGICAL_CONSTANT = 1e-52;
+const EULER_NUMBER = 2.718281828459045;
+const PI = 3.141592653589793;
+const GM = 1.618033988749895;
+
+// ── Simulation Settings ────────────────────────────────────────────────────
+let PS, MI = 50;
+const X_MIN = -2, X_MAX = 1, Y_MIN = -1, Y_MAX = 1;
+
+// ── State ──────────────────────────────────────────────────────────────────
+let animals = [], microbes = [], environment = { grass: [], shrubs: [], trees: [] };
+let mandelbrotNN = null, voiceInput = "";
+let lastMandelbrotOODATime = 0;
+let epsilon = 0.1, alpha = 0.1, gamma = 0.9;
+let replayBuffer = [], bufferSize = 1000, batchSize = 32;
+let simulationRunning = true;
+let microbeInterval = null;
+let animalInterval = null;
+let eventInterval = null;
+let recognition = null;
+let isRecording = false;
+
+// ── DOM elements ───────────────────────────────────────────────────────────
+const statusEl = document.getElementById('status');
+const natureCanvas = document.getElementById('nature-canvas');
+const mandelbrotCanvas = document.getElementById('mandelbrot-canvas');
+const natureCtx = natureCanvas.getContext('2d');
+const mandelbrotCtx = mandelbrotCanvas.getContext('2d');
+const voiceStatus = document.getElementById('voice-status');
+
+// Canvas sizing
+function resizeCanvases() {
+  const w = Math.min(window.innerWidth * 0.9, 800);
+  natureCanvas.width = w;
+  natureCanvas.height = Math.floor(w * 0.4);
+  mandelbrotCanvas.width = w;
+  mandelbrotCanvas.height = Math.floor(w * 0.4);
+  PS = Math.max(1, Math.floor(Math.min(w, mandelbrotCanvas.height) / 500));
+}
+resizeCanvases();
+window.addEventListener('resize', () => { resizeCanvases(); redrawAll(); });
+
+const SW = () => mandelbrotCanvas.width;
+const SH = () => mandelbrotCanvas.height;
+
+// ── SunCalc fallback ───────────────────────────────────────────────────────
+const SunCalc = {
+  getPosition(date, lat, lng) {
+    const hours = date.getHours() + date.getMinutes() / 60;
+    const altitude = Math.sin((hours / 24) * 2 * PI - PI / 2) * PI / 2;
+    return { altitude };
+  }
+};
+
+// ── Bob Ross palette ───────────────────────────────────────────────────────
+const bob_ross = [
+  { r: 227, g: 38,  b: 54  }, // Alizarin Crimson
+  { r: 255, g: 99,  b: 71  }, // Bright Red
+  { r: 255, g: 215, b: 0   }, // Cadmium Yellow
+  { r: 60,  g: 20,  b: 20  }, // Dark Sienna
+  { r: 255, g: 179, b: 71  }, // Indian Yellow
+  { r: 0,   g: 0,   b: 0   }, // Midnight Black
+  { r: 0,   g: 15,  b: 137 }, // Phthalo Blue
+  { r: 18,  g: 53,  b: 36  }, // Phthalo Green
+  { r: 0,   g: 49,  b: 83  }, // Prussian Blue
+  { r: 80,  g: 125, b: 42  }, // Sap Green
+  { r: 102, g: 66,  b: 40  }, // Van Dyke Brown
+  { r: 240, g: 187, b: 94  }, // Yellow Ochre
+  { r: 253, g: 245, b: 230 }, // Titanium White
+  { r: 220, g: 220, b: 220 }, // Light Gray
+];
+
+function getColor(value) {
+  value = Math.max(0, Math.min(1, value));
+  const index = Math.min(Math.floor(value * (bob_ross.length - 1)), bob_ross.length - 2);
+  const frac = value * (bob_ross.length - 1) - index;
+  const c1 = bob_ross[index], c2 = bob_ross[index + 1];
+  const r = Math.floor(c1.r + (c2.r - c1.r) * frac);
+  const g = Math.floor(c1.g + (c2.g - c1.g) * frac);
+  const b = Math.floor(c1.b + (c2.b - c1.b) * frac);
+  return `rgb(${r},${g},${b})`;
+}
+
+function minBy(array, callback) {
+  if (!array || !array.length) return null;
+  return array.reduce((min, item) => callback(item) < callback(min) ? item : min, array[0]);
+}
+
+// ============================================================================
+// NeuralNetwork Class — FIXED
+// ============================================================================
+class NeuralNetwork {
+  constructor(inputSize, hiddenSize, outputSize) {
+    this.inputSize = inputSize;
+    this.hiddenSize = hiddenSize;
+    this.outputSize = outputSize;
+    this.weights1 = this._randomMatrix(inputSize, hiddenSize);
+    this.weights2 = this._randomMatrix(hiddenSize, outputSize);
+    this.memory = [];
+  }
+
+  _randomMatrix(rows, cols) {
+    const m = [];
+    for (let i = 0; i < rows; i++) {
+      m[i] = [];
+      for (let j = 0; j < cols; j++) m[i][j] = Math.random() * 2 - 1;
+    }
+    return m;
+  }
+
+  sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
+
+  feedforward(input) {
+    if (!input || input.length !== this.inputSize || !input.every(x => Number.isFinite(x))) {
+      const empty = new Array(this.outputSize).fill(0);
+      empty._hidden = new Array(this.hiddenSize).fill(0.5);
+      empty._rawOutput = new Array(this.outputSize).fill(0);
+      empty._rawHidden = new Array(this.hiddenSize).fill(0);
+      return empty;
+    }
+    const hiddenRaw = this._matrixMultiply(input, this.weights1);
+    const hiddenAct = hiddenRaw.map(this.sigmoid);
+    const outputRaw = this._matrixMultiply(hiddenAct, this.weights2);
+    const outputAct = outputRaw.map(this.sigmoid);
+    outputAct._hidden = hiddenAct;
+    outputAct._rawOutput = outputRaw;
+    outputAct._rawHidden = hiddenRaw;
+    return outputAct;
+  }
+
+  _matrixMultiply(a, b) {
+    if (!a || !b || !Array.isArray(a) || !Array.isArray(b) || !b[0] || a.length !== b.length) return null;
+    const result = new Array(b[0].length).fill(0);
+    for (let i = 0; i < b[0].length; i++) {
+      for (let j = 0; j < a.length; j++) {
+        result[i] += a[j] * (b[j] && b[j][i] !== undefined ? b[j][i] : 0);
+      }
+    }
+    return result;
+  }
+
+  // Proper backpropagation
+  train(input, target, epochs = 10, lr = 0.1) {
+    if (!input || !target || input.length !== this.inputSize || target.length !== this.outputSize) return;
+    for (let e = 0; e < epochs; e++) {
+      const hiddenRaw = this._matrixMultiply(input, this.weights1);
+      const hiddenAct = hiddenRaw.map(this.sigmoid);
+      const outputRaw = this._matrixMultiply(hiddenAct, this.weights2);
+      const outputAct = outputRaw.map(this.sigmoid);
+
+      const outputDelta = target.map((t, i) => (t - outputAct[i]) * outputAct[i] * (1 - outputAct[i]));
+
+      const hiddenError = new Array(this.hiddenSize).fill(0);
+      for (let j = 0; j < this.hiddenSize; j++)
+        for (let k = 0; k < this.outputSize; k++)
+          hiddenError[j] += outputDelta[k] * this.weights2[j][k];
+
+      const hiddenDelta = hiddenError.map((err, j) => err * hiddenAct[j] * (1 - hiddenAct[j]));
+
+      for (let j = 0; j < this.hiddenSize; j++)
+        for (let k = 0; k < this.outputSize; k++)
+          this.weights2[j][k] += lr * outputDelta[k] * hiddenAct[j];
+
+      for (let i = 0; i < this.inputSize; i++)
+        for (let j = 0; j < this.hiddenSize; j++)
+          this.weights1[i][j] += lr * hiddenDelta[j] * input[i];
+    }
+  }
+
+  // Q-learning with proper gradients
+  trainQ(state, action, reward, nextState) {
+    if (!state || !nextState || !Number.isFinite(reward) || !Number.isInteger(action)) return;
+    if (action < 0 || action >= this.outputSize) return;
+
+    const hiddenRaw = this._matrixMultiply(state, this.weights1);
+    const hiddenAct = hiddenRaw.map(this.sigmoid);
+    const outputRaw = this._matrixMultiply(hiddenAct, this.weights2);
+    const outputAct = outputRaw.map(this.sigmoid);
+
+    const currentQ = outputAct[action];
+    const nextOutput = this.feedforward(nextState);
+    const nextQ = Math.max(...nextOutput);
+    const targetQ = reward + gamma * nextQ;
+    const error = targetQ - currentQ;
+
+    const outputDelta = error * outputAct[action] * (1 - outputAct[action]);
+
+    const hiddenDelta = new Array(this.hiddenSize).fill(0);
+    for (let j = 0; j < this.hiddenSize; j++)
+      hiddenDelta[j] = outputDelta * this.weights2[j][action] * hiddenAct[j] * (1 - hiddenAct[j]);
+
+    for (let j = 0; j < this.hiddenSize; j++)
+      this.weights2[j][action] += alpha * outputDelta * hiddenAct[j];
+
+    for (let i = 0; i < this.inputSize; i++)
+      for (let j = 0; j < this.hiddenSize; j++)
+        this.weights1[i][j] += alpha * hiddenDelta[j] * state[i];
+  }
+
+  trainBatch(batch) {
+    if (!batch || !Array.isArray(batch)) return;
+    for (const exp of batch) this.trainQ(exp.state, exp.action, exp.reward, exp.nextState);
+  }
+
+  addNode() {
+    this.hiddenSize++;
+    this.weights1 = this.weights1.map(row => row.concat([Math.random() * 2 - 1]));
+    const newRow = [];
+    for (let k = 0; k < this.outputSize; k++) newRow.push(Math.random() * 2 - 1);
+    this.weights2.push(newRow);
+    this.memory.push({ type: 'node', hiddenSize: this.hiddenSize });
+  }
+
+  addLayer(size) {
+    if (!Number.isInteger(size) || size <= 0) return;
+    const oldHiddenSize = this.hiddenSize;
+    const oldW1 = this.weights1, oldW2 = this.weights2;
+
+    this.weights1 = this._randomMatrix(this.inputSize, size);
+    this.weights2 = this._randomMatrix(size, this.outputSize);
+    this.hiddenSize = size;
+
+    const ratio = size / oldHiddenSize;
+    for (let i = 0; i < this.inputSize; i++)
+      for (let j = 0; j < oldHiddenSize; j++)
+        this.weights1[i][Math.floor(j * ratio)] = (this.weights1[i][Math.floor(j * ratio)] + oldW1[i][j]) / 2;
+    for (let j = 0; j < oldHiddenSize; j++) {
+      const ni = Math.floor(j * ratio);
+      for (let k = 0; k < this.outputSize; k++)
+        this.weights2[ni][k] = (this.weights2[ni][k] + oldW2[j][k]) / 2;
+    }
+    this.memory.push({ type: 'layer', size, migratedFrom: oldHiddenSize });
+  }
+}
+
+// ============================================================================
+// Nature Simulation
+// ============================================================================
+function createAnimal(classType) {
+  return {
+    type: classType,
+    x: Math.random() * 0.9,
+    y: Math.random() * 0.7,
+    speed: classType === "Prey" ? SPEED_OF_LIGHT * 1e-8 * (Math.random() * 7 + 3) : SPEED_OF_LIGHT * 1e-8 * (Math.random() * 5 + 2),
+    mass: classType === "Prey" ? Math.random() * 30 + 10 : Math.random() * 50 + 30,
+    energy: classType === "Prey" ? BOLTZMANN_CONSTANT * 310 * AVOGADRO_CONSTANT / 1e20 : BOLTZMANN_CONSTANT * 310 * AVOGADRO_CONSTANT / 1e19,
+    nn: new NeuralNetwork(6, 4, 3),
+    complexity: 1
+  };
+}
+
+function generateNature() {
+  animals = [];
+  microbes = [];
+  environment = { grass: [], shrubs: [], trees: [] };
+
+  for (let i = 0; i < 6; i++) {
+    const type = ["Short", "Tall", "Dense"][i % 3];
+    environment.grass.push({
+      type: "Grass_" + type,
+      x: Math.random() * 0.9, y: Math.random() * 0.7,
+      height: PLANCK_CONSTANT * 1e34 * (type === "Short" ? 0.05 : type === "Tall" ? 0.2 : 0.1),
+      density: type === "Dense" ? AVOGADRO_CONSTANT / 1e22 * 1.5 : type === "Short" ? AVOGADRO_CONSTANT / 1e22 * 0.5 : AVOGADRO_CONSTANT / 1e22,
+      regenRate: type === "Short" ? 0.02 : type === "Tall" ? 0.01 : 0.015
+    });
+  }
+  for (let i = 0; i < 4; i++) {
+    const type = ["Thorny", "Leafy", "Flowering"][i % 3];
+    environment.shrubs.push({
+      type: "Shrub_" + type, x: Math.random() * 0.9, y: Math.random() * 0.7,
+      height: GRAVITY_CONSTANT * 1e11 * (type === "Thorny" ? 0.8 : type === "Leafy" ? 1.2 : 1),
+      radius: PI * (type === "Flowering" ? 0.4 : type === "Thorny" ? 0.2 : 0.3),
+      energyYield: type === "Flowering" ? 2 : type === "Leafy" ? 1.5 : 1
+    });
+  }
+  for (let i = 0; i < 3; i++) {
+    const type = ["Deciduous", "Evergreen", "Fruit"][i % 3];
+    environment.trees.push({
+      type: "Tree_" + type, x: Math.random() * 0.9, y: Math.random() * 0.7,
+      height: type === "Evergreen" ? Math.pow(EULER_NUMBER, 3.5) : type === "Fruit" ? Math.pow(EULER_NUMBER, 2.5) : Math.pow(EULER_NUMBER, 3),
+      trunkRadius: GM * (type === "Deciduous" ? 0.15 : type === "Fruit" ? 0.1 : 0.2),
+      stability: type === "Evergreen" ? 1.5 : type === "Fruit" ? 0.8 : 1
+    });
+  }
+  for (let i = 0; i < 5; i++) {
+    microbes.push({
+      type: "Microbe", x: Math.random() * 0.9, y: Math.random() * 0.7,
+      activity: ELECTRON_MASS * 1e31 * (Math.random() * 0.5 + 0.5),
+      nutrientBoost: PLANCK_LENGTH * 1e35 * (Math.random() * 0.1 + 0.05)
+    });
+  }
+  for (let i = 0; i < 4; i++) animals.push(createAnimal(i % 2 === 0 ? "Prey" : "Predator"));
+
+  drawNature();
+  startMicrobes();
+}
+
+function getAnimalState(animal) {
+  const nearestFood = animal.type === "Prey"
+    ? minBy([...environment.grass, ...environment.shrubs], item => Math.hypot(animal.x - item.x, animal.y - item.y))
+    : minBy(animals.filter(a => a.type === "Prey" && a !== animal), prey => Math.hypot(animal.x - prey.x, animal.y - prey.y));
+  const foodDist = nearestFood ? Math.hypot(animal.x - nearestFood.x, animal.y - nearestFood.y) : 1;
+  const nearestThreat = animal.type === "Prey"
+    ? minBy(animals.filter(a => a.type === "Predator"), pred => Math.hypot(animal.x - pred.x, animal.y - pred.y)) : null;
+  const threatDist = nearestThreat ? Math.hypot(animal.x - nearestThreat.x, animal.y - nearestThreat.y) : 1;
+  const sunlight = SunCalc.getPosition(new Date(), 0, 0).altitude / PI;
+  return [
+    Math.min(1, animal.energy / (animal.type === "Prey" ? 1e3 : 1e4)),
+    Math.min(1, animal.speed / (animal.type === "Prey" ? 10 : 7)),
+    Math.min(1, animal.mass / (animal.type === "Prey" ? 40 : 80)),
+    Math.min(1, foodDist / 0.9),
+    Math.min(1, animal.type === "Prey" ? threatDist / 0.9 : foodDist / 0.9),
+    Math.max(0, Math.min(1, sunlight))
+  ];
+}
+
+function simulateAllAnimals() {
+  if (!simulationRunning) return;
+  animals.forEach(animal => {
+    if (!animal || !animal.nn) return;
+    const state = getAnimalState(animal);
+    let reward = 0.01;
+    const qValues = animal.nn.feedforward(state);
+    let action = Math.random() < epsilon ? Math.floor(Math.random() * 3) : qValues.indexOf(Math.max(...qValues));
+
+    const nearestFood = animal.type === "Prey"
+      ? minBy([...environment.grass, ...environment.shrubs], item => Math.hypot(animal.x - item.x, animal.y - item.y))
+      : minBy(animals.filter(a => a.type === "Prey" && a !== animal), prey => Math.hypot(animal.x - prey.x, animal.y - prey.y));
+    const foodDist = nearestFood ? Math.hypot(animal.x - nearestFood.x, animal.y - nearestFood.y) : 1;
+    const nearestThreat = animal.type === "Prey"
+      ? minBy(animals.filter(a => a.type === "Predator"), pred => Math.hypot(animal.x - pred.x, animal.y - pred.y)) : null;
+    const threatDist = nearestThreat ? Math.hypot(animal.x - nearestThreat.x, animal.y - nearestThreat.y) : 1;
+
+    if (action === 0 && nearestFood) {
+      const dx = nearestFood.x - animal.x, dy = nearestFood.y - animal.y;
+      const dist = Math.hypot(dx, dy);
+      animal.x += (dx / dist) * animal.speed * PLANCK_TIME * 1e44;
+      animal.y += (dy / dist) * animal.speed * PLANCK_TIME * 1e44;
+      animal.energy -= COULOMB_CONSTANT * 1e-9 * animal.mass;
+    } else if (action === 2 && nearestThreat && animal.type === "Prey") {
+      const dx = animal.x - nearestThreat.x, dy = animal.y - nearestThreat.y;
+      const dist = Math.hypot(dx, dy);
+      animal.x += (dx / dist) * animal.speed * PLANCK_TIME * 1e44 * 1.5;
+      animal.y += (dy / dist) * animal.speed * PLANCK_TIME * 1e44 * 1.5;
+      animal.energy -= COULOMB_CONSTANT * 1e-9 * animal.mass * 2;
+      if (threatDist > 0.3) reward = -0.5;
+    } else if (action === 2 && nearestFood && animal.type === "Predator") {
+      const dx = nearestFood.x - animal.x, dy = nearestFood.y - animal.y;
+      const dist = Math.hypot(dx, dy);
+      animal.x += (dx / dist) * animal.speed * PLANCK_TIME * 1e44 * 1.2;
+      animal.y += (dy / dist) * animal.speed * PLANCK_TIME * 1e44 * 1.2;
+      animal.energy -= COULOMB_CONSTANT * 1e-9 * animal.mass * 1.5;
+    } else if (action === 1 && foodDist < 0.05 && nearestFood) {
+      if (animal.type === "Prey") {
+        animal.energy += STEFAN_BOLTZMANN * 1e8 * nearestFood.density * nearestFood.energyYield;
+        nearestFood.density *= 0.5;
+        if (nearestFood.density < 0.1) {
+          environment.grass = environment.grass.filter(g => g !== nearestFood);
+          environment.shrubs = environment.shrubs.filter(s => s !== nearestFood);
+        }
+      } else {
+        animal.energy += STEFAN_BOLTZMANN * 1e8 * nearestFood.energy / 1e3;
+        animals = animals.filter(a => a !== nearestFood);
+      }
+      reward = 1;
+    }
+
+    animal.x = Math.max(0, Math.min(0.9, animal.x));
+    animal.y = Math.max(0, Math.min(0.7, animal.y));
+
+    const nextState = getAnimalState(animal);
+    replayBuffer.push({ state, action, reward, nextState });
+    if (replayBuffer.length > bufferSize) replayBuffer.shift();
+    if (replayBuffer.length >= batchSize) {
+      const batch = [];
+      for (let i = 0; i < batchSize; i++) batch.push(replayBuffer[Math.floor(Math.random() * replayBuffer.length)]);
+      animal.nn.trainBatch(batch);
+    }
+
+    if (animal.energy > (animal.type === "Prey" ? 1e3 : 1e4) && Math.random() < COSMOLOGICAL_CONSTANT * 1e52 * animal.complexity) {
+      animal.complexity++;
+      Math.random() < 0.7 ? animal.nn.addNode() : animal.nn.addLayer(4);
+      log(animal.type + " Evolved! Complexity: " + animal.complexity);
+    }
+
+    if (animal.energy < 0) {
+      animals = animals.filter(a => a !== animal);
+      replayBuffer.push({ state, action, reward: -1, nextState });
+    }
+  });
+  drawNature();
+  updateStatus();
+  epsilon = Math.max(0.01, epsilon * 0.995);
+}
+
+function startMicrobes() {
+  if (microbeInterval) clearInterval(microbeInterval);
+  microbeInterval = setInterval(() => {
+    if (!simulationRunning) return;
+    microbes.forEach(m => {
+      const nearestDead = minBy(
+        [...environment.grass, ...environment.shrubs].filter(item => item.density < 0.2),
+        item => Math.hypot(m.x - item.x, m.y - item.y)
+      );
+      if (nearestDead && Math.hypot(m.x - nearestDead.x, m.y - nearestDead.y) < 0.05) {
+        nearestDead.density += m.nutrientBoost;
+        m.activity -= PLANCK_LENGTH * 1e35 * 0.01;
+      }
+      if (Math.random() < m.activity) {
+        m.x += (Math.random() - 0.5) * PLANCK_TIME * 1e44;
+        m.y += (Math.random() - 0.5) * PLANCK_TIME * 1e44;
+        m.x = Math.max(0, Math.min(0.9, m.x));
+        m.y = Math.max(0, Math.min(0.7, m.y));
+      }
+      if (Math.random() < WIEN_DISPLACEMENT * 1e3) {
+        environment.grass.push({
+          type: "Grass_" + ["Short", "Tall", "Dense"][Math.floor(Math.random() * 3)],
+          x: m.x + (Math.random() - 0.5) * 0.1, y: m.y + (Math.random() - 0.5) * 0.1,
+          height: PLANCK_CONSTANT * 1e34 * (Math.random() * 0.15 + 0.05),
+          density: AVOGADRO_CONSTANT / 1e22 * (Math.random() * 0.5 + 0.5), regenRate: 0.015
+        });
+      }
+    });
+    microbes = microbes.filter(m => m.activity > 0);
+    drawNature();
+  }, 1000);
+}
+
+// ── Drawing ────────────────────────────────────────────────────────────────
+function drawNature() {
+  const w = natureCanvas.width, h = natureCanvas.height;
+  natureCtx.fillStyle = '#0a0a0a';
+  natureCtx.fillRect(0, 0, w, h);
+
+  environment.grass.forEach(g => {
+    natureCtx.fillStyle = getColor(g.density / 2);
+    natureCtx.beginPath();
+    natureCtx.arc(g.x * w, g.y * h, 5, 0, 2 * PI);
+    natureCtx.fill();
+  });
+  environment.shrubs.forEach(s => {
+    natureCtx.fillStyle = getColor(s.energyYield / 2);
+    natureCtx.beginPath();
+    natureCtx.arc(s.x * w, s.y * h, 10, 0, 2 * PI);
+    natureCtx.fill();
+  });
+  environment.trees.forEach(t => {
+    natureCtx.fillStyle = getColor(t.stability / 1.5);
+    natureCtx.fillRect(t.x * w, t.y * h, 15, 20);
+  });
+  microbes.forEach(m => {
+    natureCtx.fillStyle = getColor(m.activity / (ELECTRON_MASS * 1e31));
+    natureCtx.fillRect(m.x * w, m.y * h, 2, 2);
+  });
+  animals.forEach(a => {
+    natureCtx.fillStyle = getColor(a.energy / (a.type === "Prey" ? 1e3 : 1e4));
+    natureCtx.beginPath();
+    natureCtx.arc(a.x * w, a.y * h, a.type === "Prey" ? 6 : 8, 0, 2 * PI);
+    natureCtx.fill();
+    // Label
+    natureCtx.fillStyle = '#fff';
+    natureCtx.font = '10px monospace';
+    natureCtx.fillText(a.type[0], a.x * w + 8, a.y * h + 4);
+  });
+}
+
+// ── Mandelbrot ─────────────────────────────────────────────────────────────
+function generateMandelbrot(width, height, maxIter) {
+  const data = [];
+  const sunlight = SunCalc.getPosition(new Date(), 0, 0).altitude / PI;
+  for (let x = 0; x < width; x += PS) {
+    data[x] = [];
+    for (let y = 0; y < height; y += PS) {
+      const real = X_MIN + (x / width) * (X_MAX - X_MIN) * GM;
+      const imag = Y_MIN + (y / height) * (Y_MAX - Y_MIN) * (1 + sunlight);
+      let zr = 0, zi = 0, iter = 0;
+      while (zr * zr + zi * zi <= 4 && iter < maxIter) {
+        const tmp = zr * zr - zi * zi + real;
+        zi = 2 * zr * zi + imag;
+        zr = tmp;
+        iter++;
+      }
+      data[x][y] = iter / maxIter;
+    }
+  }
+  return data;
+}
+
+function drawMandelbrot() {
+  const startTime = Date.now();
+  const w = mandelbrotCanvas.width, h = mandelbrotCanvas.height;
+  const data = generateMandelbrot(w, h, MI);
+  mandelbrotCtx.fillStyle = '#0a0a0a';
+  mandelbrotCtx.fillRect(0, 0, w, h);
+
+  for (let x = 0; x < w; x += PS) {
+    for (let y = 0; y < h; y += PS) {
+      mandelbrotCtx.fillStyle = getColor((data[x] && data[x][y]) || 0);
+      mandelbrotCtx.fillRect(x, y, PS, PS);
+    }
+  }
+
+  const renderTime = Date.now() - startTime;
+  const pixelCount = Math.ceil((w / PS) * (h / PS));
+  log("Mandelbrot: " + renderTime + "ms, " + pixelCount + " pixels");
+
+  if (Date.now() - lastMandelbrotOODATime > 5000) {
+    mandelbrotOODALoop();
+    lastMandelbrotOODATime = Date.now();
+  }
+}
+
+// ── OODA Loop ──────────────────────────────────────────────────────────────
+function mandelbrotObserve() {
+  const battery = 0.8;
+  const memRatio = (performance.memory ? performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit : 0.5);
+  const sunlight = SunCalc.getPosition(new Date(), 0, 0).altitude / PI;
+  return [battery, memRatio, voiceInput.length / 100, sunlight];
+}
+
+function mandelbrotOODALoop() {
+  const obs = mandelbrotObserve();
+  const situation = mandelbrotNN.feedforward(obs)[0];
+  if (situation > 0.7) {
+    mandelbrotNN.addNode();
+    log("Mandelbrot NN: Added node (situation=" + situation.toFixed(3) + ")");
+  } else if (situation < 0.3) {
+    mandelbrotNN.addLayer(6);
+    log("Mandelbrot NN: Added layer (situation=" + situation.toFixed(3) + ")");
+  }
+  drawMandelbrot();
+}
+
+// ── Voice Control ──────────────────────────────────────────────────────────
+function setupVoice() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    voiceStatus.textContent = 'Voice recognition not available in this browser.';
+    document.getElementById('btn-voice').disabled = true;
+    return;
+  }
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = (event) => {
+    const result = event.results[0][0].transcript;
+    voiceInput = result;
+    interpretCommand(result);
+    const obs = mandelbrotObserve();
+    const situation = mandelbrotNN.feedforward(obs)[0];
+    const target = [situation * 0.9 + 0.05];
+    mandelbrotNN.train(obs, target);
+    voiceStatus.textContent = 'Heard: "' + result + '"';
+    stopRecording();
+  };
+
+  recognition.onerror = (event) => {
+    voiceStatus.textContent = 'Voice error: ' + event.error;
+    stopRecording();
+  };
+
+  recognition.onend = () => stopRecording();
+}
+
+function toggleVoice() {
+  if (!recognition) { setupVoice(); }
+  if (!recognition) return;
+  if (isRecording) { stopRecording(); }
+  else { startRecording(); }
+}
+
+function startRecording() {
+  if (!recognition || isRecording) return;
+  try {
+    recognition.start();
+    isRecording = true;
+    document.getElementById('btn-voice').classList.add('recording');
+    document.getElementById('btn-voice').textContent = '🎤 Listening...';
+    voiceStatus.textContent = 'Listening...';
+  } catch (e) {
+    voiceStatus.textContent = 'Could not start: ' + e;
+  }
+}
+
+function stopRecording() {
+  isRecording = false;
+  document.getElementById('btn-voice').classList.remove('recording');
+  document.getElementById('btn-voice').textContent = '🎤 Voice';
+  try { recognition.stop(); } catch (e) {}
+}
+
+function interpretCommand(cmd) {
+  if (!cmd) return;
+  cmd = cmd.toLowerCase();
+  let response = "Command not recognized";
+  if (cmd.includes("pause")) {
+    simulationRunning = false; response = "Simulation paused";
+  } else if (cmd.includes("resume")) {
+    simulationRunning = true; response = "Simulation resumed";
+  } else if (cmd.includes("increase complexity")) {
+    animals.forEach(a => a.nn.addNode());
+    response = "Increased animal NN complexity";
+  } else if (cmd.includes("render")) {
+    drawMandelbrot(); response = "Rendering Mandelbrot";
+  } else if (cmd.includes("add node")) {
+    mandelbrotNN.addNode(); response = "Adding node";
+  } else if (cmd.includes("spawn prey")) {
+    animals.push(createAnimal("Prey"));
+    drawNature(); response = "Spawned prey";
+  } else if (cmd.includes("spawn predator")) {
+    animals.push(createAnimal("Predator"));
+    drawNature(); response = "Spawned predator";
+  } else if (cmd.includes("eat")) {
+    animals.forEach(a => {
+      const food = a.type === "Prey"
+        ? minBy([...environment.grass, ...environment.shrubs], item => Math.hypot(a.x - item.x, a.y - item.y))
+        : minBy(animals.filter(p => p.type === "Prey" && p !== a), prey => Math.hypot(a.x - prey.x, a.y - prey.y));
+      if (food && Math.hypot(a.x - food.x, a.y - food.y) < 0.05) {
+        if (a.type === "Prey") {
+          a.energy += STEFAN_BOLTZMANN * 1e8 * food.density * food.energyYield;
+          food.density *= 0.5;
+          if (food.density < 0.1) {
+            environment.grass = environment.grass.filter(g => g !== food);
+            environment.shrubs = environment.shrubs.filter(s => s !== food);
+          }
+        } else {
+          a.energy += STEFAN_BOLTZMANN * 1e8 * food.energy / 1e3;
+          animals = animals.filter(p => p !== food);
+        }
+      }
+    });
+    drawNature(); response = "Animals eating";
+  } else if (cmd.includes("grow grass")) {
+    environment.grass.push({
+      type: "Grass_" + ["Short", "Tall", "Dense"][Math.floor(Math.random() * 3)],
+      x: Math.random() * 0.9, y: Math.random() * 0.7,
+      height: PLANCK_CONSTANT * 1e34 * (Math.random() * 0.15 + 0.05),
+      density: AVOGADRO_CONSTANT / 1e22 * (Math.random() * 0.5 + 0.5), regenRate: 0.015
+    });
+    drawNature(); response = "Growing grass";
+  }
+  speak(response);
+}
+
+// ── Speech output ──────────────────────────────────────────────────────────
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 1.0;
+  utterance.pitch = 1.0;
+  window.speechSynthesis.speak(utterance);
+}
+
+// ── Persistence ────────────────────────────────────────────────────────────
+function saveWeights() {
+  const data = {
+    animals: animals.map(a => ({ weights1: a.nn.weights1, weights2: a.nn.weights2, hiddenSize: a.nn.hiddenSize, memory: a.nn.memory })),
+    mandelbrot: { weights1: mandelbrotNN.weights1, weights2: mandelbrotNN.weights2, hiddenSize: mandelbrotNN.hiddenSize, memory: mandelbrotNN.memory }
+  };
+  localStorage.setItem('nature-life-weights', JSON.stringify(data));
+  log('Weights saved to localStorage');
+}
+
+function loadWeights() {
+  const raw = localStorage.getItem('nature-life-weights');
+  if (!raw) { log('No saved weights found'); return; }
+  const data = JSON.parse(raw);
+  animals.forEach((a, i) => {
+    if (data.animals[i]) {
+      a.nn.weights1 = data.animals[i].weights1;
+      a.nn.weights2 = data.animals[i].weights2;
+      a.nn.hiddenSize = data.animals[i].hiddenSize;
+      a.nn.memory = data.animals[i].memory || [];
+    }
+  });
+  if (data.mandelbrot) {
+    mandelbrotNN.weights1 = data.mandelbrot.weights1;
+    mandelbrotNN.weights2 = data.mandelbrot.weights2;
+    mandelbrotNN.hiddenSize = data.mandelbrot.hiddenSize;
+    mandelbrotNN.memory = data.mandelbrot.memory || [];
+  }
+  log('Weights loaded from localStorage');
+}
+
+function saveNatureImage() {
+  const link = document.createElement('a');
+  link.download = 'Nature-Life-' + Date.now() + '.png';
+  link.href = natureCanvas.toDataURL('image/png');
+  link.click();
+  log('Nature canvas saved');
+}
+
+// ── Random events ──────────────────────────────────────────────────────────
+function randomEvent() {
+  if (Math.random() < 0.05) {
+    if (Math.random() < 0.5) {
+      animals.forEach(a => a.energy *= 0.8);
+      log("Storm hits!");
+    } else {
+      environment.grass.forEach(g => g.density *= 1.2);
+      log("Nutrient surge!");
+    }
+    drawNature();
+  }
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function log(msg) {
+  statusEl.textContent = msg;
+}
+
+function updateStatus() {
+  statusEl.textContent = "Nature: " + animals.length + " animals, " + microbes.length + " microbes | Mandelbrot: " + (voiceInput || "Awaiting input") + " | ε=" + epsilon.toFixed(3);
+}
+
+function redrawAll() {
+  drawNature();
+  drawMandelbrot();
+}
+
+function runSimulation() {
+  log("Life Simulation Running...");
+  generateNature();
+  drawMandelbrot();
+}
+
+function cleanup() {
+  if (microbeInterval) clearInterval(microbeInterval);
+  if (animalInterval) clearInterval(animalInterval);
+  if (eventInterval) clearInterval(eventInterval);
+  if (isRecording) stopRecording();
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+function init() {
+  mandelbrotNN = new NeuralNetwork(4, 5, 1);
+  generateNature();
+  drawMandelbrot();
+
+  animalInterval = setInterval(simulateAllAnimals, 500);
+  eventInterval = setInterval(randomEvent, 1000);
+
+  document.getElementById('btn-sim').addEventListener('click', runSimulation);
+  document.getElementById('btn-save').addEventListener('click', saveWeights);
+  document.getElementById('btn-load').addEventListener('click', loadWeights);
+  document.getElementById('btn-save-nature').addEventListener('click', saveNatureImage);
+  document.getElementById('btn-voice').addEventListener('click', toggleVoice);
+
+  setupVoice();
+  speak("Life simulation online.");
+  updateStatus();
+  log("Nature-Life v2.0 — SEED3 — Ready. Voice: pause, resume, spawn, eat, grow grass");
+}
+
+window.addEventListener('beforeunload', cleanup);
+init();
+</script>
+</body>
+</html>

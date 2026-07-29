@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+<title>NogVerse Complete — A13</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#010308;overflow:hidden;position:fixed;width:100%;height:100%;font-family:'Courier New',monospace;touch-action:none}canvas{display:block}
+#hud{position:fixed;top:4px;left:50%;transform:translateX(-50%);pointer-events:none;text-align:center;z-index:10}
+#hud .t{color:#ffd700;font-size:10px;letter-spacing:2px}#info{color:#888;font-size:6px;margin-top:1px}
+#ctrl{position:fixed;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:2px;z-index:10;flex-wrap:wrap;justify-content:center}
+#ctrl button{background:rgba(255,200,50,.06);border:1px solid rgba(255,200,50,.1);color:#aaa;padding:3px 6px;border-radius:3px;font-size:6px;cursor:pointer;font-family:monospace}
+#ctrl button.on{background:rgba(200,180,100,.15);border-color:rgba(200,180,100,.4);color:#ffd700}
+a.back{position:fixed;bottom:8px;right:8px;color:#443;font-size:7px;text-decoration:none;z-index:20}</style></head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud"><div class="t">🌌 NOGVERSE COMPLETE</div><div id="info"></div></div>
+<div id="ctrl">
+  <button onclick="V.view=!V.view;up()" id="bv">📐</button>
+  <button onclick="V.lbl=!V.lbl;up()" class="on" id="bl">🏷</button>
+  <button onclick="V.orb=!V.orb;up()" class="on" id="bo">◎</button>
+  <button onclick="V.grav=!V.grav;up()" class="on" id="bg">⬇</button>
+  <button onclick="V.life=!V.life;up()" class="on" id="blf">🐾</button>
+  <button onclick="V.rot=!V.rot;up()" class="on" id="br">⟳</button>
+  <button onclick="V.fac=!V.fac;up()" class="on" id="bf">⚔</button>
+  <button onclick="V.zm=Math.min(15,V.zm*1.5)">🔍+</button><button onclick="V.zm=Math.max(.003,V.zm/1.5)">🔍−</button>
+  <button onclick="V.zl=Math.min(99,V.zl+5)">🔽</button><button onclick="V.zl=Math.max(0,V.zl-5)">🔼</button>
+  <button onclick="V.zm=1;V.ox=0;V.oy=0;V.zl=50;V.view=false;V.animating=false;V.rot=true" class="on">↺</button>
+</div>
+<a class="back" href="index.html">← Arcade</a>
+<script>
+const π=Math.PI,φ=1.618;
+const C=document.getElementById('c'),X=C.getContext('2d');
+let Wc,Hc,T=0,collisions=[],colCount=0;
+const V={zm:1,ox:0,oy:0,zl:50,view:false,lbl:true,orb:true,grav:true,life:true,fac:true,rot:true,col:true,rotSpeed:.004,targetZM:1,targetOX:0,targetOY:0,animating:false};
+let drag=false,lx=0,ly=0,gravDebris=[],tapTime=0,tapX=0,tapY=0;
+const G=100,CELL=50,D=100,DCELL=8,G_CONST=0.8;
+
+// ═══════════════════════════════════════════════════════════════
+function h3(x,y,z){let n=Math.sin(x*127.1+y*311.7+z*173.3+φ)*43758.5453;return n-Math.floor(n)}
+function st(gx,gy,gz){let h=h3(gx,gy,gz);if(h<.001)return 0;if(h<.02)return 8;if(h<.06)return 6;if(h<.10)return 7;if(h<.14)return 9;if(h<.25)return 5;if(h<.35)return 3;if(h<.47)return 4;if(h<.65)return 1;return 2}
+const SC={0:'#000',1:'#ffe08a',2:'#f8f8ff',3:'#aaccff',4:'#ff6644',5:'#88ffaa',6:'#ffe8e8',7:'#ffe8aa',8:'#ddeeff',9:'#eebb88'};
+const SN={0:'BH',1:'Y',2:'W',3:'B',4:'R',5:'G',6:'W+R',7:'Y+B',8:'B+R+G',9:'Y+Br'};
+const SS={0:10,1:14,2:11,3:18,4:10,5:13,6:16,7:15,8:20,9:13};
+const SM={0:0,1:500,2:400,3:800,4:350,5:450,6:600,7:700,8:1200,9:550};
+
+// ═══════════════════════════════════════════════════════════════
+// ALL PLANET TYPES (from nog_game.c + our catalog)
+// ═══════════════════════════════════════════════════════════════
+const PTYPES=['Rocky','Radioactive','Metallic','Crystalline','Glacial','Rogue','Volcanic','Gaia','Dune'];
+const PCOLORS={Rocky:['#a08060','#8a6a4a'],Radioactive:['#cc3333','#992222'],Metallic:['#8899aa','#667788'],Crystalline:['#aaddff','#88bbdd'],Glacial:['#ddeeff','#bbccdd'],Rogue:['#443322','#332211'],Volcanic:['#cc4422','#aa3311'],Gaia:['#4488cc','#336699'],Dune:['#cc9933','#aa7722']};
+// Life per planet type
+const LIFE={Rocky:[{e:'🕷️',c:'#f80'},{e:'🦗',c:'#8f0'},{e:'🐜',c:'#f44'}],Radioactive:[{e:'🦎',c:'#0f0'},{e:'🐉',c:'#f80'},{e:'👁️',c:'#f0f'}],Metallic:[{e:'🕷️',c:'#c0c'},{e:'🐜',c:'#f66'},{e:'🐕',c:'#fa4'}],Crystalline:[{e:'🦅',c:'#fff'},{e:'🐒',c:'#a64'},{e:'🐠',c:'#0ff'}],Glacial:[{e:'🐜',c:'#88f'},{e:'🦣',c:'#a88'},{e:'🦅',c:'#fff'}],Rogue:[{e:'🪨',c:'#aaa'},{e:'🐉',c:'#f80'},{e:'🦇',c:'#88f'}],Volcanic:[{e:'🐜',c:'#f44'},{e:'🐉',c:'#ff0'},{e:'🦣',c:'#f84'}],Gaia:[{e:'🦅',c:'#fff'},{e:'🦌',c:'#a64'},{e:'🐬',c:'#48f'},{e:'🐒',c:'#864'},{e:'🦋',c:'#f0f'}],Dune:[{e:'🕷️',c:'#f80'},{e:'🦂',c:'#fa0'},{e:'🦎',c:'#0f8'}],GasGiant:[],Asteroid:[{e:'🪨',c:'#aaa'}],RogueP:[{e:'🪨',c:'#aaa'},{e:'🐉',c:'#f80'}]};
+
+// ═══════════════════════════════════════════════════════════════
+// 4 FACTIONS (from Dual Systems) + OODA NN
+// ═══════════════════════════════════════════════════════════════
+const FACTIONS=['red','blue','green','purple'];
+const FCOLORS={red:'#FF6347',blue:'#1E90FF',green:'#00FF00',purple:'#800080'};
+const FNAMES={red:'Crimson Legion',blue:'Azure Fleet',green:'Verdant Order',purple:'Void Covenant'};
+
+class NeuralNet{
+  constructor(){this.w1=[];this.w2=[];for(let i=0;i<5;i++){this.w1[i]=[];for(let j=0;j<4;j++)this.w1[i][j]=(Math.random()-.5)*.5}for(let i=0;i<4;i++){this.w2[i]=[];for(let j=0;j<4;j++)this.w2[i][j]=(Math.random()-.5)*.5}}
+  sig(x){return 1/(1+Math.exp(-Math.max(-50,Math.min(50,x))))}
+  fw(inp){let h=[];for(let j=0;j<4;j++){let s=0;for(let i=0;i<5;i++)s+=inp[i]*this.w1[i][j];h.push(this.sig(s))}let o=[];for(let j=0;j<4;j++){let s=0;for(let i=0;i<4;i++)s+=h[i]*this.w2[i][j];o.push(s)}return o}
+}
+
+// Faction state
+let factions=[];
+for(let i=0;i<4;i++){
+  factions.push({
+    name:FACTIONS[i],color:FCOLORS[FACTIONS[i]],fullName:FNAMES[FACTIONS[i]],
+    nn:new NeuralNet(),homeGX:20+i*20,homeGY:50,homeGZ:50,
+    ships:[],score:0,territory:new Set()
+  });
+  // Territory: faction controls a region
+  let cx=20+i*20,cy=50;
+  for(let dx=-5;dx<=5;dx++)for(let dy=-5;dy<=5;dy++)for(let dz=-2;dz<=2;dz++)
+    factions[i].territory.add((cx+dx)+','+(cy+dy)+','+(50+dz));
+  // Spawn patrol ships
+  for(let s=0;s<8;s++){
+    factions[i].ships.push({gx:cx+(Math.random()-.5)*8,gy:cy+(Math.random()-.5)*8,gz:50+(Math.random()-.5)*4,targetGX:cx+(Math.random()-.5)*12,targetGY:cy+(Math.random()-.5)*12,targetGZ:50+(Math.random()-.5)*8,progress:Math.random()});
+  }
+}
+
+// OODA Loop — runs every 60 frames (~1s at 60fps)
+let oodaCounter=0;
+function oodaLoop(){
+  oodaCounter++;if(oodaCounter%90!==0)return;
+  for(let f of factions){
+    // Observe: count systems, enemies nearby, expansion opportunities
+    let sysCount=f.territory.size;
+    let enemyNear=0;
+    for(let f2 of factions)if(f2!==f){
+      for(let s of f2.ships){
+        let key=Math.round(s.gx)+','+Math.round(s.gy)+','+Math.round(s.gz);
+        if(f.territory.has(key))enemyNear++;
+      }
+    }
+    let state=[sysCount/200,enemyNear/10,f.score/100,Math.random(),f.ships.length/20];
+    let out=f.nn.fw(state);
+
+    // Decide: expand (0), defend (1), attack (2), research (3)
+    let action=out.indexOf(Math.max(...out));
+
+    if(action===0&&Math.random()<.3){ // Expand territory
+      let edge=[];for(let t of f.territory){let p=t.split(',').map(Number);
+        for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++)for(let dz=-1;dz<=1;dz++){
+          let nx=p[0]+dx,ny=p[1]+dy,nz=p[2]+dz;
+          if(nx>=0&&nx<G&&ny>=0&&ny<G&&nz>=0&&nz<D){let k=nx+','+ny+','+nz;if(!f.territory.has(k))edge.push({gx:nx,gy:ny,gz:nz})}
+        }}
+      if(edge.length){let pick=edge[Math.floor(Math.random()*edge.length)];f.territory.add(pick.gx+','+pick.gy+','+pick.gz);f.score+=1}
+    }else if(action===1){ // Defend
+      f.score+=.5;
+    }else if(action===2&&Math.random()<.2){ // Attack nearest enemy territory
+      for(let f2 of factions)if(f2!==f){
+        let tarr=Array.from(f2.territory);
+        if(tarr.length){let t=tarr[Math.floor(Math.random()*tarr.length)],p=t.split(',').map(Number);
+          let dist=Math.hypot(p[0]-f.homeGX,p[1]-f.homeGY);
+          if(dist<15){f2.territory.delete(t);f.territory.add(t);f.score+=3}
+        }
+      }
+    }
+    // Move ships toward targets
+    for(let s of f.ships){
+      s.progress+=.01;if(s.progress>=1){s.gx=s.targetGX;s.gy=s.targetGY;s.gz=s.targetGZ;s.targetGX+=Math.floor((Math.random()-.5)*6);s.targetGY+=Math.floor((Math.random()-.5)*6);s.targetGZ=Math.max(0,Math.min(99,s.targetGZ+Math.floor((Math.random()-.5)*4)));s.progress=0}
+      s.gx+=(s.targetGX-s.gx)*.02;s.gy+=(s.targetGY-s.gy)*.02;s.gz+=(s.targetGZ-s.gz)*.02;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PLANET + LIFE GENERATION
+// ═══════════════════════════════════════════════════════════════
+let planetCache={};
+function getPlanets(gx,gy,gz){
+  let key=gx+','+gy+','+gz;if(planetCache[key])return planetCache[key];
+  let t=st(gx,gy,gz);if(t===0){planetCache[key]=[];return[]}
+  let h=h3(gx+1,gy+2,gz+3),nP=Math.floor(h*10);if(t===8)nP=Math.floor(h*16)+2;
+  let planets=[],orbit=20;
+  for(let i=0;i<nP;i++){
+    let typeIdx=Math.floor(h3(gx+i,gy+i*2,gz-i)*9);
+    let type=PTYPES[typeIdx],colors=PCOLORS[type];
+    let r=3+Math.random()*6;
+    let isGas=type==='GasGiant';
+    let hasRings=isGas&&Math.random()<.3;
+    let nMoons=r>5?Math.floor(Math.random()*3):Math.random()<.3?1:0;
+    let moons=[];for(let j=0;j<nMoons;j++)moons.push({r:1+Math.random(),orbit:r*2+j*2,angle:Math.random()*π*2,speed:.02/(j+1)});
+    let life=[];
+    if(V.life&&LIFE[type]){let lf=LIFE[type];for(let k=0;k<Math.min(3,lf.length);k++)if(Math.random()<.7)life.push({e:lf[k].e,c:lf[k].c,lon:Math.random()*π*2,lat:(Math.random()-.5)*π})}
+    planets.push({type,colors,r,orbit,speed:.003/(i+1),angle:Math.random()*π*2,hasRings,moons,life});
+    orbit+=r*2+Math.random()*8;
+  }
+  // Add asteroids in belt
+  if(Math.random()<.6){let nA=Math.floor(Math.random()*8)+2;for(let i=0;i<nA;i++)planets.push({type:'Asteroid',colors:{0:'#888',1:'#666'},r:1+Math.random(),orbit:orbit+Math.random()*10,speed:.004+Math.random()*.01,angle:Math.random()*π*2,hasRings:false,moons:[],life:LIFE.Asteroid?[{e:'🪨',c:'#aaa',lon:0,lat:0}]:[],isAsteroid:true})}
+  planetCache[key]=planets;return planets;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GRAVITY
+// ═══════════════════════════════════════════════════════════════
+function gf(px,py,sx,sy,mass){let dx=sx-px,dy=sy-py,dist=Math.sqrt(dx*dx+dy*dy);if(dist<2)return{ax:0,ay:0,hit:true};let f=G_CONST*mass/(dist*dist);return{ax:(dx/dist)*f,ay:(dy/dist)*f,hit:false,dist}}
+function spawnGP(sx,sy,c){for(let i=0;i<c;i++){let a=Math.random()*π*2,d=15+Math.random()*80;gravDebris.push({x:sx+Math.cos(a)*d,y:sy+Math.sin(a)*d,vx:(Math.random()-.5)*1.5,vy:(Math.random()-.5)*1.5,life:300+Math.random()*400})}}
+function updateGravity(sc,cx2,cy2){
+  for(let p of gravDebris){let bf=null,bd=Infinity;
+    for(let gx=0;gx<G;gx+=10)for(let gy=0;gy<G;gy+=10){
+      let t=st(gx,gy,V.zl);if(t===0)continue;let sx=cx2+gx*CELL*sc,sy=cy2+gy*CELL*sc;let g=gf(p.x,p.y,sx,sy,SM[t]);if(g.dist<bd){bf=g;bd=g.dist}}
+    if(bf){p.vx+=bf.ax*.3;p.vy+=bf.ay*.3;if(bf.hit)p.life=0}p.x+=p.vx;p.y+=p.vy;p.life--;p.vx*=.99;p.vy*=.99}
+  gravDebris=gravDebris.filter(p=>p.life>0);
+  if(T%5<.02&&gravDebris.length<200){let gx=Math.floor(Math.random()*G),gy=Math.floor(Math.random()*G),t=st(gx,gy,V.zl);if(t!==0)spawnGP(cx2+gx*CELL*sc,cy2+gy*CELL*sc,1)}
+}
+function drawGW(sc,cx2,cy2){
+  if(!V.grav)return;
+  for(let gx=0;gx<G;gx+=6)for(let gy=0;gy<G;gy+=6){
+    let t=st(gx,gy,V.zl);if(t===0)continue;let sx=cx2+gx*CELL*sc,sy=cy2+gy*CELL*sc;
+    let ir=Math.sqrt(SM[t]*G_CONST/.01)*sc*.4;if(ir<3)continue;
+    for(let r=1;r<=2;r++){X.strokeStyle=`rgba(100,180,255,${.06/r})`;X.lineWidth=.5;X.setLineDash([2,5]);X.beginPath();X.arc(sx,sy,ir*r/2,0,π*2);X.stroke();X.setLineDash([])}
+  }
+}
+
+function init(){Wc=innerWidth;C.width=Wc;Hc=innerHeight;C.height=Hc}init();window.addEventListener('resize',init);
+
+function drawStarAt(sx,sy,color,sz,isBH){
+  if(isBH){X.fillStyle='#000';X.beginPath();X.arc(sx,sy,sz*.5,0,π*2);X.fill();X.strokeStyle='rgba(255,200,50,.3)';X.lineWidth=1;X.beginPath();X.arc(sx,sy,sz*.7,0,π*2);X.stroke();return}
+  let r=Math.max(.8,sz*.25);if(r<1.5){X.fillStyle=color;X.fillRect(sx-.5,sy-.5,1,1);return}
+  let grad=X.createRadialGradient(sx-r*.2,sy-r*.2,0,sx,sy,r);grad.addColorStop(0,'#fff');grad.addColorStop(.5,color);grad.addColorStop(1,'transparent');X.fillStyle=grad;X.beginPath();X.arc(sx,sy,r,0,π*2);X.fill();
+}
+function drawPlanetAt(bx,by,r,colors,isGas){
+  if(r<1){X.fillStyle=colors[0];X.fillRect(bx-.5,by-.5,1,1);return}
+  let grad=X.createRadialGradient(bx-r*.3,by-r*.3,0,bx,by,r);grad.addColorStop(0,'#fff');grad.addColorStop(.3,colors[1]);grad.addColorStop(1,colors[0]);X.fillStyle=grad;X.beginPath();X.arc(bx,by,r,0,π*2);X.fill();
+  if(isGas)for(let i=0;i<2;i++){X.strokeStyle='rgba(255,255,255,.1)';X.lineWidth=r*.12;X.beginPath();X.arc(bx,by+i*r*.15-r*.06,r*.8,0,π);X.stroke()}
+}
+
+function draw(){
+  X.fillStyle='rgba(1,2,6,.7)';X.fillRect(0,0,Wc,Hc);
+  for(let i=0;i<30;i++){let sx=((i*137.5+Wc*.3)%Wc+Wc)%Wc;X.fillStyle=`rgba(200,200,220,${.01+.02*Math.sin(T+i)})`;X.fillRect(sx,((i*271.8+Hc*.3)%Hc+Hc)%Hc,1,1)}
+
+  let sc=V.zm,cx2=Wc/2+V.ox,cy2=Hc/2+V.oy;
+  let xMin=Math.max(0,Math.floor((V.ox/-sc-Wc/sc/2)/CELL)-1),xMax=Math.min(G-1,Math.ceil((V.ox/-sc+Wc/sc/2)/CELL)+1);
+  let yMin=Math.max(0,Math.floor((V.oy/-sc-Hc/sc/2)/CELL)-1),yMax=Math.min(G-1,Math.ceil((V.oy/-sc+Hc/sc/2)/CELL)+1);
+  let zMin=Math.max(0,V.zl-4),zMax=Math.min(D-1,V.zl+4);
+  let showSys=V.zm>.1,vis=0;
+
+  // Faction territory (background)
+  if(V.fac&&V.zm>.05&&V.zm<2){
+    for(let gz=zMin;gz<=zMax;gz++)for(let gx=xMin;gx<=xMax;gx++)for(let gy=yMin;gy<=yMax;gy++){
+      for(let f of factions)if(f.territory.has(gx+','+gy+','+gz)){
+        let sx,sy;if(V.view){sx=cx2+gx*CELL*sc;sy=cy2+(gy*CELL*.3+gz*DCELL*.7)*sc}else{sx=cx2+gx*CELL*sc;sy=cy2+gy*CELL*sc}
+        X.fillStyle=f.color+'08';X.fillRect(sx,sy,CELL*sc,(V.view?DCELL:CELL)*sc);break;
+      }
+    }
+  }
+
+  // Gravity
+  if(V.grav){updateGravity(sc,cx2,cy2);drawGW(sc,cx2,cy2);for(let p of gravDebris){X.fillStyle='rgba(255,200,100,.4)';X.fillRect(p.x-.5,p.y-.5,1,1)}}
+
+  // Grid lines
+  if(V.zm>.15){X.strokeStyle='rgba(255,255,255,.01)';X.lineWidth=.3;
+    for(let gx=xMin;gx<=xMax;gx++){let sx=cx2+gx*CELL*sc;X.beginPath();X.moveTo(sx,cy2+yMin*CELL*sc);X.lineTo(sx,cy2+(yMax+1)*CELL*sc);X.stroke()}
+    for(let gy=yMin;gy<=yMax;gy++){let sy=cy2+gy*CELL*sc;X.beginPath();X.moveTo(cx2+xMin*CELL*sc,sy);X.lineTo(cx2+(xMax+1)*CELL*sc,sy);X.stroke()}
+  }
+
+  // Stars + systems
+  for(let gz=zMin;gz<=zMax;gz++){
+    let df=1-Math.abs(gz-V.zl)/5;if(df<.05)continue;
+    for(let gx=xMin;gx<=xMax;gx++)for(let gy=yMin;gy<=yMax;gy++){
+      let t=st(gx,gy,gz),color=SC[t],sz=SS[t]*sc*df;
+      let sx,sy;if(V.view){sx=cx2+gx*CELL*sc;sy=cy2+(gy*CELL*.3+gz*DCELL*.7)*sc}else{sx=cx2+gx*CELL*sc;sy=cy2+gy*CELL*sc}
+      if(sx<-50||sx>Wc+50||sy<-50||sy>Hc+50)continue;vis++;
+      X.globalAlpha=Math.max(.06,df);
+
+      if(showSys&&t!==0&&sz>12){
+        drawStarAt(sx,sy,color,sz,false);
+        let planets=getPlanets(gx,gy,gz);
+        // Collision check
+        if(V.col&&planets.length>1)for(let pi=0;pi<planets.length;pi++){let pp=planets[pi];if(pp.destroyed)continue;
+          for(let pj=pi+1;pj<planets.length;pj++){let pq=planets[pj];if(pq.destroyed)continue;
+            let da=pp.angle+T*pp.speed*2-pq.angle-T*pq.speed*2;
+            let dx=Math.cos(pp.angle+T*pp.speed*2)*pp.orbit-Math.cos(pq.angle+T*pq.speed*2)*pq.orbit;
+            let dy=Math.sin(pp.angle+T*pp.speed*2)*pp.orbit-Math.sin(pq.angle+T*pq.speed*2)*pq.orbit;
+            let dist=Math.sqrt(dx*dx+dy*dy);
+            if(dist<(pp.r+pq.r)*.5){let big=pp.r>=pq.r?pp:pq,small=pp.r>=pq.r?pq:pp;small.destroyed=true;
+              let mx=sx+(Math.cos(pp.angle+T*pp.speed*2)*pp.orbit+Math.cos(pq.angle+T*pq.speed*2)*pq.orbit)/2*sc*.15;
+              let my=sy+(Math.sin(pp.angle+T*pp.speed*2)*pp.orbit+Math.sin(pq.angle+T*pq.speed*2)*pq.orbit)/2*sc*.15;
+              for(let k=0;k<20;k++){let a=Math.random()*π*2,s=Math.random()*3;collisions.push({x:mx,y:my,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:30+Math.random()*50,col:small.colors?small.colors[0]:'#ff8844'})}
+              if(big.r<15)big.r+=small.r*.3;colCount++;break;}
+          }if(planets.some(p=>p.destroyed))break;
+        }
+        if(planets.length&&V.orb)planets.forEach(p=>{
+          if(p.isAsteroid){let a=p.angle+T*p.speed*3;X.fillStyle='#888';X.fillRect(sx+Math.cos(a)*p.orbit*sc*.15-.5,sy+Math.sin(a)*p.orbit*sc*.15-.5,1,1);return}
+          let a=p.angle+T*p.speed*2,px=sx+Math.cos(a)*p.orbit*sc*.15,py=sy+Math.sin(a)*p.orbit*sc*.15;
+          if(p.orbit*sc*.15>3&&V.orb){X.strokeStyle='rgba(255,255,255,.03)';X.lineWidth=.3;X.beginPath();X.arc(sx,sy,p.orbit*sc*.15,0,π*2);X.stroke()}
+          let pr=Math.max(.5,p.r*sc*.02);drawPlanetAt(px,py,pr,p.colors,p.type==='GasGiant');
+          if(p.moons&&pr>2)for(let m of p.moons){let ma=m.angle+T*m.speed*5;X.fillStyle='#aaa';X.fillRect(px+Math.cos(ma)*m.orbit*sc*.02-.5,py+Math.sin(ma)*m.orbit*sc*.02-.5,1,1)}
+          if(p.hasRings&&pr>3){X.strokeStyle='rgba(255,255,255,.05)';X.lineWidth=pr*.15;X.beginPath();X.ellipse(px,py,p.r*sc*.03,p.r*sc*.03*.3,0,0,π*2);X.stroke()}
+          // Life dots on planet
+          if(V.life&&p.life&&pr>4)for(let l of p.life){let la=l.lon+T*.01,ll=l.lat;X.fillStyle=l.c;X.font='4px monospace';X.fillText(l.e,px+Math.cos(la)*pr*.6-2,py+Math.sin(ll)*pr*.6+1)}
+        });
+        if(V.lbl&&sz>10){X.fillStyle=`rgba(255,255,255,${df*.5})`;X.font=`${Math.min(9,sz*.35)}px monospace`;X.fillText(SN[t],sx+sz*.5,sy-1)}
+      }else{
+        drawStarAt(sx,sy,color,sz,t===0);
+        // Life on rogue planets (even in galaxy view)
+        if(V.life&&t!==0&&sz>8){let planets=getPlanets(gx,gy,gz);for(let p of planets)if(p.type==='Rogue'&&p.life)for(let l of p.life){X.fillStyle=l.c;X.font='3px monospace';X.fillText(l.e,sx+(Math.random()-.5)*sz*.8,sy+(Math.random()-.5)*sz*.8)}}
+        if(V.lbl&&sz>4&&t!==0){X.fillStyle=`rgba(255,255,255,${df*.4})`;X.font=`${Math.min(9,sz*.4)}px monospace`;X.fillText(SN[t],sx+sz*.6,sy-1)}
+      }
+      X.globalAlpha=1;
+    }
+  }
+
+  // Faction ships
+  if(V.fac&&V.zm>.05){
+    for(let f of factions)for(let s of f.ships){
+      let sx,sy;if(V.view){sx=cx2+s.gx*CELL*sc;sy=cy2+(s.gy*CELL*.3+s.gz*DCELL*.7)*sc}else{sx=cx2+s.gx*CELL*sc;sy=cy2+s.gy*CELL*sc}
+      if(sx<0||sx>Wc||sy<0||sy>Hc)continue;
+      X.fillStyle=f.color;X.beginPath();X.arc(sx,sy,2.5,0,π*2);X.fill();X.strokeStyle='#fff';X.lineWidth=.5;X.beginPath();X.arc(sx,sy,2.5,0,π*2);X.stroke();
+    }
+  }
+
+  // OODA
+  oodaLoop();
+
+  let mode=showSys?'SYSTEM':'GALAXY';
+  // Render collisions
+  for(let e of collisions){e.x+=e.vx;e.y+=e.vy;e.life--;if(e.life>0){let alpha=e.life/80;X.fillStyle=e.col.startsWith('#')?`rgba(${parseInt(e.col.slice(1,3),16)},${parseInt(e.col.slice(3,5),16)},${parseInt(e.col.slice(5,7),16)},${alpha})`:`rgba(255,150,50,${alpha})`;X.beginPath();X.arc(e.x,e.y,Math.max(.5,3*alpha),0,π*2);X.fill()}}
+  collisions=collisions.filter(e=>e.life>0);
+  if(showSys)V.col=true;
+  document.getElementById('info').innerHTML=`${vis} stars · ${mode} · Z=${V.zl}/${D} · 💥${colCount}`;
+}
+function up(){
+  let map={bl:'lbl',bv:'view',bo:'orb',bg:'grav',blf:'life',bf:'fac',br:'rot'};
+  for(let[id,key]of Object.entries(map)){let el=document.getElementById(id);if(el)el.classList.toggle('on',V[key])}
+}
+function animateTo(sys){V.targetOX=0;V.targetOY=0;V.targetZM=1;V.animating=true}
+
+C.addEventListener('touchstart',e=>{e.preventDefault();if(e.touches.length===2){let d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);C._ps=d;C._pz=V.zm;drag=false;return}drag=true;lx=e.touches[0].clientX;ly=e.touches[0].clientY;tapTime=Date.now();tapX=e.touches[0].clientX;tapY=e.touches[0].clientY});
+C.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===2&&C._ps){let d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);V.zm=Math.max(.003,Math.min(15,C._pz*(d/C._ps)));V.animating=false;return}if(!drag)return;V.ox+=e.touches[0].clientX-lx;V.oy+=e.touches[0].clientY-ly;lx=e.touches[0].clientX;ly=e.touches[0].clientY;V.animating=false});
+C.addEventListener('touchend',()=>{if(Date.now()-tapTime<300&&Math.abs(lx-tapX)<10&&Math.abs(ly-tapY)<10)animateTo(null);C._ps=null;drag=false});
+C.addEventListener('mousedown',e=>{drag=true;lx=e.clientX;ly=e.clientY});
+C.addEventListener('mousemove',e=>{if(!drag)return;V.ox+=e.clientX-lx;V.oy+=e.clientY-ly;lx=e.clientX;ly=e.clientY});
+C.addEventListener('mouseup',()=>drag=false);
+C.addEventListener('wheel',e=>{e.preventDefault();V.zm=Math.max(.003,Math.min(15,V.zm*(e.deltaY<0?1.1:.9)));V.animating=false});
+
+function loop(){
+  T+=.016;
+  if(V.rot&&!drag)V.oy+=V.rotSpeed;
+  if(V.animating){let l=.08;V.ox+=(V.targetOX-V.ox)*l;V.oy+=(V.targetOY-V.oy)*l;V.zm+=(V.targetZM-V.zm)*l;if(Math.abs(V.targetOX-V.ox)<.5&&Math.abs(V.targetOY-V.oy)<.5&&Math.abs(V.targetZM-V.zm)<.01){V.ox=V.targetOX;V.oy=V.targetOY;V.zm=V.targetZM;V.animating=false}}
+  draw();requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script></body></html>

@@ -1,0 +1,111 @@
+[2026-07-25 13:48:13] 📊 Patricia v5.0 — Process Excellence Officer
+[2026-07-25 13:48:13] 📊 State: 120 previous cycles
+🧠🔄 Brain v4.3 initializing...
+Active model: antoniohudnall/Mort_II:latest
+Available models: 5
+  ✅ ACTIVE Mort_II (Primary) (antoniohudnall/Mort_II:latest)
+  ⏳ standby Phi-3 (Fast) (phi3:latest)
+  ⏳ standby TinyLlama (Tiny) (tinyllama:latest)
+  ⏳ standby Qwen 2.5 (qwen2.5:3b)
+  ⏳ standby Llama 3.2 (llama3.2:latest)
+🎓 Continuous learning with multi-model support
+
+✅ Brain v4.3 ready
+
+To switch models:
+  brain.switch_to_model('phi3:latest')
+  brain.switch_to_model('tinyllama:latest')
+[2026-07-25 13:48:13] ✅ Brain ready — 5 models, active: antoniohudnall/Mort_II:latest
+[2026-07-25 13:48:13] 📊 Processing queue: 1 file(s)
+[2026-07-25 13:48:13] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 13:48:13] 🚨 API port 12851 in use, skipping HTTP API
+[2026-07-25 13:48:14] 📊 Cycle #1 — 🟢 All good
+[2026-07-25 13:53:14] 📊 Cycle #2 — 🟢 All good
+[2026-07-25 13:58:15] 📊 Cycle #3 — 🟢 All good
+[2026-07-25 14:03:15] 📊 Cycle #4 — 🟢 All good
+[2026-07-25 14:08:15] 📊 Cycle #5 — 🟢 All good
+[2026-07-25 14:13:15] 📊 Processing queue: 1 file(s)
+[2026-07-25 14:13:15] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 14:13:15] 📊 Cycle #6 — 🟢 All good
+[2026-07-25 14:18:15] 📊 Cycle #7 — 🟢 All good
+[2026-07-25 14:23:15] 📊 Cycle #8 — 🟢 All good
+[2026-07-25 14:28:16] 📊 Cycle #9 — 🟢 All good
+[2026-07-25 14:33:16] 📊 Cycle #10 — 🟢 All good
+[2026-07-25 14:38:16] 📊 Cycle #11 — 🟢 All good
+[2026-07-25 14:43:16] 📊 Processing queue: 1 file(s)
+[2026-07-25 14:43:16] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 14:43:16] 📊 Cycle #12 — 0 down, state saved
+[2026-07-25 14:48:16] 📊 Cycle #13 — 🟢 All good
+[2026-07-25 14:53:16] 📊 Cycle #14 — 🟢 All good
+[2026-07-25 14:58:17] 📊 Cycle #15 — 🟢 All good
+[2026-07-25 15:03:17] 📊 Cycle #16 — 🟢 All good
+[2026-07-25 15:08:17] 📊 Cycle #17 — 🟢 All good
+[2026-07-25 15:13:17] 📊 Processing queue: 1 file(s)
+[2026-07-25 15:13:17] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 15:13:17] 📊 Cycle #18 — 🟢 All good
+[2026-07-25 15:18:18] 📊 Cycle #19 — 🟢 All good
+[2026-07-25 15:23:18] 📊 Cycle #20 — 🟢 All good
+[2026-07-25 15:28:18] 📊 Cycle #21 — 🟢 All good
+[2026-07-25 15:33:18] 📊 Cycle #22 — 🟢 All good
+[2026-07-25 15:38:18] 📊 Cycle #23 — 🟢 All good
+[2026-07-25 15:43:18] 📊 Processing queue: 1 file(s)
+[2026-07-25 15:43:18] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 15:43:18] 📊 Cycle #24 — 0 down, state saved
+[2026-07-25 15:48:19] 📊 Cycle #25 — 🟢 All good
+[2026-07-25 15:53:19] 📊 Cycle #26 — 🟢 All good
+[2026-07-25 15:58:19] 📊 Cycle #27 — 🟢 All good
+[2026-07-25 16:03:19] 📊 Cycle #28 — 🟢 All good
+[2026-07-25 16:08:19] 📊 Cycle #29 — 🟢 All good
+[2026-07-25 16:13:20] 📊 Processing queue: 1 file(s)
+[2026-07-25 16:13:20] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 16:13:20] 📊 Cycle #30 — 🟢 All good
+[2026-07-25 16:18:20] 📊 Cycle #31 — 🟢 All good
+[2026-07-25 16:23:20] 📊 Cycle #32 — 🟢 All good
+[2026-07-25 16:28:20] 📊 Cycle #33 — 🟢 All good
+[2026-07-25 16:33:20] 📊 Cycle #34 — 🟢 All good
+[2026-07-25 16:38:20] 📊 Cycle #35 — 🟢 All good
+[2026-07-25 16:43:21] 📊 Processing queue: 1 file(s)
+[2026-07-25 16:43:21] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 16:43:21] 📊 Cycle #36 — 0 down, state saved
+[2026-07-25 16:48:21] 📊 Cycle #37 — 🟢 All good
+[2026-07-25 16:53:21] 📊 Cycle #38 — 🟢 All good
+[2026-07-25 16:58:21] 📊 Cycle #39 — 🟢 All good
+[2026-07-25 17:03:21] 📊 Cycle #40 — 🟢 All good
+[2026-07-25 17:08:22] 📊 Cycle #41 — 🟢 All good
+[2026-07-25 17:13:22] 📊 Processing queue: 1 file(s)
+[2026-07-25 17:13:22] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 17:13:22] 📊 Cycle #42 — 🟢 All good
+[2026-07-25 17:18:22] 📊 Cycle #43 — 🟢 All good
+[2026-07-25 17:23:22] 📊 Cycle #44 — 🟢 All good
+[2026-07-25 17:28:22] 📊 Cycle #45 — 🟢 All good
+[2026-07-25 17:33:22] 📊 Cycle #46 — 🟢 All good
+[2026-07-25 17:38:23] 📊 Cycle #47 — 🟢 All good
+[2026-07-25 17:43:23] 📊 Processing queue: 1 file(s)
+[2026-07-25 17:43:23] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 17:43:23] 📊 Cycle #48 — 0 down, state saved
+[2026-07-25 17:48:23] 📊 Cycle #49 — 🟢 All good
+[2026-07-25 17:53:23] 📊 Cycle #50 — 🟢 All good
+[2026-07-25 17:58:24] 📊 Cycle #51 — 🟢 All good
+[2026-07-25 18:03:24] 📊 Cycle #52 — 🟢 All good
+[2026-07-25 18:08:24] 📊 Cycle #53 — 🟢 All good
+[2026-07-25 18:13:24] 📊 Processing queue: 1 file(s)
+[2026-07-25 18:13:24] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 18:13:24] 📊 Cycle #54 — 🟢 All good
+[2026-07-25 18:18:24] 📊 Cycle #55 — 🟢 All good
+[2026-07-25 18:23:24] 📊 Cycle #56 — 🟢 All good
+[2026-07-25 18:28:25] 📊 Cycle #57 — 🟢 All good
+[2026-07-25 18:33:25] 📊 Cycle #58 — 🟢 All good
+[2026-07-25 18:38:25] 📊 Cycle #59 — 🟢 All good
+[2026-07-25 18:43:25] 📊 Processing queue: 1 file(s)
+[2026-07-25 18:43:25] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 18:43:25] 📊 Cycle #60 — 0 down, state saved
+[2026-07-25 18:48:25] 📊 Cycle #61 — 🟢 All good
+[2026-07-25 18:53:26] 📊 Cycle #62 — 🟢 All good
+[2026-07-25 18:58:26] 📊 Cycle #63 — 🟢 All good
+[2026-07-25 19:03:26] 📊 Cycle #64 — 🟢 All good
+[2026-07-25 19:08:26] 📊 Cycle #65 — 🟢 All good
+[2026-07-25 19:13:26] 📊 Processing queue: 1 file(s)
+[2026-07-25 19:13:26] 🚨 Queue error processed: [Errno 21] Is a directory: '/data/data/com.termux/files/home/mortimer/patricia/queue/processed'
+[2026-07-25 19:13:26] 📊 Cycle #66 — 🟢 All good
+[2026-07-25 19:18:27] 📊 Cycle #67 — 🟢 All good
+[2026-07-25 19:23:27] 📊 Cycle #68 — 🟢 All good

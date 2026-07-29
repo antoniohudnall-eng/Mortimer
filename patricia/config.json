@@ -5,7 +5,16 @@
     "models": {
         "decision": "qwen2.5:1.5b",
         "analysis": "llama3.2:3b",
+        "reasoning": "deepseek-v4-pro",
+        "reasoning_fallback": "llama3.2:3b",
         "embedding": "nomic-embed-text:latest"
+    },
+    "providers": {
+        "deepseek": {
+            "api": "https://api.deepseek.com/v1/chat/completions",
+            "model": "deepseek-chat",
+            "auth_file": "~/.pi/agent/auth.json"
+        }
     },
     "brain": {
         "memory_dir": "/data/data/com.termux/files/home/AOS-Brain/memory",

@@ -1,0 +1,84 @@
+[2026-07-25 20:14:30] 📊 Patricia v5.0 — Process Excellence Officer
+[2026-07-25 20:14:30] 📊 State: 1 previous cycles
+🧠🔄 Brain v4.3 initializing...
+Active model: antoniohudnall/Mort_II:latest
+Available models: 5
+  ✅ ACTIVE Mort_II (Primary) (antoniohudnall/Mort_II:latest)
+  ⏳ standby Phi-3 (Fast) (phi3:latest)
+  ⏳ standby TinyLlama (Tiny) (tinyllama:latest)
+  ⏳ standby Qwen 2.5 (qwen2.5:3b)
+  ⏳ standby Llama 3.2 (llama3.2:latest)
+🎓 Continuous learning with multi-model support
+
+✅ Brain v4.3 ready
+
+To switch models:
+  brain.switch_to_model('phi3:latest')
+  brain.switch_to_model('tinyllama:latest')
+[2026-07-25 20:14:30] ✅ Brain ready — 5 models, active: antoniohudnall/Mort_II:latest
+[2026-07-25 20:14:30] 🚨 API port 12851 in use, skipping HTTP API
+[2026-07-25 20:14:30] 📊 Patricia v5.0 — Process Excellence Officer
+[2026-07-25 20:14:30] 📊 State: 1 previous cycles
+🧠🔄 Brain v4.3 initializing...
+Active model: antoniohudnall/Mort_II:latest
+Available models: 5
+  ✅ ACTIVE Mort_II (Primary) (antoniohudnall/Mort_II:latest)
+  ⏳ standby Phi-3 (Fast) (phi3:latest)
+  ⏳ standby TinyLlama (Tiny) (tinyllama:latest)
+  ⏳ standby Qwen 2.5 (qwen2.5:3b)
+  ⏳ standby Llama 3.2 (llama3.2:latest)
+🎓 Continuous learning with multi-model support
+
+✅ Brain v4.3 ready
+
+To switch models:
+  brain.switch_to_model('phi3:latest')
+  brain.switch_to_model('tinyllama:latest')
+[2026-07-25 20:14:30] ✅ Brain ready — 5 models, active: antoniohudnall/Mort_II:latest
+[2026-07-25 20:14:30] 🚨 API port 12851 in use, skipping HTTP API
+[2026-07-25 20:14:30] 📊 Patricia v5.0 — Process Excellence Officer
+[2026-07-25 20:14:30] 📊 State: 1 previous cycles
+🧠🔄 Brain v4.3 initializing...
+Active model: antoniohudnall/Mort_II:latest
+Available models: 5
+  ✅ ACTIVE Mort_II (Primary) (antoniohudnall/Mort_II:latest)
+  ⏳ standby Phi-3 (Fast) (phi3:latest)
+  ⏳ standby TinyLlama (Tiny) (tinyllama:latest)
+  ⏳ standby Qwen 2.5 (qwen2.5:3b)
+  ⏳ standby Llama 3.2 (llama3.2:latest)
+🎓 Continuous learning with multi-model support
+
+✅ Brain v4.3 ready
+
+To switch models:
+  brain.switch_to_model('phi3:latest')
+  brain.switch_to_model('tinyllama:latest')
+[2026-07-25 20:14:30] ✅ Brain ready — 5 models, active: antoniohudnall/Mort_II:latest
+[2026-07-25 20:14:30] 🚨 API port 12851 in use, skipping HTTP API
+[2026-07-25 20:14:30] 📊 Patricia v5.0 — Process Excellence Officer
+[2026-07-25 20:14:30] 📊 State: 1 previous cycles
+🧠🔄 Brain v4.3 initializing...
+Active model: antoniohudnall/Mort_II:latest
+Available models: 5
+  ✅ ACTIVE Mort_II (Primary) (antoniohudnall/Mort_II:latest)
+  ⏳ standby Phi-3 (Fast) (phi3:latest)
+  ⏳ standby TinyLlama (Tiny) (tinyllama:latest)
+  ⏳ standby Qwen 2.5 (qwen2.5:3b)
+  ⏳ standby Llama 3.2 (llama3.2:latest)
+🎓 Continuous learning with multi-model support
+
+✅ Brain v4.3 ready
+
+To switch models:
+  brain.switch_to_model('phi3:latest')
+  brain.switch_to_model('tinyllama:latest')
+[2026-07-25 20:14:30] ✅ Brain ready — 5 models, active: antoniohudnall/Mort_II:latest
+[2026-07-25 20:14:30] 🚨 API port 12851 in use, skipping HTTP API
+[2026-07-25 20:14:32] 🚨 Brain query failed: HTTP Error 404: Not Found
+[2026-07-25 20:14:32] 📊 Cycle #1 — 🔴 2 down
+[2026-07-25 20:14:33] 🚨 Brain query failed: HTTP Error 404: Not Found
+[2026-07-25 20:14:33] 📊 Cycle #1 — 🔴 2 down
+[2026-07-25 20:14:33] 🚨 Brain query failed: HTTP Error 404: Not Found
+[2026-07-25 20:14:33] 📊 Cycle #1 — 🔴 2 down
+[2026-07-25 20:14:33] 🚨 Brain query failed: HTTP Error 404: Not Found
+[2026-07-25 20:14:33] 📊 Cycle #1 — 🔴 2 down

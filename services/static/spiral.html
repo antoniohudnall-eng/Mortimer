@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Hudnall-φ Spiral — 3D</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050510;overflow:hidden;position:fixed;width:100%;height:100%;font-family:'Courier New',monospace;touch-action:none}
+canvas{display:block}
+#hud{position:fixed;top:8px;left:50%;transform:translateX(-50%);pointer-events:none;text-align:center;z-index:10}
+#hud .t{color:#FFD700;font-size:15px;letter-spacing:3px;text-shadow:0 0 20px rgba(255,215,0,.3)}
+#hud .s{color:#5a7a8a;font-size:8px;margin-top:2px}
+#hud .s span{color:#00d4aa}
+#info{position:fixed;bottom:8px;left:50%;transform:translateX(-50%);color:#3a4a5a;font-size:8px;pointer-events:none;text-align:center;z-index:10}
+.ctls{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:3px;z-index:10;flex-wrap:wrap;justify-content:center}
+.ctls button{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15);color:#6a6a5a;padding:4px 8px;border-radius:4px;font-size:8px;cursor:pointer;font-family:monospace}
+.ctls button.on{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:#FFD700}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud"><div class="t">🌀 HUDNALL-φ SPIRAL</div><div class="s">Riemann Zeros · Golden Ratio · <span>Asymptotic — never closes</span></div></div>
+<div id="info"></div>
+<div style="position:fixed;top:8px;right:12px;z-index:10"><a href="/" style="color:#d4a843;font-size:9px;text-decoration:none;font-family:monospace;border:1px solid rgba(255,215,0,.2);padding:3px 6px;border-radius:3px">📚 PORTAL</a></div>
+<div class="ctls">
+  <button onclick="V.m=(V.m+1)%4;up()" id="bm">🌀 SPIRAL</button>
+  <button onclick="V.z=!V.z;up()" class="on" id="bz">📍 ZEROS</button>
+  <button onclick="V.p=!V.p;up()" class="on" id="bp">✨ FLOW</button>
+  <button onclick="V.a=!V.a;up()" class="on" id="ba">⟳</button>
+  <button onclick="V.rx=-.3;V.ry=0;V.rz=.2;V.zm=1.1">↺</button>
+</div>
+<script>
+const C=document.getElementById('c'),X=C.getContext('2d');
+const φ=(1+Math.sqrt(5))/2;
+let W,H,cx,cy,T=0;
+const V={rx:-.3,ry:0,rz:.2,zm:1.1,a:true,z:true,p:true,m:0};
+let drag=false,lx=0,ly=0;
+
+const γ=[14.134725,21.022040,25.010858,30.424876,32.935062,37.586178,40.918719,43.327073,48.005151,49.773832,52.970321,56.446248,59.347044,60.831779,65.112544,67.079811,69.546402,72.067158,75.704691,77.144840,79.337375,82.910381,84.735493,87.425275,88.809111,92.491899,94.651344,95.870634,98.831194,101.317851,103.725538,105.446623,107.168611,111.029536,111.874659,114.320221,116.226680,118.790783,121.370125,122.946829,124.256819,127.516684,129.578704,131.087688,133.497737,134.756509,138.116042,139.736209,141.123707,143.111846,146.000982,147.422765,150.053520,150.925258,153.024694,156.112603,157.597591,158.849988,161.188964,163.030710,165.537069,167.184440,169.094515,169.911976,173.411536,174.754191,176.441434,178.377408,179.916484,182.207078,184.874468,185.598784,187.228923,189.416159,191.491200,192.026656,193.079727,195.265397,196.876482,198.015310,201.264752,202.493595,204.189672,205.394697,207.906258,209.576510,211.690863,213.347919,214.547045,216.169539,219.067596,220.714919,221.430706,224.007000,224.983325,227.421444,229.337413,231.250189,231.987236,233.693404,236.524230,237.769846];
+
+let flow=[];
+for(let i=0;i<120;i++) flow.push({t:Math.random()*Math.PI*6,v:.002+Math.random()*.005,p:Math.random()*Math.PI*2});
+
+function init(){W=window.innerWidth||document.documentElement.clientWidth;C.width=W;H=window.innerHeight||document.documentElement.clientHeight;C.height=H;cx=W/2;cy=H/2}
+window.addEventListener('resize',()=>{W=window.innerWidth||document.documentElement.clientWidth;C.width=W;H=window.innerHeight||document.documentElement.clientHeight;C.height=H;cx=W/2;cy=H/2})
+function rx(p,a){let c=Math.cos(a),s=Math.sin(a);return{x:p.x,y:p.y*c-p.z*s,z:p.y*s+p.z*c}}
+function ry(p,a){let c=Math.cos(a),s=Math.sin(a);return{x:p.x*c+p.z*s,y:p.y,z:-p.x*s+p.z*c}}
+function rz(p,a){let c=Math.cos(a),s=Math.sin(a);return{x:p.x*c-p.y*s,y:p.x*s+p.y*c,z:p.z}}
+function proj(p){let r=rz(ry(rx(p,V.rx),V.ry),V.rz);let d=350*V.zm,sc=d/(d+r.z);return{x:cx+r.x*sc,y:cy-r.y*sc,s:sc,z:r.z}}
+
+function sp(t){let r=Math.pow(φ,t/(Math.PI*1.5))*1.8;return{x:Math.cos(t)*r,y:Math.sin(t)*r,z:t*6-50}}
+
+function draw(){
+  X.fillStyle='rgba(5,5,16,.35)';X.fillRect(0,0,W,H);
+  for(let i=0;i<180;i++){
+    let sx=((i*137.5+W*.3)%W+W)%W,sy=((i*271.8+H*.3)%H+H)%H;
+    let b=.3+.7*Math.sin(T*2+i);
+    X.fillStyle=`rgba(255,255,255,${.01+b*.025})`;X.fillRect(sx,sy,1,1);
+  }
+
+  let S=[];
+  for(let t=0;t<Math.PI*6;t+=.02) S.push(sp(t));
+
+  // Critical line
+  for(let z=-60;z<100;z+=2){
+    let a=proj({x:0,y:0,z}),b=proj({x:0,y:0,z:z+2});
+    X.strokeStyle=`rgba(255,255,255,${.02})`;X.lineWidth=.3;
+    X.beginPath();X.moveTo(a.x,a.y);X.lineTo(b.x,b.y);X.stroke();
+  }
+  let cl=proj({x:0,y:0,z:80});
+  X.fillStyle='rgba(255,255,255,.1)';X.font='9px monospace';X.fillText('Re(s)=½',cl.x+4,cl.y);
+
+  // Main spiral
+  let pulse=1+Math.sin(T*.6)*.12;
+  for(let i=1;i<S.length;i++){
+    let a=S[i-1],b=S[i],f=i/S.length,r=Math.floor(200+f*55),g=Math.floor(150+f*65);
+    let pa=proj(a),pb=proj(b);
+    X.strokeStyle=`rgba(${r},${g},0,${(.2+f*.8)*pulse})`;X.lineWidth=1.5*pb.s;
+    X.beginPath();X.moveTo(pa.x,pa.y);X.lineTo(pb.x,pb.y);X.stroke();
+  }
+  // Mirror arm
+  for(let i=1;i<S.length;i++){
+    let a={x:-S[i-1].x,y:-S[i-1].y,z:S[i-1].z},b={x:-S[i].x,y:-S[i].y,z:S[i].z},f=i/S.length;
+    X.strokeStyle=`rgba(255,215,0,${.08+f*.15})`;X.lineWidth=.6*proj(b).s;
+    X.beginPath();X.moveTo(proj(a).x,proj(a).y);X.lineTo(proj(b).x,proj(b).y);X.stroke();
+  }
+
+  // φ grid
+  if(V.m>=2){
+    for(let l=0;l<5;l++){
+      let z=l*20-40,w=100*Math.pow(φ,l),h=w/φ;
+      let cr=[{x:-w/2,y:-h/2,z},{x:w/2,y:-h/2,z},{x:w/2,y:h/2,z},{x:-w/2,y:h/2,z}];
+      for(let i=0;i<4;i++){let pa=proj(cr[i]),pb=proj(cr[(i+1)%4]);X.strokeStyle='rgba(0,212,170,.1)';X.lineWidth=.4;X.beginPath();X.moveTo(pa.x,pa.y);X.lineTo(pb.x,pb.y);X.stroke()}
+    }
+  }
+
+  // Flowing particles
+  if(V.p){
+    flow.forEach(f=>{
+      f.t+=f.v;if(f.t>Math.PI*6)f.t=0;
+      let p=sp(f.t),arm=Math.sin(T*1.1+f.p);
+      if(arm<0){p.x=-p.x;p.y=-p.y}
+      let pp=proj(p),gl=.2+.2*Math.sin(T*2.5+f.p);
+      let g=X.createRadialGradient(pp.x,pp.y,0,pp.x,pp.y,6*pp.s);
+      g.addColorStop(0,`rgba(0,212,170,${gl})`);g.addColorStop(.5,`rgba(255,200,0,${gl*.3})`);g.addColorStop(1,'rgba(0,0,0,0)');
+      X.fillStyle=g;X.beginPath();X.arc(pp.x,pp.y,6*pp.s,0,Math.PI*2);X.fill();
+    });
+  }
+
+  // Riemann zeros
+  if(V.z){
+    let max=γ[γ.length-1];
+    for(let i=0;i<γ.length;i++){
+      let t=γ[i],r=20+(t/max)*260,a=t*φ*.8+i*.15;
+      let p=proj({x:Math.cos(a)*r,y:Math.sin(a)*r,z:t*.4-40});
+      let beat=.5+.5*Math.sin(T*1.3+i*.3),sz=2+(i%4)*.3+beat*1.8;
+      let g=X.createRadialGradient(p.x,p.y,0,p.x,p.y,sz*5*p.s);
+      g.addColorStop(0,`rgba(255,215,0,${.3+beat*.5})`);g.addColorStop(.3,`rgba(255,160,0,${.12+beat*.2})`);g.addColorStop(1,'rgba(0,0,0,0)');
+      X.fillStyle=g;X.beginPath();X.arc(p.x,p.y,sz*5*p.s,0,Math.PI*2);X.fill();
+      X.fillStyle=`rgba(255,215,0,${.6+beat*.4})`;X.beginPath();X.arc(p.x,p.y,sz*p.s,0,Math.PI*2);X.fill();
+      if(i<10){X.fillStyle=`rgba(255,215,0,${.4+beat*.3})`;X.font=`${7*p.s}px monospace`;X.fillText('γ'+String(i+1),p.x+3*p.s,p.y-3*p.s)}
+    }
+    for(let i=1;i<γ.length;i++){
+      let t0=γ[i-1],t1=γ[i],max=γ[γ.length-1];
+      let r0=20+(t0/max)*260,r1=20+(t1/max)*260,a0=t0*φ*.8+(i-1)*.15,a1=t1*φ*.8+i*.15;
+      let pa=proj({x:Math.cos(a0)*r0,y:Math.sin(a0)*r0,z:t0*.4-40}),pb=proj({x:Math.cos(a1)*r1,y:Math.sin(a1)*r1,z:t1*.4-40});
+      X.strokeStyle=`rgba(0,212,170,${.08+.08*Math.sin(T*.7+i*.25)})`;X.lineWidth=.4;
+      X.beginPath();X.moveTo(pa.x,pa.y);X.lineTo(pb.x,pb.y);X.stroke();
+    }
+  }
+
+  // Convergence spiral at origin
+  for(let t=0;t<Math.PI*2;t+=.05){
+    let r=6+Math.pow(φ,-t*.5)*18,p=proj({x:Math.cos(t)*r,y:Math.sin(t)*r,z:Math.sin(T*.4)*2});
+    if(t>.01){let pr=proj({x:Math.cos(t-.05)*r*.98,y:Math.sin(t-.05)*r*.98,z:Math.sin(T*.4)*2});X.strokeStyle=`rgba(0,212,170,${.2+.1*Math.sin(T+t)})`;X.lineWidth=.7*p.s;X.beginPath();X.moveTo(pr.x,pr.y);X.lineTo(p.x,p.y);X.stroke()}
+  }
+
+  // Origin glow
+  let o=proj({x:0,y:0,z:0}),og=X.createRadialGradient(o.x,o.y,0,o.x,o.y,12);
+  og.addColorStop(0,'rgba(255,215,0,.9)');og.addColorStop(.3,'rgba(255,215,0,.3)');og.addColorStop(1,'rgba(0,0,0,0)');
+  X.fillStyle=og;X.beginPath();X.arc(o.x,o.y,12,0,Math.PI*2);X.fill();
+  X.fillStyle='#FFD700';X.beginPath();X.arc(o.x,o.y,2.5,0,Math.PI*2);X.fill();
+
+  document.getElementById('info').innerHTML=`<b>φ</b>=${φ.toFixed(10)} · ${γ.length} zeros · <b>Asymptotic approach — never closes</b> · <i>"We are in the in-between"</i>`;
+}
+
+function up(){document.getElementById('bz').classList.toggle('on',V.z);document.getElementById('bp').classList.toggle('on',V.p);document.getElementById('ba').classList.toggle('on',V.a);let ms=['🌀 SPIRAL','🔀 BOTH','📐 φ GRID','📍 ZEROS ONLY'];document.getElementById('bm').textContent=ms[V.m]}
+
+C.addEventListener('touchstart',e=>{e.preventDefault();drag=true;let t=e.touches[0];lx=t.clientX;ly=t.clientY});
+C.addEventListener('touchmove',e=>{e.preventDefault();if(!drag)return;let t=e.touches[0];V.ry+=(t.clientX-lx)*.004;V.rx+=(t.clientY-ly)*.004;lx=t.clientX;ly=t.clientY});
+C.addEventListener('touchend',()=>drag=false);
+C.addEventListener('mousedown',e=>{drag=true;lx=e.clientX;ly=e.clientY});
+C.addEventListener('mousemove',e=>{if(!drag)return;V.ry+=(e.clientX-lx)*.004;V.rx+=(e.clientY-ly)*.004;lx=e.clientX;ly=e.clientY});
+C.addEventListener('mouseup',()=>drag=false);
+C.addEventListener('wheel',e=>{e.preventDefault();V.zm*=e.deltaY<0?1.08:.92;V.zm=Math.max(.3,Math.min(5,V.zm))});
+
+function loop(){T+=.016;if(V.a)V.ry+=.003;draw();requestAnimationFrame(loop)}
+document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{init();loop()},150)});
+if(document.readyState==='complete'||document.readyState==='interactive'){setTimeout(()=>{init();loop()},150)}
+</script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+<title>🌀 THE HUDNALL GALAXY — φ-Helix · Systems · Gravity — SEED3</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#010208;overflow:hidden;position:fixed;width:100%;height:100%;font-family:'Courier New',monospace;touch-action:none}
+canvas{display:block}
+#hud{position:fixed;top:6px;left:50%;transform:translateX(-50%);pointer-events:none;text-align:center;z-index:10}
+#hud .t{color:#ffd700;font-size:12px;letter-spacing:3px;text-shadow:0 0 20px rgba(255,215,0,.2)}
+#hud .sub{color:#887744;font-size:8px;margin-top:2px;font-style:italic}
+#info{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);color:#555;font-size:7px;pointer-events:none;z-index:10;text-align:center}
+#nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:10;flex-wrap:wrap;justify-content:center}
+#nav button{background:rgba(212,168,67,.06);border:1px solid rgba(212,168,67,.15);color:#887744;padding:4px 9px;border-radius:4px;font-size:7px;cursor:pointer;font-family:monospace;transition:all .2s}
+#nav button:hover{background:rgba(212,168,67,.12);border-color:rgba(212,168,67,.3);color:#d4a843}
+#nav button.on{background:rgba(212,168,67,.15);border-color:rgba(212,168,67,.5);color:#d4a843}
+#sysHud{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:10;text-align:center;display:none}
+#sysHud .starName{color:#ffd700;font-size:10px;letter-spacing:2px}
+#sysHud .sysInfo{color:#887744;font-size:7px;margin-top:3px}
+a.portal{position:fixed;top:8px;right:10px;color:#d4a843;font-size:8px;text-decoration:none;z-index:20;font-family:monospace;border:1px solid rgba(212,168,67,.2);padding:3px 6px;border-radius:3px}
+a.portal:hover{background:rgba(212,168,67,.1)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud"><div class="t">🌀 THE HUDNALL GALAXY</div><div class="sub">φ-Helix · Prime Distribution · Real Gravity</div></div>
+<div id="sysHud"><div class="starName" id="starName"></div><div class="sysInfo" id="sysInfo"></div></div>
+<div id="info"></div>
+<div id="nav">
+  <button onclick="V.pause=!V.pause;up()" id="bp">⏯</button>
+  <button onclick="V.labels=!V.labels;up()" class="on" id="bl">🏷</button>
+  <button onclick="V.orbits=!V.orbits;up()" class="on" id="bo">◎</button>
+  <button onclick="V.gravity=!V.gravity;up()" class="on" id="bg">⬇</button>
+  <button onclick="V.flow=!V.flow;up()" class="on" id="bf">✨</button>
+  <button onclick="V.col=!V.col;up()" class="on" id="bc">💥</button>
+  <button onclick="V.rotate=!V.rotate;up()" class="on" id="br">⟳</button>
+  <button onclick="V.zm=Math.min(5,V.zm*1.2)">🔍+</button>
+  <button onclick="V.zm=Math.max(.15,V.zm/1.2)">🔍−</button>
+  <button onclick="if(view==='system')goBack();else{V.zm=1.2;V.ox=0;V.oy=0;V.rotate=true;view='galaxy'}">↺</button>
+</div>
+<a class="portal" href="http://127.0.0.1:7777">← Portal</a>
+<script>
+const π=Math.PI, φ=1.618033988749895;
+const C=document.getElementById('c'),X=C.getContext('2d');
+let Wc,Hc,T=0,colCount=0,collisions=[],gravDebris=[];
+const V={pause:false,labels:true,orbits:true,gravity:true,flow:true,col:true,rotate:true,zm:1.2,ox:0,oy:0,targetOX:0,targetOY:0,targetZM:1.2,animating:false};
+let drag=false,lx=0,ly=0,view='galaxy',selSys=null,selWorld=null;
+
+// ═══════ RNG ═══════
+function m32(s){return function(){let t=s+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+const rng=m32(42);
+function rf(x,y){return m32(x*127+y*311+42)()}
+function rf3(x,y,z){return m32(x*31337+y*7331+z*1733+42)()}
+
+// ═══════ STAR DATA ═══════
+const STARS={
+  O:{n:'O Blue Supergiant',c:'#9bb0ff',c2:'#aaccff',glow:'#5588ff',r:18,t:40000,m:60},
+  B:{n:'B Blue-White',c:'#aac4ff',c2:'#bbddff',glow:'#88aaff',r:8,t:20000,m:18},
+  A:{n:'A White',c:'#e8e8ff',c2:'#ffffff',glow:'#ccc8ff',r:3,t:8500,m:3.2},
+  F:{n:'F Yellow-White',c:'#fff8e0',c2:'#ffffcc',glow:'#ffe8c0',r:1.6,t:6500,m:1.7},
+  G:{n:'G Yellow',c:'#ffe08a',c2:'#ffff88',glow:'#ffcc44',r:1.1,t:5778,m:1},
+  K:{n:'K Orange',c:'#ffbb55',c2:'#ff9933',glow:'#ff8822',r:.9,t:4500,m:.8},
+  M:{n:'M Red Dwarf',c:'#ff6633',c2:'#ff4422',glow:'#ff3311',r:.5,t:3500,m:.45},
+};
+
+// ═══════ PLANET DATA ═══════
+const PT={
+  Lava:{n:'Lava',c:'#cc4422',c2:'#ff5511',r:.7,giant:false,atmo:false,life:[]},
+  Rocky:{n:'Rocky',c:'#b89070',c2:'#9a7a5a',r:.7,giant:false,atmo:false,life:['🕷️','🦗']},
+  Desert:{n:'Desert',c:'#cc9633',c2:'#aa7722',r:.9,giant:false,atmo:true,life:['🦂','🦎']},
+  Ocean:{n:'Ocean',c:'#3366cc',c2:'#2255aa',r:1,giant:false,atmo:true,life:['🐠','🐬']},
+  Forest:{n:'Forest',c:'#448844',c2:'#226622',r:1,giant:false,atmo:true,life:['🦌','🦅','🐒']},
+  Crystal:{n:'Crystal',c:'#aaddff',c2:'#88bbdd',r:.8,giant:false,atmo:false,life:['🦅','🐒']},
+  Ice:{n:'Ice',c:'#cceeff',c2:'#aaccee',r:.85,giant:false,atmo:true,life:['🦣']},
+  Rad:{n:'Radioactive',c:'#cc3333',c2:'#992222',r:.75,giant:false,atmo:false,life:['🦎']},
+  Gas:{n:'Gas Giant',c:'#dda888',c2:'#cc7744',r:4,giant:true,life:[]},
+  SuperGas:{n:'Super Giant',c:'#eecc99',c2:'#ddaa77',r:6.5,giant:true,life:[]},
+  Ringed:{n:'Ringed Giant',c:'#ddbbaa',c2:'#cc9977',r:4.5,giant:true,life:[],rings:true},
+};
+
+// ═══════ φ-HELIX GALAXY GENERATION ═══════
+let systems=[];
+function genHelixGalaxy(){
+  systems=[];
+  const arms=3, sysPerArm=80, totalArms=sysPerArm*arms;
+  const galaxyRadius=300;
+  
+  for(let i=0;i<totalArms;i++){
+    let arm=i%arms;
+    let idx=i;
+    
+    // φ-helix: angle advances by golden angle, radius by φ-power
+    let t=(idx/sysPerArm)*π*5;
+    let angle=t*φ+arm*(π*2/arms);
+    let r=Math.pow(φ,t/(π*1.2))*1.5;
+    let rr=r*galaxyRadius*0.35*(0.3+0.7*(idx/sysPerArm));
+    let z=(rf(idx,arm)-.5)*60;
+    
+    let x=Math.cos(angle)*rr;
+    let y=Math.sin(angle)*rr;
+    
+    // Star type by position — core systems are hotter
+    let distFromCenter=Math.sqrt(x*x+y*y)/(galaxyRadius*.35);
+    let sh=rf3(x,y,z);
+    let st='M';
+    if(distFromCenter<.15){if(sh<.1)st='O';else if(sh<.3)st='B';else st='A';}
+    else if(distFromCenter<.4){if(sh<.2)st='B';else if(sh<.4)st='A';else if(sh<.6)st='F';else if(sh<.8)st='G';else st='K';}
+    else{if(sh<.1)st='G';else if(sh<.4)st='K';else st='M';}
+    
+    let si=STARS[st];
+    let nP=Math.floor(2+rf(idx,arm+10)*9);
+    
+    systems.push({
+      idx,arm,x,y,z,star:st,starInfo:si,nPlanets:nP,
+      seed:rf(idx,arm+100),systemBuilt:false,
+      planetCache:null
+    });
+  }
+  
+  // Additional scattered stars between arms
+  for(let i=0;i<100;i++){
+    let angle=rf(i,0)*π*2, r=rf(i,1)*galaxyRadius*.35*(.15+.85*rf(i,2));
+    let x=Math.cos(angle)*r, y=Math.sin(angle)*r, z=(rf(i,3)-.5)*100;
+    let st=(rf(i,4)>.7)?'K':'M';
+    let si=STARS[st];
+    systems.push({idx:totalArms+i,arm:-1,x,y,z,star:st,starInfo:si,nPlanets:Math.floor(1+rf(i,5)*4),seed:rf(i,6),systemBuilt:false,planetCache:null});
+  }
+}
+genHelixGalaxy();
+
+// ═══════ BUILD SOLAR SYSTEM ═══════
+function buildSystem(sys){
+  if(sys.systemBuilt)return sys.planetCache;
+  let si=sys.starInfo;
+  let hzShift=si.t>10000?3:si.t>6500?2:si.t>5000?1:0;
+  let pTypes=[
+    {type:'Lava',orb:4},{type:'Rocky',orb:8},{type:'Desert',orb:13},
+    {type:'Ocean',orb:19},{type:'Forest',orb:25},{type:'Crystal',orb:32},
+    {type:'Ice',orb:39},{type:'Gas',orb:50},{type:'Ringed',orb:62},{type:'SuperGas',orb:78}
+  ];
+  let nP=Math.min(sys.nPlanets,pTypes.length);
+  let planets=[];
+  for(let i=0;i<nP;i++){
+    let pi=PT[pTypes[i].type];
+    let orb=pTypes[i].orb+hzShift*2+rf(sys.seed,i)*3;
+    let a=rf(sys.seed,i+30)*π*2, sp=(.008/(i+1))*(.7+rf(sys.seed,i+40)*.6);
+    let nMoons=pi.giant?Math.floor(2+rf(sys.seed,i+50)*5):(pi.r>.8?Math.floor(rf(sys.seed,i+50)*2):0);
+    let moons=[];
+    for(let m=0;m<nMoons;m++)moons.push({r:.2+rf(sys.seed,i+m+100)*.5,orb:pi.r*1.6+m*1.5,a:rf(sys.seed,i+m+200)*π*2,sp:.04/(m+1)});
+    planets.push({name:`${pi.n} ${i+1}`,type:pTypes[i].type,data:pi,orb,a,sp,moons,r:pi.r*(.7+rf(sys.seed,i+70)*.6),rings:pi.rings||(pi.giant&&rf(sys.seed,i+80)>.6),life:pi.life});
+  }
+  sys.planetCache=planets;
+  sys.systemBuilt=true;
+  return planets;
+}
+
+// ═══════ GRAVITY PHYSICS ═══════
+const G_CONST=.6;
+function gravForce(px,py,sx,sy,mass){
+  let dx=sx-px,dy=sy-py,dist=Math.sqrt(dx*dx+dy*dy);
+  if(dist<3)return{ax:0,ay:0,hit:true,dist};
+  let f=G_CONST*mass/(dist*dist);
+  return{ax:(dx/dist)*f,ay:(dy/dist)*f,hit:false,dist};
+}
+function spawnDebris(sx,sy,n){
+  for(let i=0;i<n;i++)gravDebris.push({x:sx+(Math.random()-.5)*20,y:sy+(Math.random()-.5)*20,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2,life:200+Math.random()*300});
+}
+
+// ═══════ PROJECTION ═══════
+function project(x,y,z){
+  let sc=V.zm, cx=Wc/2+V.ox, cy=Hc/2+V.oy;
+  let d=400/(Math.abs(z)+300)*sc;
+  return{x:cx+x*d,y:cy+y*d,sc:d,z};
+}
+
+// ═══════ NAVIGATION ═══════
+function goToSystem(sys){
+  selSys=sys; view='system';
+  buildSystem(sys);
+  V.targetZM=2.5; V.targetOX=-sys.x*2; V.targetOY=-sys.y*2; V.animating=true; V.rotate=false;
+  document.getElementById('sysHud').style.display='block';
+  document.getElementById('starName').textContent='☀️ '+sys.starInfo.n;
+  document.getElementById('sysInfo').textContent=sys.nPlanets+' planets · '+sys.star+' type · φ-arm '+(sys.arm+1);
+}
+function goBack(){
+  selSys=null; view='galaxy';
+  V.targetZM=1.2; V.targetOX=0; V.targetOY=0; V.animating=true; V.rotate=true;
+  document.getElementById('sysHud').style.display='none';
+}
+
+// ═══════ DRAW: GALAXY ═══════
+function drawGalaxy(){
+  // Starfield
+  for(let i=0;i<60;i++){
+    X.fillStyle=`rgba(180,200,240,${.015+.02*Math.sin(T*1.3+i)})`;
+    X.fillRect(((i*173+Wc)%Wc+Wc)%Wc,((i*281+Hc)%Hc+Hc)%Hc,.6,.6);
+  }
+  
+  // φ-helix guide lines
+  X.strokeStyle='rgba(212,168,67,.04)'; X.lineWidth=.5; X.setLineDash([4,8]);
+  for(let arm=0;arm<3;arm++){
+    X.beginPath();
+    let first=true;
+    for(let i=0;i<80;i++){
+      let t=i/80*π*5, angle=t*φ+arm*(π*2/3);
+      let rr=Math.pow(φ,t/(π*1.2))*1.5*300*.35*(.3+.7*(i/80));
+      let px=Wc/2+V.ox+Math.cos(angle)*rr*V.zm, py=Hc/2+V.oy+Math.sin(angle)*rr*V.zm;
+      if(first){X.moveTo(px,py);first=false;}else X.lineTo(px,py);
+    }
+    X.stroke();
+  }
+  X.setLineDash([]);
+  
+  // Gravity wells
+  if(V.gravity){
+    updateGravity();
+    for(let p of gravDebris){
+      let alpha=p.life/500;
+      X.fillStyle=`rgba(255,200,100,${alpha*.4})`; X.fillRect(p.x-.5,p.y-.5,1,1);
+    }
+  }
+  
+  // Flow particles — drift along helix arms
+  if(V.flow){
+    for(let i=0;i<30;i++){
+      let t=(T*.05+i*.3)%(π*5), arm=Math.floor(i/10);
+      let angle=t*φ+arm*(π*2/3);
+      let rr=Math.pow(φ,t/(π*1.2))*1.5*300*.35*(.3+.7*(t/(π*5)));
+      let px=Wc/2+V.ox+Math.cos(angle)*rr*V.zm, py=Hc/2+V.oy+Math.sin(angle)*rr*V.zm;
+      let a=.3+.3*Math.sin(T*2+i);
+      X.fillStyle=`rgba(0,212,170,${a*.4})`; X.beginPath(); X.arc(px,py,2,0,π*2); X.fill();
+    }
+  }
+  
+  // Draw star systems
+  for(let sys of systems){
+    let p=project(sys.x,sys.y,sys.z);
+    if(p.x<-60||p.x>Wc+60||p.y<-60||p.y>Hc+60||p.sc<.01)continue;
+    let si=sys.starInfo, sr=Math.max(3,si.r*p.sc*.6);
+    
+    // Glow
+    let gr=X.createRadialGradient(p.x,p.y,0,p.x,p.y,sr*2.2);
+    gr.addColorStop(0,'#ffffff'); gr.addColorStop(.1,si.c2);
+    gr.addColorStop(.5,si.glow+'44'); gr.addColorStop(1,'transparent');
+    X.fillStyle=gr; X.beginPath(); X.arc(p.x,p.y,sr*2.2,0,π*2); X.fill();
+    
+    // Star body
+    let body=X.createRadialGradient(p.x-sr*.1,p.y-sr*.1,0,p.x,p.y,sr);
+    body.addColorStop(0,'#fff'); body.addColorStop(.3,si.c2);
+    body.addColorStop(.7,si.c); body.addColorStop(1,si.glow+'22');
+    X.fillStyle=body; X.beginPath(); X.arc(p.x,p.y,sr,0,π*2); X.fill();
+    
+    // Planet indicators
+    if(sr>6&&sys.nPlanets>0){
+      let orbR=sr*1.8;
+      if(V.orbits){
+        X.strokeStyle='rgba(255,255,255,.04)'; X.lineWidth=.3;
+        X.beginPath(); X.arc(p.x,p.y,orbR,0,π*2); X.stroke();
+      }
+      // Show inner planets
+      if(sr>10){
+        let planets=buildSystem(sys);
+        for(let pi=0;pi<Math.min(3,planets.length);pi++){
+          let pl=planets[pi];
+          if(!V.pause)pl.a+=pl.sp;
+          let ppx=p.x+Math.cos(pl.a)*orbR, ppy=p.y+Math.sin(pl.a)*orbR*.6;
+          X.fillStyle=pl.data.c; X.beginPath(); X.arc(ppx,ppy,Math.max(1,pl.r*p.sc*.1),0,π*2); X.fill();
+        }
+      }
+    }
+    
+    // Label
+    if(V.labels&&sr>5){
+      X.fillStyle='rgba(255,255,255,.5)'; X.font=`${Math.min(9,sr*.3)}px monospace`;
+      X.fillText(si.n,sr>8?p.x+sr+2:p.x-8,p.y-4);
+    }
+    
+    // Planet count
+    if(sr>8){
+      X.fillStyle='rgba(255,255,255,.2)'; X.font='5px monospace';
+      X.fillText(`🪐×${sys.nPlanets}`,p.x-sr,p.y+sr+5);
+    }
+  }
+}
+
+// ═══════ GRAVITY UPDATE ═══════
+function updateGravity(){
+  if(T%3>.05)return;
+  for(let p of gravDebris){
+    let bf=null,bd=Infinity;
+    for(let sys of systems){
+      let sx=Wc/2+V.ox+sys.x*V.zm, sy=Hc/2+V.oy+sys.y*V.zm;
+      let g=gravForce(p.x,p.y,sx,sy,sys.starInfo.m*3);
+      if(g.dist<bd){bf=g;bd=g.dist;}
+    }
+    if(bf){p.vx+=bf.ax*.3; p.vy+=bf.ay*.3; if(bf.hit)p.life=0;}
+    p.x+=p.vx; p.y+=p.vy; p.life--; p.vx*=.99; p.vy*=.99;
+  }
+  gravDebris=gravDebris.filter(p=>p.life>0);
+  if(T%120<.02&&gravDebris.length<200){
+    let sys=systems[Math.floor(Math.random()*systems.length)];
+    let sx=Wc/2+V.ox+sys.x*V.zm, sy=Hc/2+V.oy+sys.y*V.zm;
+    spawnDebris(sx,sy,1);
+  }
+}
+
+// ═══════ DRAW: SYSTEM (3D ORRERY) ═══════
+function drawSystem(){
+  if(!selSys)return;
+  let planets=buildSystem(selSys), si=selSys.starInfo;
+  let cx=Wc/2, cy=Hc/2;
+  
+  // Background starfield
+  for(let i=0;i<30;i++){
+    X.fillStyle=`rgba(150,180,220,${.02+.03*Math.sin(T+i)})`;
+    X.fillRect(((i*151+Wc)%Wc+Wc)%Wc,((i*263+Hc)%Hc+Hc)%Hc,.5,.5);
+  }
+  
+  // Sun
+  let sr=Math.max(12,si.r*10);
+  let glw=X.createRadialGradient(cx,cy,0,cx,cy,sr*4);
+  glw.addColorStop(0,'#fff'); glw.addColorStop(.05,si.c2); glw.addColorStop(.3,si.glow+'66'); glw.addColorStop(1,'transparent');
+  X.fillStyle=glw; X.beginPath(); X.arc(cx,cy,sr*4,0,π*2); X.fill();
+  let sun=X.createRadialGradient(cx-sr*.1,cy-sr*.1,0,cx,cy,sr);
+  sun.addColorStop(0,'#fff'); sun.addColorStop(.2,si.c2); sun.addColorStop(.6,si.c); sun.addColorStop(1,si.glow+'22');
+  X.fillStyle=sun; X.beginPath(); X.arc(cx,cy,sr,0,π*2); X.fill();
+  
+  // Orbits
+  if(V.orbits){
+    for(let p of planets){
+      let orbR=p.orb*10;
+      X.strokeStyle='rgba(255,255,255,.03)'; X.lineWidth=.5;
+      X.setLineDash([2,3]); X.beginPath(); X.ellipse(cx,cy,orbR,orbR*.35,0,0,π*2); X.stroke(); X.setLineDash([]);
+    }
+  }
+  
+  // Sort back-to-front
+  let sortBuf=[];
+  for(let p of planets){
+    if(!V.pause)p.a+=p.sp;
+    let orbR=p.orb*10, px=cx+Math.cos(p.a)*orbR, py=cy+Math.sin(p.a)*orbR*.35;
+    sortBuf.push({x:px,y:py,rad:Math.max(3,p.r*5),type:'planet',obj:p,dist:orbR});
+    for(let m of p.moons){
+      if(!V.pause)m.a+=m.sp;
+      sortBuf.push({x:px+Math.cos(m.a)*m.orb*2.5,y:py+Math.sin(m.a)*m.orb*.8,rad:Math.max(.8,m.r*2.5),type:'moon',dist:orbR});
+    }
+  }
+  sortBuf.sort((a,b)=>b.dist-a.dist);
+  
+  for(let o of sortBuf){
+    if(o.type==='planet'){
+      let p=o.obj, pi=p.data, rad=o.rad;
+      if(pi.giant&&rad>4){
+        X.save(); X.beginPath(); X.arc(o.x,o.y,rad,0,π*2); X.clip();
+        for(let i=0;i<5;i++){let by=o.y-rad+i*rad*2/5; X.fillStyle=`rgba(255,255,255,${i%2?'.04':'.02'})`; X.fillRect(o.x-rad,by,rad*2,rad*2/5*.5)}
+        X.restore();
+      }
+      let bd=X.createRadialGradient(o.x-rad*.15,o.y-rad*.2,0,o.x,o.y,rad);
+      bd.addColorStop(0,'#fff'); bd.addColorStop(.15,pi.c2||pi.c); bd.addColorStop(.5,pi.c); bd.addColorStop(1,pi.c+'44');
+      X.fillStyle=bd; X.beginPath(); X.arc(o.x,o.y,rad,0,π*2); X.fill();
+      if(pi.atmo){X.strokeStyle='rgba(160,200,255,.15)'; X.lineWidth=rad*.1; X.beginPath(); X.arc(o.x,o.y,rad*1.03,0,π*2); X.stroke()}
+      if(p.rings){X.strokeStyle='rgba(200,180,150,.15)'; X.lineWidth=rad*.12; X.beginPath(); X.ellipse(o.x,o.y,rad*1.6,rad*1.6*.12,-.2,0,π*2); X.stroke()}
+      if(V.labels&&rad>5){
+        X.fillStyle='rgba(255,255,255,.5)'; X.font='6px monospace';
+        X.fillText(`${p.name}`,o.x+rad*.3,o.y+rad*.3+5);
+        if(p.life&&p.life.length){
+          X.fillStyle=p.life[0].c; X.font='5px monospace';
+          X.fillText(p.life[0].e,o.x+rad*.3,o.y+rad*.3-2);
+        }
+      }
+    }else if(o.rad>.7){
+      X.fillStyle='#bbb'; X.beginPath(); X.arc(o.x,o.y,o.rad,0,π*2); X.fill();
+    }
+  }
+  
+  // Collisions
+  if(V.col)for(let i=0;i<planets.length;i++)for(let j=i+1;j<planets.length;j++){
+    let pi=planets[i],pj=planets[j];
+    let da=pi.a-pj.a,dx=Math.cos(pi.a)*pi.orb*10-Math.cos(pj.a)*pj.orb*10,dy=Math.sin(pi.a)*pi.orb*10*.35-Math.sin(pj.a)*pj.orb*10*.35;
+    if(Math.sqrt(dx*dx+dy*dy)<(pi.r+pj.r)*2.5){
+      let big=pi.r>=pj.r?pi:pj, small=pi.r>=pj.r?pj:pi;
+      if(!small.destroyed){small.destroyed=true; if(big.r<15)big.r+=small.r*.3; colCount++;
+        let mx=cx+Math.cos(pi.a)*pi.orb*10,my=cy+Math.sin(pi.a)*pi.orb*10*.35;
+        for(let k=0;k<15;k++)collisions.push({x:mx,y:my,vx:(Math.random()-.5)*3,vy:(Math.random()-.5)*3,life:30+Math.random()*40,col:small.data.c});
+      }
+    }
+  }
+  for(let e of collisions){e.x+=e.vx;e.y+=e.vy;e.life--;if(e.life>0){X.fillStyle=e.col; X.beginPath(); X.arc(e.x,e.y,Math.max(.5,2*e.life/50),0,π*2); X.fill()}}
+  collisions=collisions.filter(e=>e.life>0);
+}
+
+// ═══════ MAIN LOOP ═══════
+function init(){Wc=innerWidth;C.width=Wc;Hc=innerHeight;C.height=Hc;}
+init(); window.addEventListener('resize',init);
+
+function draw(){
+  X.fillStyle='rgba(1,2,8,.6)'; X.fillRect(0,0,Wc,Hc);
+  if(view==='galaxy')drawGalaxy();
+  else drawSystem();
+  
+  let totalSystems=systems.length;
+  document.getElementById('info').innerHTML=`${totalSystems} systems · φ=${φ.toFixed(6)} · ${view==='galaxy'?'🌌 Galaxy':'☀️ System'} · 💥${colCount} · 👆 tap star`;
+}
+
+// Animation
+if(V.animating){let l=.08;V.ox+=(V.targetOX-V.ox)*l;V.oy+=(V.targetOY-V.oy)*l;V.zm+=(V.targetZM-V.zm)*l;if(Math.abs(V.targetOX-V.ox)<.5&&Math.abs(V.targetOY-V.oy)<.5){V.animating=false}}
+
+// Controls
+C.addEventListener('touchstart',e=>{e.preventDefault();
+  if(e.touches.length===2){C._ps=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);C._pz=V.zm;drag=false;return}
+  drag=true; lx=e.touches[0].clientX; ly=e.touches[0].clientY; C._tapT=Date.now(); C._tapX=lx; C._tapY=ly;
+});
+C.addEventListener('touchmove',e=>{e.preventDefault();
+  if(e.touches.length===2&&C._ps){let d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);V.zm=Math.max(.15,Math.min(5,C._pz*(d/C._ps)));return}
+  if(!drag)return; V.ox+=e.touches[0].clientX-lx; V.oy+=e.touches[0].clientY-ly; lx=e.touches[0].clientX; ly=e.touches[0].clientY;
+});
+C.addEventListener('touchend',e=>{
+  if(Date.now()-C._tapT<300&&Math.abs(lx-C._tapX)<15&&Math.abs(ly-C._tapY)<15){
+    if(view==='galaxy'){
+      let best=null,bd=Infinity;
+      for(let sys of systems){
+        let p=project(sys.x,sys.y,sys.z);
+        let d=Math.hypot(p.x-lx,p.y-ly);
+        if(d<30&&d<bd){best=sys;bd=d;}
+      }
+      if(best)goToSystem(best);
+      else goBack();
+    }else goBack();
+  }
+  C._ps=null; drag=false;
+});
+C.addEventListener('wheel',e=>{e.preventDefault(); V.zm=Math.max(.15,Math.min(5,V.zm*(e.deltaY<0?1.15:.85)));});
+
+function loop(){
+  if(!V.pause)T+=.016;
+  if(V.rotate&&!drag&&view==='galaxy')V.oy+=.003;
+  draw();
+  requestAnimationFrame(loop);
+}
+function up(){
+  let map={bl:'labels',bo:'orbits',bg:'gravity',bf:'flow',bc:'col',br:'rotate'};
+  for(let[id,key]of Object.entries(map)){let el=document.getElementById(id);if(el)el.classList.toggle('on',V[key])}
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

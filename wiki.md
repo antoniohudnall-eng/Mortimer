@@ -221,9 +221,87 @@ espeak -v en-us+m3 -s 161 -p 51 -a 113 -k 4 "Your message"
 
 ---
 
+## 🌌 Galaxy Fleet (Deployed to VPS — 2026-07-25)
+
+Deployed to Mortimer.cloud (31.97.6.30) at `/root/galaxy/`.
+
+| Port | Service | URL |
+|------|---------|-----|
+| 7780 | Solar System 3D | http://31.97.6.30:7780 |
+| 7781 | Unified System Viewer | http://31.97.6.30:7781 |
+| 7782 | NogVerse Complete | http://31.97.6.30:7782 |
+| 7783 | Hudnall Galaxy v2 | http://31.97.6.30:7783 |
+| 7784 | Hudnall Galaxy v1 | http://31.97.6.30:7784 |
+| 7785 | **Unified Galaxy** 🌀 | http://31.97.6.30:7785 |
+
+**Startup:** `bash /root/galaxy/startup.sh`
+
+### ⚠️ UFW Lesson
+Always open firewall ports after deploying to VPS: `ufw allow PORT/tcp`
+
+---
+
+## 📦 New Skills (Synced from VPS — 2026-07-24)
+
+### From Mortimer Cloud (31.97.6.30)
+
+| Skill | Purpose | Trigger |
+|-------|---------|---------|
+| **aocros-roast** 🔥 | Adversarial analysis — 5-council stress test | `/roast` |
+| **aocros-context** 🧠 | Context management — prevent context rot | `/context` |
+| **aocros-counsel** 🦉 | Strategic counsel — weighted decision support | `/counsel` |
+| **aocros-parallel** 🚀 | Parallel execution — sub-agent coordination | `/goal` |
+| **aocros-verify** ✅ | Self-verification — output quality gates | `/verify` |
+| **temporal-workflow** ⏱️ | Durable workflows — survive crashes | CLI |
+
+### New Reference Docs
+- **sales_cadence.md** — Full sales cadence strategy (Inbound/Cold/Demo/Proposal/Nurture)
+- **cadence_active_lead.md** — First active lead tracking (shadow mode, awaiting Captain)
+
+### Skill Workflow
+```
+ROAST → COUNSEL → (PARALLEL build) → VERIFY → ship
+```
+
+## 🌀 Hudnall-φ Trinity (Rebuilt 2026-07-24)
+
+**Portal:** http://127.0.0.1:7777
+
+| Port | Service | Content |
+|------|---------|---------|
+| 7777 | Quantum Oracle | Portal + Captain's 3D Spiral + White Paper + API |
+| 7778 | Prime Helix | φ-weighted prime distribution helix |
+| 7779 | Riemann Helix | Zero convergence visualization |
+
+## 📊 Fleet Status (2026-07-24)
+
+- **16 agents operational** (23.9% of 67)
+- **6/6 services green**
+- **Patricia v5.0** monitoring + HTTP API (:12851)
+- **Orchestrator v2.0** real spawn engine
+- **C3P0 Translator** 9 languages
+- **Browser Agent** verified web scraper
+- **MNEMOSYNE** 12 executions, auto-fed by Patricia
+
+## 🔥 RIP GOR Protocol (Est. 2026-07-27)
+
+**Captain's directive.** Permanent standing workflow.
+
+| Step | Letter | Action |
+|------|--------|--------|
+| **R** | Roast | Full 5-council adversarial roast (intensive) |
+| **P** | Patricia | Process Excellence analyzes roast results |
+| **Go** | Go | Execute Judge's cheapest 48-hour test |
+
+**Formula:** `Roast (int) → Patricia → Go (result)`
+
+**Trigger:** Before any significant decision, fleet action, or project launch.
+
+---
+
 ## Last Updated
 
-**2026-06-19** — Crew roster created, droids sandboxes built, wiki updated
+**2026-07-27** — RIP GOR protocol established. Fleet: 68 sandboxes, 1 active memory (myl0nr0s), all others stale since June 19.
 
 ---
 

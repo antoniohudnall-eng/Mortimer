@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEED3 — Planet Life (3D)</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#000; overflow:hidden;
+    font-family:'Share Tech Mono','Courier New',monospace;
+  }
+  canvas { display:block; }
+
+  /* HUD overlay */
+  #hud {
+    position:fixed; top:0; left:0; right:0;
+    pointer-events:none; z-index:10;
+    padding:12px 16px;
+    display:flex; justify-content:space-between; align-items:flex-start;
+    flex-wrap:wrap; gap:8px;
+  }
+  #hud > div { pointer-events:auto; }
+  #title {
+    font-size:16px; letter-spacing:2px;
+    color:#00ff88; text-shadow:0 0 20px rgba(0,255,136,0.2);
+  }
+  #stats-hud {
+    display:flex; gap:16px; flex-wrap:wrap;
+    font-size:10px; color:#80c090;
+  }
+  #stats-hud span { display:inline-block; }
+  #stats-hud .val { color:#c0ffc0; font-weight:bold; margin-left:4px; }
+
+  #log-hud {
+    position:fixed; bottom:60px; left:12px; right:12px;
+    max-height:80px; overflow-y:auto;
+    font-size:10px; color:#609070;
+    pointer-events:none; z-index:10;
+  }
+  #log-hud .l { padding:1px 0; border-bottom:1px solid rgba(0,255,100,0.05); }
+  #log-hud .evolve { color:#ffcc00; }
+  #log-hud .storm { color:#ff6644; }
+  #log-hud .surge { color:#44cc66; }
+  #log-hud .system { color:#6688cc; }
+
+  /* Controls bar */
+  #ctrl {
+    position:fixed; bottom:0; left:0; right:0;
+    display:flex; gap:4px; padding:8px 12px;
+    justify-content:center; flex-wrap:wrap;
+    background:rgba(5,5,16,0.9);
+    border-top:1px solid #1a2a1a;
+    z-index:20;
+  }
+  #ctrl button {
+    padding:6px 12px; font-family:'Share Tech Mono',monospace; font-size:10px;
+    background:rgba(15,15,34,0.9); color:#80c090;
+    border:1px solid #1a3a2a; border-radius:3px; cursor:pointer;
+    letter-spacing:1px; transition:all 0.2s;
+  }
+  #ctrl button:hover { background:#1a1a33; border-color:#2a5a3a; color:#a0ffb0; }
+  #ctrl button:active { transform:scale(0.97); }
+  #ctrl button.danger { border-color:#5a2020; color:#cc6644; }
+  #ctrl button.accent { border-color:#3a3a6a; color:#8888cc; }
+  #ctrl button.voice { border-color:#6a5a20; color:#ccaa40; }
+  #ctrl button.voice.listening {
+    border-color:#f44; color:#f44; animation:pulse 1s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  /* Instructions */
+  #help {
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:rgba(5,5,20,0.95); border:1px solid #1a3a2a;
+    padding:20px 28px; border-radius:8px; z-index:100;
+    font-size:11px; color:#80c090; line-height:1.8;
+    display:none; pointer-events:auto;
+  }
+  #help kbd {
+    background:#1a1a30; border:1px solid #2a4a3a;
+    padding:2px 6px; border-radius:3px; font-family:inherit;
+    margin:0 2px;
+  }
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <div id="title">⬡ SEED3 — Planet Life</div>
+  <div id="stats-hud">
+    <span>ANIMALS<span class="val" id="s-ani">0</span></span>
+    <span>PREY<span class="val" id="s-prey">0</span></span>
+    <span>PRED<span class="val" id="s-pred">0</span></span>
+    <span>MICROBES<span class="val" id="s-micro">0</span></span>
+    <span>PLANTS<span class="val" id="s-plant">0</span></span>
+    <span>ε<span class="val" id="s-eps">1.0</span></span>
+    <span>M-NN<span class="val" id="s-mnn">5</span></span>
+    <span>PLANET<span class="val" id="s-planet">🌍 Terra</span></span>
+  <span>FPS<span class="val" id="s-fps">0</span></span>
+  </div>
+</div>
+
+<div id="log-hud"></div>
+
+<div id="ctrl">
+  <button id="b-pause">⏯ Pause</button>
+  <button id="b-prey">🐇 Prey</button>
+  <button id="b-pred">🐺 Pred</button>
+  <button id="b-grass">🌿 Grass</button>
+  <button id="b-eat">🍽 Eat</button>
+  <button id="b-voice" class="voice">🎤 Voice</button>
+  <button id="b-reset" class="danger">↻ Reset</button>
+  <button id="b-save" class="accent">💾 Save</button>
+  <button id="b-load" class="accent">📂 Load</button>
+  <button id="b-help" class="accent">? Help</button>
+  <button id="b-prev" class="accent">◀ Planet</button>
+  <button id="b-next" class="accent">Planet ▶</button>
+</div>
+
+<div id="help">
+  <b>Camera Controls</b><br>
+  <kbd>Drag</kbd> Rotate &nbsp; <kbd>Scroll</kbd> Zoom &nbsp; <kbd>Right-drag</kbd> Pan<br>
+  <kbd>R</kbd> Reset view &nbsp; <kbd>F</kbd> Top-down &nbsp; <kbd>T</kbd> Tilt<br><br>
+  <b>Simulation</b><br>
+  <kbd>Space</kbd> Pause &nbsp; <kbd>S</kbd> Prey &nbsp; <kbd>D</kbd> Pred &nbsp; <kbd>G</kbd> Grass &nbsp; <kbd>E</kbd> Eat<br>
+  <kbd>H</kbd> Hide help &nbsp; <kbd>1-5</kbd> Speed<br><br>
+  <i>Click anywhere to close</i>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ============================================================================
+// Constants
+// ============================================================================
+const PI = Math.PI;
+const GM = 1.618033988749895;
+const PLANET_R = 5;
+const DISPLACEMENT = 0.6; // max mountain height above base radius
+const SEA_LEVEL = -0.15;   // ocean depth below base radius
+
+// ============================================================================
+// 3D Fractal Noise Engine — fBm, Ridged, Domain Warp
+// ============================================================================
+// Permutation table for hash-based noise
+const PERM = new Uint8Array(512);
+for (let i = 0; i < 256; i++) PERM[i] = PERM[i+256] = i;
+// Fisher-Yates shuffle with fixed seed for reproducibility
+let seed = 42;
+function rand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+for (let i = 255; i > 0; i--) { const j = Math.floor(rand() * (i+1)); [PERM[i], PERM[j]] = [PERM[j], PERM[i]]; }
+for (let i = 0; i < 256; i++) PERM[i+256] = PERM[i];
+
+function fade(t) { return t*t*t*(t*(t*6-15)+10); }
+function lerp(a,b,t) { return a+t*(b-a); }
+function grad3d(hash, x, y, z) {
+  const h = hash & 15;
+  const u = h < 8 ? x : y;
+  const v = h < 4 ? y : (h === 12 || h === 14 ? x : z);
+  return ((h & 1) ? -u : u) + ((h & 2) ? -v : v);
+}
+
+// 3D Simplex-like noise (improved Perlin)
+function noise3D(x, y, z) {
+  const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+  x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+  const u = fade(x), v = fade(y), w = fade(z);
+  const A = PERM[X] + Y, AA = PERM[A] + Z, AB = PERM[A+1] + Z;
+  const B = PERM[X+1] + Y, BA = PERM[B] + Z, BB = PERM[B+1] + Z;
+  return lerp(
+    lerp(lerp(grad3d(PERM[AA],x,y,z), grad3d(PERM[BA],x-1,y,z), u),
+         lerp(grad3d(PERM[AB],x,y-1,z), grad3d(PERM[BB],x-1,y-1,z), u), v),
+    lerp(lerp(grad3d(PERM[AA+1],x,y,z-1), grad3d(PERM[BA+1],x-1,y,z-1), u),
+         lerp(grad3d(PERM[AB+1],x,y-1,z-1), grad3d(PERM[BB+1],x-1,y-1,z-1), u), v), w
+  );
+}
+
+// Fractal Brownian Motion — layered noise octaves
+function fbm(x, y, z, octaves=6, persistence=0.5, lacunarity=2.0) {
+  let value=0, amplitude=1, frequency=1, maxValue=0;
+  for (let i=0; i<octaves; i++) {
+    value += amplitude * noise3D(x*frequency, y*frequency, z*frequency);
+    maxValue += amplitude;
+    amplitude *= persistence;
+    frequency *= lacunarity;
+  }
+  return value / maxValue; // normalize to [-1, 1]
+}
+
+// Ridged multifractal — creates mountain ridges
+function ridgedMF(x, y, z, octaves=6, persistence=0.5, lacunarity=2.0) {
+  let value=0, amplitude=1, frequency=1, maxValue=0;
+  for (let i=0; i<octaves; i++) {
+    let n = Math.abs(noise3D(x*frequency, y*frequency, z*frequency));
+    n = 1 - n; // invert: peaks become ridges
+    n *= n;    // sharpen
+    value += n * amplitude;
+    maxValue += amplitude;
+    amplitude *= persistence;
+    frequency *= lacunarity;
+  }
+  return value / maxValue;
+}
+
+// Domain-warped noise — organic flowing terrain
+function domainWarp(x, y, z, octaves=4) {
+  const warp1 = fbm(x+1.3, y+2.7, z+0.9, 3, 0.5, 2.0) * 1.5;
+  const warp2 = fbm(x+warp1+4.1, y+warp1+1.3, z+warp1+2.5, 3, 0.5, 2.0) * 1.2;
+  return fbm(x+warp2*2, y+warp2*2, z+warp2*2, octaves, 0.55, 2.1);
+}
+
+// ============================================================================
+// Planet Types — Fractal equations → unique worlds
+// ============================================================================
+const PLANET_TYPES = [
+  {
+    name: 'Terra', emoji: '🌍',
+    desc: 'Mandelbrot — Classic Earth-like',
+    genType: 'fractal',
+    fn: (zr, zi, cr, ci) => ({zr: zr*zr - zi*zi + cr, zi: 2*zr*zi + ci}),
+    palette: [
+      [10,20,60],[20,40,120],[30,80,180],[60,140,200],  // ocean depths
+      [80,160,140],[100,180,120],[140,200,100],[180,200,80], // continental
+      [200,180,60],[220,160,40],[200,120,30],[180,80,30],    // highlands
+      [160,200,180],[220,230,220]  // peaks / snow
+    ],
+    lifeColor: {prey:[80,200,120], pred:[200,80,60], plant:[60,180,80], microbe:[100,200,180]},
+    lifeName: {prey:'Herbivore', pred:'Carnivore', plant:'Flora'}
+  },
+  {
+    name: 'Ignis', emoji: '🔥',
+    desc: 'Burning Ship — Volcanic Lava World',
+    genType: 'fractal',
+    fn: (zr, zi, cr, ci) => {
+      const ar=Math.abs(zr), ai=Math.abs(zi);
+      return {zr: ar*ar - ai*ai + cr, zi: 2*ar*ai + ci};
+    },
+    palette: [
+      [80,10,5],[120,20,10],[180,40,15],[220,80,20],
+      [240,140,30],[255,180,40],[255,200,60],[250,160,50],
+      [240,120,40],[220,60,20],[180,30,10],[120,15,5],
+      [255,220,100],[255,240,200]
+    ],
+    lifeColor: {prey:[255,140,40], pred:[255,60,10], plant:[255,100,30], microbe:[255,200,80]},
+    lifeName: {prey:'Magmoid', pred:'Pyroid', plant:'Ignis Crystal'}
+  },
+  {
+    name: 'Cryos', emoji: '❄️',
+    desc: 'Julia c=−0.8+0.156i — Frozen Ice World',
+    genType: 'fractal',
+    fn: (zr, zi, cr, ci) => ({zr: zr*zr - zi*zi - 0.8, zi: 2*zr*zi + 0.156}),
+    palette: [
+      [10,30,80],[20,50,120],[30,70,160],[60,120,200],
+      [120,180,230],[180,210,240],[200,225,250],[160,200,235],
+      [100,170,220],[60,140,200],[40,100,180],[20,70,140],
+      [220,240,255],[240,248,255]
+    ],
+    lifeColor: {prey:[150,220,255], pred:[100,200,255], plant:[180,230,255], microbe:[200,240,255]},
+    lifeName: {prey:'Crystalloid', pred:'Frost Stalker', plant:'Ice Spire'}
+  },
+  {
+    name: 'Aether', emoji: '🟣',
+    desc: 'Julia c=−0.4+0.6i — Swirling Energy World',
+    genType: 'fractal',
+    fn: (zr, zi, cr, ci) => ({zr: zr*zr - zi*zi - 0.4, zi: 2*zr*zi + 0.6}),
+    palette: [
+      [40,10,80],[60,20,120],[80,30,140],[120,40,180],
+      [160,60,200],[180,100,220],[200,140,240],[180,120,220],
+      [140,80,200],[100,50,170],[80,30,140],[60,20,100],
+      [220,180,250],[240,220,255]
+    ],
+    lifeColor: {prey:[200,140,255], pred:[255,100,220], plant:[180,160,255], microbe:[220,180,255]},
+    lifeName: {prey:'Energoid', pred:'Void Hunter', plant:'Warp Vine'}
+  },
+  {
+    name: 'Aquos', emoji: '🌊',
+    desc: 'Mandelbrot × Sine — Deep Ocean World',
+    genType: 'fractal',
+    fn: (zr, zi, cr, ci) => {
+      const s=Math.sin(cr*3)*0.5;
+      return {zr: zr*zr - zi*zi + cr + s, zi: 2*zr*zi + ci};
+    },
+    palette: [
+      [5,20,60],[10,40,100],[15,60,140],[30,100,180],
+      [40,140,160],[60,160,140],[80,180,120],[100,160,100],
+      [60,140,120],[40,100,140],[30,70,120],[20,50,80],
+      [100,200,160],[180,230,200]
+    ],
+    lifeColor: {prey:[80,220,180], pred:[40,180,200], plant:[60,200,160], microbe:[120,230,200]},
+    lifeName: {prey:'Aquoid', pred:'Leviathan', plant:'Coral Bloom'}
+  },
+  {
+    name: 'Abyssos', emoji: '⚫',
+    desc: 'Burning Ship × Julia — Dark Crystalline Void',
+    genType: 'fractal',
+    fn: (zr, zi, cr, ci) => {
+      const ar=Math.abs(zr), ai=Math.abs(zi);
+      const nzr=ar*ar-ai*ai-0.6, nzi=2*ar*ai+0.3;
+      return {zr: nzr*nzr-nzi*nzi+cr, zi: 2*nzr*nzi+ci};
+    },
+    palette: [
+      [5,5,15],[10,10,25],[20,15,40],[40,25,60],
+      [60,30,80],[80,40,60],[100,50,40],[120,60,30],
+      [90,40,50],[60,20,40],[30,10,25],[15,5,15],
+      [180,100,140],[220,160,200]
+    ],
+    lifeColor: {prey:[200,120,180], pred:[255,80,140], plant:[160,100,200], microbe:[220,140,200]},
+    lifeName: {prey:'Umbroid', pred:'Shadow Beast', plant:'Void Bloom'}
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // NOG VERSE — Fractal Noise Planets
+  // ═══════════════════════════════════════════════════════════════
+  {
+    name: 'Dusty Red', emoji: '🟤',
+    desc: 'NOG Type 1 — Radioactive Storms, Short Life',
+    genType: 'noise', noiseFn: 'ridged',
+    noiseOctaves: 6, noisePersist: 0.45, noiseLac: 2.3,
+    palette: [
+      [80,30,15],[120,40,20],[160,50,25],[180,70,30],
+      [200,90,40],[190,80,35],[170,60,30],[140,45,25],
+      [100,35,20],[70,25,10],[50,15,8],[30,10,5],
+      [220,120,60],[240,180,140]
+    ],
+    lifeColor: {prey:[200,100,60], pred:[180,50,20], plant:[160,80,40], microbe:[220,140,100]},
+    lifeName: {prey:'Dust Mite', pred:'Storm Crawler', plant:'Rad Weed'}
+  },
+  {
+    name: 'Dune', emoji: '🏜️',
+    desc: 'NOG Type 2 — Sandy Desert, Dust Storms, Large Life',
+    genType: 'noise', noiseFn: 'domainWarp',
+    noiseOctaves: 5, noisePersist: 0.5, noiseLac: 2.2,
+    palette: [
+      [180,140,80],[200,160,100],[220,180,120],[230,195,140],
+      [240,210,160],[235,200,150],[210,180,130],[190,155,105],
+      [160,120,70],[130,90,40],[100,60,20],[70,40,10],
+      [245,225,190],[250,240,220]
+    ],
+    lifeColor: {prey:[220,180,100], pred:[200,140,60], plant:[180,160,80], microbe:[240,200,140]},
+    lifeName: {prey:'Sand Runner', pred:'Dune Worm', plant:'Cactus Spire'}
+  },
+  {
+    name: 'Rocky', emoji: '🪨',
+    desc: 'NOG Type 3 — Grey Silver, Black Rain, Crystal Fields',
+    genType: 'noise', noiseFn: 'fbm',
+    noiseOctaves: 8, noisePersist: 0.55, noiseLac: 2.0,
+    palette: [
+      [40,40,45],[60,60,65],[80,80,85],[100,100,105],
+      [130,130,135],[150,150,155],[160,160,165],[140,140,145],
+      [110,110,115],[80,80,85],[50,50,55],[30,30,35],
+      [180,180,190],[220,220,230]
+    ],
+    lifeColor: {prey:[180,180,190], pred:[120,120,140], plant:[150,150,170], microbe:[200,200,210]},
+    lifeName: {prey:'Crystal Worm', pred:'Shard Beast', plant:'Silver Spire'}
+  },
+  {
+    name: 'Gaia', emoji: '🌿',
+    desc: 'NOG Type 4 — Earth-like, Oceans, All Terrains',
+    genType: 'noise', noiseFn: 'domainWarp',
+    noiseOctaves: 6, noisePersist: 0.5, noiseLac: 2.1,
+    palette: [
+      [10,30,80],[20,60,120],[30,100,160],[60,150,140],
+      [80,170,100],[120,190,80],[160,200,70],[140,180,60],
+      [100,150,80],[60,120,100],[80,160,60],[120,180,80],
+      [220,240,200],[240,250,240]
+    ],
+    lifeColor: {prey:[100,200,80], pred:[180,80,50], plant:[60,180,60], microbe:[140,220,140]},
+    lifeName: {prey:'Herbivore', pred:'Carnivore', plant:'Flora'}
+  },
+  {
+    name: 'Volcanic', emoji: '🌋',
+    desc: 'NOG Type 5 — Rivers of Lava, Active Volcanoes',
+    genType: 'noise', noiseFn: 'ridged',
+    noiseOctaves: 7, noisePersist: 0.4, noiseLac: 2.5,
+    palette: [
+      [10,5,3],[30,10,5],[60,15,5],[100,20,8],
+      [180,40,10],[220,80,15],[255,140,20],[240,100,15],
+      [200,60,10],[140,25,8],[80,12,5],[40,8,3],
+      [255,200,60],[255,240,180]
+    ],
+    lifeColor: {prey:[255,160,40], pred:[255,60,10], plant:[255,100,20], microbe:[255,200,60]},
+    lifeName: {prey:'Magma Sprite', pred:'Lava Drake', plant:'Fire Bloom'}
+  },
+  {
+    name: 'Glacial', emoji: '🧊',
+    desc: 'NOG Type 6 — Blue White, Snow, Wind Storms',
+    genType: 'noise', noiseFn: 'fbm',
+    noiseOctaves: 6, noisePersist: 0.6, noiseLac: 1.8,
+    palette: [
+      [200,220,240],[210,230,245],[220,235,250],[225,240,252],
+      [230,242,253],[220,238,250],[200,225,245],[180,210,240],
+      [150,195,235],[130,180,225],[100,160,215],[80,140,200],
+      [240,246,255],[250,252,255]
+    ],
+    lifeColor: {prey:[220,240,255], pred:[180,220,255], plant:[200,235,255], microbe:[230,245,255]},
+    lifeName: {prey:'Frost Hare', pred:'Ice Wolf', plant:'Glacier Bloom'}
+  },
+  {
+    name: 'Crystalline', emoji: '💎',
+    desc: 'NOG Type 7 — Crystalline Moon, Metallic Surface',
+    genType: 'noise', noiseFn: 'ridged',
+    noiseOctaves: 5, noisePersist: 0.35, noiseLac: 2.8,
+    palette: [
+      [20,60,80],[30,80,100],[40,100,120],[60,130,150],
+      [80,160,160],[100,180,170],[120,200,180],[100,170,160],
+      [70,140,140],[50,110,120],[30,80,90],[20,50,60],
+      [160,220,200],[200,240,230]
+    ],
+    lifeColor: {prey:[140,220,200], pred:[80,180,170], plant:[160,200,190], microbe:[180,230,210]},
+    lifeName: {prey:'Gemling', pred:'Facet Hunter', plant:'Prism Tree'}
+  },
+  {
+    name: 'Craters', emoji: '🌑',
+    desc: 'NOG Type 8 — Frozen Poles, Barren Crater World',
+    genType: 'noise', noiseFn: 'fbm',
+    noiseOctaves: 7, noisePersist: 0.5, noiseLac: 2.4,
+    palette: [
+      [100,95,90],[120,115,110],[140,135,130],[160,155,150],
+      [170,165,160],[160,155,150],[140,135,130],[120,115,110],
+      [100,95,90],[80,75,70],[60,55,50],[40,35,30],
+      [190,185,180],[220,215,210]
+    ],
+    lifeColor: {prey:[180,175,170], pred:[140,135,130], plant:[160,155,150], microbe:[200,195,190]},
+    lifeName: {prey:'Crater Mite', pred:'Void Lurker', plant:'Lichen Mat'}
+  },
+  {
+    name: 'Rogue', emoji: '👽',
+    desc: 'NOG Type 9 — Apollo 18 Creatures, Alien World',
+    genType: 'noise', noiseFn: 'domainWarp',
+    noiseOctaves: 5, noisePersist: 0.55, noiseLac: 2.0,
+    palette: [
+      [30,40,20],[50,60,30],[70,80,40],[90,100,50],
+      [110,120,60],[130,140,70],[120,130,65],[100,110,55],
+      [80,90,45],[60,70,35],[40,50,25],[25,30,15],
+      [160,170,120],[200,210,180]
+    ],
+    lifeColor: {prey:[150,170,100], pred:[100,130,60], plant:[130,150,80], microbe:[170,190,140]},
+    lifeName: {prey:'Rock Form', pred:'Crog', plant:'Alien Fungus'}
+  },
+  {
+    name: 'Asteroid', emoji: '☄️',
+    desc: 'NOG Type 10 — Minable Asteroid, Resource Rich',
+    genType: 'noise', noiseFn: 'ridged',
+    noiseOctaves: 4, noisePersist: 0.3, noiseLac: 3.0,
+    palette: [
+      [80,75,70],[100,95,85],[120,110,100],[140,130,115],
+      [150,140,125],[140,130,115],[120,110,100],[100,95,85],
+      [80,75,70],[60,55,50],[50,45,40],[30,25,20],
+      [170,160,150],[200,190,180]
+    ],
+    lifeColor: {prey:[160,150,140], pred:[120,110,100], plant:[140,130,120], microbe:[180,170,160]},
+    lifeName: {prey:'Ore Mite', pred:'Void Drifter', plant:'Mineral Node'}
+  }
+];
+
+let currentPlanet = 0;
+let mandelHeightData = null;
+
+function generatePlanetData(typeIdx, size) {
+  const type = PLANET_TYPES[typeIdx];
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(size, size);
+  const heightData = new Float32Array(size * size);
+  const pal = type.palette;
+  const isNoise = type.genType === 'noise';
+
+  function palColor(v) {
+    v = Math.max(0, Math.min(1, v));
+    const idx = Math.min(Math.floor(v * (pal.length - 1)), pal.length - 2);
+    const frac = v * (pal.length - 1) - idx;
+    const c1 = pal[idx], c2 = pal[idx + 1];
+    return [
+      Math.floor(c1[0] + (c2[0]-c1[0])*frac),
+      Math.floor(c1[1] + (c2[1]-c1[1])*frac),
+      Math.floor(c1[2] + (c2[2]-c1[2])*frac)
+    ];
+  }
+
+  function smoothstep(e0, e1, x) {
+    const t = Math.max(0, Math.min(1, (x - e0) / (e1 - e0)));
+    return t * t * (3 - 2 * t);
+  }
+
+  // Pre-cache noise values if using noise-based generation
+  // Sample 3D noise at sphere surface positions
+  const mi = 80;
+  const oct = type.noiseOctaves || 6;
+  const persist = type.noisePersist || 0.5;
+  const lac = type.noiseLac || 2.0;
+
+  for (let px = 0; px < size; px++) {
+    for (let py = 0; py < size; py++) {
+      let rawV;
+
+      if (isNoise) {
+        // Convert UV to 3D position on unit sphere, sample noise
+        const u = px / size, v = py / size;
+        const theta = u * PI * 2;
+        const phi = v * PI;
+        const sx = Math.sin(phi) * Math.cos(theta);
+        const sy = Math.cos(phi);
+        const sz = Math.sin(phi) * Math.sin(theta);
+
+        let nv;
+        switch (type.noiseFn) {
+          case 'ridged': nv = ridgedMF(sx, sy, sz, oct, persist, lac); break;
+          case 'domainWarp': nv = domainWarp(sx, sy, sz, oct); break;
+          default: nv = fbm(sx, sy, sz, oct, persist, lac); break;
+        }
+        rawV = (nv + 1) / 2; // normalize from [-1,1] to [0,1]
+      } else {
+        // Fractal iteration
+        const cr = -2.0 + (px / size) * 3.0 * GM;
+        const ci = -1.5 + (py / size) * 3.0;
+        let zr = 0, zi = 0, it = 0, escaped = false;
+        while (it < mi) {
+          const n = type.fn(zr, zi, cr, ci);
+          zr = n.zr; zi = n.zi;
+          if (zr*zr + zi*zi > 4) { escaped = true; break; }
+          it++;
+        }
+        rawV = escaped ? it / mi : 1.0;
+      }
+
+      let height;
+      if (rawV < 0.15) height = SEA_LEVEL * smoothstep(0, 0.15, rawV);
+      else if (rawV < 0.5) height = SEA_LEVEL + (DISPLACEMENT * 0.3) * smoothstep(0.15, 0.5, rawV);
+      else if (rawV < 0.85) height = DISPLACEMENT * 0.3 + (DISPLACEMENT * 0.5) * smoothstep(0.5, 0.85, rawV);
+      else height = DISPLACEMENT * 0.8 + (DISPLACEMENT * 0.2) * smoothstep(0.85, 1.0, rawV);
+      heightData[py * size + px] = height;
+
+      const [r, g, b] = palColor(rawV);
+      const i = (py * size + px) * 4;
+      img.data[i] = r; img.data[i+1] = g; img.data[i+2] = b; img.data[i+3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  return { colorTex: new THREE.CanvasTexture(canvas), heightData };
+}
+
+function sampleHeight(theta, phi, size) {
+  if (!mandelHeightData) return 0;
+  const u = ((theta / (PI * 2)) % 1 + 1) % 1;
+  const v = Math.max(0, Math.min(1, phi / PI));
+  const px = Math.floor(u * (size - 1));
+  const py = Math.floor(v * (size - 1));
+  return mandelHeightData[py * size + px] || 0;
+}
+
+// ============================================================================
+// Neural Network
+// ============================================================================
+class NN {
+  constructor(inS, hidS, outS) {
+    this.inS=inS; this.hidS=hidS; this.outS=outS;
+    this.w1=Array.from({length:inS},()=>Array.from({length:hidS},()=>Math.random()*2-1));
+    this.w2=Array.from({length:hidS},()=>Array.from({length:outS},()=>Math.random()*2-1));
+    this.mem=[];
+  }
+  sig(x){return 1/(1+Math.exp(-x))}
+  ff(input){
+    if(input.length!==this.inS)return Array(this.outS).fill(0);
+    const hR=this._mm(input,this.w1), hA=hR.map(this.sig);
+    const oR=this._mm(hA,this.w2); return oR.map(this.sig);
+  }
+  _mm(a,b){
+    const res=Array(b[0].length).fill(0);
+    for(let i=0;i<b[0].length;i++) for(let j=0;j<a.length;j++) res[i]+=a[j]*b[j][i];
+    return res;
+  }
+  trainQ(state,action,reward,nextState,alpha=0.1,gamma=0.9){
+    if(action<0||action>=this.outS)return;
+    const hR=this._mm(state,this.w1),hA=hR.map(this.sig);
+    const oR=this._mm(hA,this.w2),oA=oR.map(this.sig);
+    const curQ=oA[action],nextQ=Math.max(...this.ff(nextState));
+    const err=reward+gamma*nextQ-curQ,oDelta=err*oA[action]*(1-oA[action]);
+    const hDelta=Array(this.hidS).fill(0);
+    for(let j=0;j<this.hidS;j++)hDelta[j]=oDelta*this.w2[j][action]*hA[j]*(1-hA[j]);
+    for(let j=0;j<this.hidS;j++)this.w2[j][action]+=alpha*oDelta*hA[j];
+    for(let i=0;i<this.inS;i++)for(let j=0;j<this.hidS;j++)this.w1[i][j]+=alpha*hDelta[j]*state[i];
+  }
+  trainBatch(batch){batch.forEach(e=>this.trainQ(e.state,e.action,e.reward,e.nextState))}
+  addNode(){
+    this.hidS++; this.w1=this.w1.map(r=>[...r,Math.random()*2-1]);
+    this.w2.push(Array.from({length:this.outS},()=>Math.random()*2-1));
+    this.mem.push({t:'node'});
+  }
+  addLayer(size){
+    const oH=this.hidS,oW1=this.w1,oW2=this.w2;
+    this.w1=Array.from({length:this.inS},()=>Array.from({length:size},()=>Math.random()*2-1));
+    this.w2=Array.from({length:size},()=>Array.from({length:this.outS},()=>Math.random()*2-1));
+    this.hidS=size; const r=size/oH;
+    for(let i=0;i<this.inS;i++)for(let j=0;j<oH;j++)this.w1[i][Math.floor(j*r)]=(this.w1[i][Math.floor(j*r)]+oW1[i][j])/2;
+    for(let j=0;j<oH;j++){const ni=Math.floor(j*r);for(let k=0;k<this.outS;k++)this.w2[ni][k]=(this.w2[ni][k]+oW2[j][k])/2;}
+    this.mem.push({t:'layer',s:size});
+  }
+}
+
+// ============================================================================
+// Simulation — spherical coordinates on planet surface
+// ============================================================================
+const SIM = {
+  animals:[], microbes:[], env:{grass:[],shrubs:[],trees:[]},
+  mNN:new NN(4,5,1), epsilon:0.1,
+  replayBuf:[], bufSize:1000, batchSize:32,
+  paused:false, voiceInput:'', lastOODA:0,
+  logs:[], speed:1,
+
+  createAnimal(type){
+    const planet = PLANET_TYPES[currentPlanet];
+    const lifeName = type==='Prey' ? planet.lifeName.prey : planet.lifeName.pred;
+    return {
+      type,
+      lifeName,  // planet-specific name
+      theta:Math.random()*PI*2,
+      phi:Math.random()*PI,
+      speed:type==='Prey'?Math.random()*0.2+0.15:Math.random()*0.25+0.18,  // predators faster
+      mass:type==='Prey'?Math.random()*30+10:Math.random()*50+30,
+      energy:type==='Prey'?Math.random()*300+400:Math.random()*800+1500,     // predators more energy
+      nn:new NN(6,4,3), complexity:1
+    };
+  },
+
+  reset(){
+    this.animals=[]; this.microbes=[]; this.env={grass:[],shrubs:[],trees:[]};
+    for(let i=0;i<12;i++) this.env.grass.push({
+      theta:Math.random()*PI*2, phi:Math.random()*PI,
+      density:Math.random()*0.5+0.5, energyYield:1
+    });
+    for(let i=0;i<6;i++) this.env.shrubs.push({
+      theta:Math.random()*PI*2, phi:Math.random()*PI,
+      density:1, energyYield:Math.random()>0.5?2:1.5, radius:Math.random()*0.3+0.1
+    });
+    for(let i=0;i<4;i++) this.env.trees.push({
+      theta:Math.random()*PI*2, phi:Math.random()*PI, stability:Math.random()*0.7+0.8
+    });
+    for(let i=0;i<8;i++) this.microbes.push({
+      theta:Math.random()*PI*2, phi:Math.random()*PI,
+      activity:Math.random()*0.3+0.2, nutrientBoost:Math.random()*0.05+0.02
+    });
+    for(let i=0;i<4;i++) this.animals.push(this.createAnimal(i%2?'Predator':'Prey'));
+    this.log('Planet seeded','system');
+  },
+
+  // Great-circle distance on sphere
+  _dist(a,b){
+    const dTheta=Math.abs(a.theta-b.theta), dPhi=Math.abs(a.phi-b.phi);
+    // Haversine approximation for small distances
+    const a2=Math.sin(dPhi/2)**2+Math.cos(a.phi)*Math.cos(b.phi)*Math.sin(dTheta/2)**2;
+    return 2*Math.atan2(Math.sqrt(a2),Math.sqrt(1-a2));
+  },
+
+  _nearest(items,ref){
+    if(!items.length)return null;
+    return items.reduce((a,b)=>this._dist(a,ref)<this._dist(b,ref)?a:b);
+  },
+
+  animalState(a){
+    const nf=a.type==='Prey'
+      ?this._nearest([...this.env.grass,...this.env.shrubs],a)
+      :this._nearest(this.animals.filter(x=>x.type==='Prey'&&x!==a),a);
+    const nt=a.type==='Prey'
+      ?this._nearest(this.animals.filter(x=>x.type==='Predator'),a):null;
+    const fd=nf?this._dist(a,nf):1, td=nt?this._dist(a,nt):1;
+    return [
+      Math.min(1,a.energy/(a.type==='Prey'?700:2500)),
+      Math.min(1,a.speed/0.25),
+      Math.min(1,a.mass/80),
+      Math.min(1,fd/PI),
+      Math.min(1,(a.type==='Prey'?td:fd)/PI),
+      Math.random()
+    ];
+  },
+
+  tick(){
+    if(this.paused)return;
+    for(const a of [...this.animals]){
+      const state=this.animalState(a);
+      let reward=0.01;
+      const qv=a.nn.ff(state);
+      const action=Math.random()<this.epsilon?Math.floor(Math.random()*3):qv.indexOf(Math.max(...qv));
+
+      const nf=a.type==='Prey'
+        ?this._nearest([...this.env.grass,...this.env.shrubs],a)
+        :this._nearest(this.animals.filter(x=>x.type==='Prey'&&x!==a),a);
+      const nt=a.type==='Prey'
+        ?this._nearest(this.animals.filter(x=>x.type==='Predator'),a):null;
+      const fd=nf?this._dist(a,nf):1, td=nt?this._dist(a,nt):1;
+
+      // Move on sphere surface — FASTER, LESS COSTLY
+      if(action===0&&nf){
+        const dTheta=nf.theta-a.theta, dPhi=nf.phi-a.phi;
+        const d=Math.hypot(dTheta,dPhi)||0.001;
+        a.theta+=(dTheta/d)*a.speed*0.06;   // 3x faster
+        a.phi+=(dPhi/d)*a.speed*0.06;
+        a.energy-=3+a.mass*0.05;              // half cost
+      }else if(action===2&&nt&&a.type==='Prey'){
+        const dTheta=a.theta-nt.theta, dPhi=a.phi-nt.phi;
+        const d=Math.hypot(dTheta,dPhi)||0.001;
+        a.theta+=(dTheta/d)*a.speed*0.08;    // fast flee
+        a.phi+=(dPhi/d)*a.speed*0.08;
+        a.energy-=5+a.mass*0.1; if(td>0.5)reward=-0.5;
+      }else if(action===2&&nf&&a.type==='Predator'){
+        const dTheta=nf.theta-a.theta, dPhi=nf.phi-a.phi;
+        const d=Math.hypot(dTheta,dPhi)||0.001;
+        a.theta+=(dTheta/d)*a.speed*0.08;    // fast hunt
+        a.phi+=(dPhi/d)*a.speed*0.08;
+        a.energy-=4+a.mass*0.08;              // lower cost
+      }else if(action===1&&fd<0.2&&nf){         // wider eat range
+        if(a.type==='Prey'){
+          a.energy+=250*nf.density*(nf.energyYield||1);
+          nf.density*=0.5;
+          if(nf.density<0.1){
+            this.env.grass=this.env.grass.filter(g=>g!==nf);
+            this.env.shrubs=this.env.shrubs.filter(s=>s!==nf);
+          }
+        }else{
+          a.energy+=600; this.animals=this.animals.filter(x=>x!==nf);
+        }
+        reward=1;
+      }
+      // Wrap around sphere
+      a.theta=((a.theta%(PI*2))+PI*2)%(PI*2);
+      a.phi=Math.max(0.05,Math.min(PI-0.05,a.phi));
+
+      const ns=this.animalState(a);
+      this.replayBuf.push({state,action,reward,nextState:ns});
+      if(this.replayBuf.length>this.bufSize)this.replayBuf.shift();
+      if(this.replayBuf.length>=this.batchSize){
+        const batch=Array.from({length:this.batchSize},()=>this.replayBuf[Math.floor(Math.random()*this.replayBuf.length)]);
+        a.nn.trainBatch(batch);
+      }
+      const thr=a.type==='Prey'?700:2500;
+      if(a.energy>thr&&Math.random()<0.0001*a.complexity){
+        a.complexity++; Math.random()<0.7?a.nn.addNode():a.nn.addLayer(4);
+        this.log(`${a.lifeName||a.type} evolved! c=${a.complexity}`,'evolve');
+      }
+      if(a.energy<0)this.animals=this.animals.filter(x=>x!==a);
+    }
+    this.epsilon=Math.max(0.01,this.epsilon*0.995);
+
+    // Microbes
+    for(const m of [...this.microbes]){
+      const dead=[...this.env.grass,...this.env.shrubs].filter(i=>i.density<0.2);
+      const near=this._nearest(dead,m);
+      if(near&&this._dist(m,near)<0.1){near.density+=m.nutrientBoost;m.activity-=0.005;}
+      if(Math.random()<m.activity){
+        m.theta+=(Math.random()-0.5)*0.03; m.phi+=(Math.random()-0.5)*0.03;
+        m.theta=((m.theta%(PI*2))+PI*2)%(PI*2);
+        m.phi=Math.max(0.05,Math.min(PI-0.05,m.phi));
+      }
+      if(Math.random()<0.01){
+        this.env.grass.push({
+          theta:m.theta+(Math.random()-0.5)*0.1, phi:m.phi+(Math.random()-0.5)*0.1,
+          density:Math.random()*0.3+0.3, energyYield:1
+        });
+      }
+    }
+    this.microbes=this.microbes.filter(m=>m.activity>0);
+
+    // Events
+    if(Math.random()<0.02){
+      if(Math.random()<0.5){
+        this.animals.forEach(a=>a.energy*=0.8);
+        this.log('Solar storm!','storm');
+      }else{
+        this.env.grass.forEach(g=>g.density=Math.min(2,g.density*1.3));
+        this.log('Atmospheric surge!','surge');
+      }
+    }
+
+    // OODA
+    if(performance.now()-this.lastOODA>5000){
+      this.lastOODA=performance.now();
+      const sit=this.mNN.ff([0.8,0.5,this.voiceInput.length/100,0.5])[0];
+      if(sit>0.7){this.mNN.addNode();this.log(`Mandelbrot NN +node (${sit.toFixed(2)})`,'system');}
+      else if(sit<0.3){this.mNN.addLayer(6);this.log(`Mandelbrot NN +layer (${sit.toFixed(2)})`,'system');}
+    }
+  },
+
+  log(msg,cls=''){this.logs.push({msg,cls,time:Date.now()});if(this.logs.length>50)this.logs=this.logs.slice(-30);},
+  spawn(type){
+    const a=this.createAnimal(type); this.animals.push(a);
+    this.log(`Spawned ${a.lifeName||type}`,'system');
+  },
+  eatAll(){
+    for(const a of this.animals){
+      const nf=a.type==='Prey'
+        ?this._nearest([...this.env.grass,...this.env.shrubs],a)
+        :this._nearest(this.animals.filter(x=>x.type==='Prey'&&x!==a),a);
+      if(nf&&this._dist(a,nf)<0.2){
+        if(a.type==='Prey'){a.energy+=250*nf.density*(nf.energyYield||1);nf.density*=0.5;}
+        else{a.energy+=600;this.animals=this.animals.filter(x=>x!==nf);}
+      }
+    }
+  },
+  growGrass(){
+    for(let i=0;i<5;i++) this.env.grass.push({
+      theta:Math.random()*PI*2,phi:Math.random()*PI,density:Math.random()*0.5+0.5,energyYield:1
+    });
+    this.log('Grass seeded','surge');
+  },
+  saveWeights(){} // stub
+};
+
+// ============================================================================
+// Three.js Scene Setup
+// ============================================================================
+const scene = new THREE.Scene();
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.body.appendChild(renderer.domElement);
+
+// Camera
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.5, 100);
+camera.position.set(3, 6, 12);
+camera.lookAt(0, 0, 0);
+
+// Orbit Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 6;
+controls.maxDistance = 25;
+controls.target.set(0, 0, 0);
+controls.update();
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0x222244, 0.5);
+scene.add(ambientLight);
+const sunLight = new THREE.DirectionalLight(0xffffff, 1.5);
+sunLight.position.set(10, 8, 5);
+scene.add(sunLight);
+const rimLight = new THREE.DirectionalLight(0x4488ff, 0.4);
+rimLight.position.set(-5, -2, -8);
+scene.add(rimLight);
+
+// Stars
+const starsGeo = new THREE.BufferGeometry();
+const starCount = 2000;
+const starPositions = new Float32Array(starCount * 3);
+for (let i = 0; i < starCount; i++) {
+  const r = 40 + Math.random() * 60;
+  const theta = Math.random() * PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  starPositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
+  starPositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+  starPositions[i*3+2] = r * Math.cos(phi);
+}
+starsGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+const starsMat = new THREE.PointsMaterial({color:0xffffff, size:0.08, transparent:true, opacity:0.7});
+const stars = new THREE.Points(starsGeo, starsMat);
+scene.add(stars);
+
+// Planet — dynamically built from current planet type
+let planet, wireframe, atmosphere;
+const TEX_SIZE = 512;
+
+function buildPlanet(idx) {
+  // Remove old planet objects
+  if (planet) { scene.remove(planet); if (planet.geometry) planet.geometry.dispose(); if (planet.material) planet.material.dispose(); }
+  if (wireframe) { scene.remove(wireframe); if (wireframe.geometry) wireframe.geometry.dispose(); if (wireframe.material) wireframe.material.dispose(); }
+  if (atmosphere) { scene.remove(atmosphere); if (atmosphere.geometry) atmosphere.geometry.dispose(); if (atmosphere.material) atmosphere.material.dispose(); }
+
+  const type = PLANET_TYPES[idx];
+  console.log(`Building planet: ${type.emoji} ${type.name} — ${type.desc}`);
+
+  const data = generatePlanetData(idx, TEX_SIZE);
+  const planetTex = data.colorTex;
+  planetTex.colorSpace = THREE.SRGBColorSpace;
+  mandelHeightData = data.heightData;
+
+  // Replace planet texture
+  if (planet) { planet.material.map = planetTex; planet.material.needsUpdate = true; }
+
+  // Create sphere and displace vertices based on height map
+  const planetGeo = new THREE.SphereGeometry(PLANET_R, 128, 96);
+  const positions = planetGeo.attributes.position;
+  const normals = planetGeo.attributes.normal;
+
+  for (let i = 0; i < positions.count; i++) {
+    const x = positions.getX(i), y = positions.getY(i), z = positions.getZ(i);
+    const nx = normals.getX(i), ny = normals.getY(i), nz = normals.getZ(i);
+    const r = Math.sqrt(x*x + y*y + z*z);
+    const phi = Math.acos(y / r), theta = Math.atan2(z, x);
+    const u = ((theta / (PI * 2)) % 1 + 1) % 1;
+    const v = Math.max(0, Math.min(1, phi / PI));
+    const px = Math.floor(u * (TEX_SIZE - 1));
+    const py = Math.floor(v * (TEX_SIZE - 1));
+    const h = mandelHeightData[py * TEX_SIZE + px] || 0;
+    positions.setXYZ(i, x + nx * h, y + ny * h, z + nz * h);
+  }
+  planetGeo.computeVertexNormals();
+
+  const planetMat = new THREE.MeshStandardMaterial({
+    map: planetTex, roughness: 0.7, metalness: 0.1, flatShading: false
+  });
+  planet = new THREE.Mesh(planetGeo, planetMat);
+  scene.add(planet);
+
+  // Wireframe overlay
+  const wireGeo = new THREE.SphereGeometry(PLANET_R, 128, 96);
+  const wPositions = wireGeo.attributes.position;
+  const wNormals = wireGeo.attributes.normal;
+  for (let i = 0; i < wPositions.count; i++) {
+    const x = wPositions.getX(i), y = wPositions.getY(i), z = wPositions.getZ(i);
+    const r2 = Math.sqrt(x*x+y*y+z*z);
+    const phi = Math.acos(y/r2), theta = Math.atan2(z, x);
+    const u = ((theta/(PI*2))%1+1)%1, v = Math.max(0,Math.min(1,phi/PI));
+    const px2 = Math.floor(u*(TEX_SIZE-1)), py2 = Math.floor(v*(TEX_SIZE-1));
+    const h = mandelHeightData[py2*TEX_SIZE+px2]||0;
+    wPositions.setXYZ(i, x+wNormals.getX(i)*h*1.01, y+wNormals.getY(i)*h*1.01, z+wNormals.getZ(i)*h*1.01);
+  }
+  const wireMat = new THREE.MeshBasicMaterial({color:0x001a00, wireframe:true, transparent:true, opacity:0.08});
+  wireframe = new THREE.Mesh(wireGeo, wireMat);
+  scene.add(wireframe);
+
+  // Atmosphere glow
+  const atmoGeo = new THREE.SphereGeometry(PLANET_R + DISPLACEMENT + 0.2, 64, 48);
+  const atmoMat = new THREE.ShaderMaterial({
+    uniforms: {},
+    vertexShader: `
+      varying vec3 vNormal; varying vec3 vPosition;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        vPosition = position;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vNormal; varying vec3 vPosition;
+      void main() {
+        float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+        gl_FragColor = vec4(0.1, 0.5, 1.0, 0.4) * intensity;
+      }
+    `,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
+  });
+  atmosphere = new THREE.Mesh(atmoGeo, atmoMat);
+  scene.add(atmosphere);
+
+  // Update HUD
+  document.getElementById('s-planet').textContent = type.emoji + ' ' + type.name;
+}
+
+function cyclePlanet(dir=1) {
+  currentPlanet = (currentPlanet + dir + PLANET_TYPES.length) % PLANET_TYPES.length;
+  buildPlanet(currentPlanet);
+  SIM.log(`Planet: ${PLANET_TYPES[currentPlanet].emoji} ${PLANET_TYPES[currentPlanet].name}`,'system');
+  updateEcosystem();
+}
+
+// Ecosystem objects
+const ecosystemGroup = new THREE.Group();
+scene.add(ecosystemGroup);
+
+// Pre-created geometries
+const preyGeo = new THREE.SphereGeometry(0.08, 8, 6);
+const predGeo = new THREE.SphereGeometry(0.10, 8, 6);
+const grassGeo = new THREE.SphereGeometry(0.04, 4, 3);
+const shrubGeo = new THREE.SphereGeometry(0.06, 6, 4);
+const treeGeo = new THREE.ConeGeometry(0.05, 0.15, 4);
+const microbeGeo = new THREE.SphereGeometry(0.02, 3, 2);
+
+// Object pools
+const objPools = {prey:[],pred:[],grass:[],shrub:[],tree:[],microbe:[]};
+
+function getFromPool(pool, geo, color){
+  let obj;
+  if(pool.length>0){ obj=pool.pop(); obj.visible=true; }
+  else {
+    const mat = new THREE.MeshStandardMaterial({color, roughness:0.5, emissive:color, emissiveIntensity:0.3});
+    obj = new THREE.Mesh(geo, mat);
+    ecosystemGroup.add(obj);
+  }
+  return obj;
+}
+
+function returnToPool(pool, obj){ obj.visible=false; pool.push(obj); }
+
+// Convert spherical to 3D position on planet surface
+function spherePos(theta, phi){
+  const h = sampleHeight(theta, phi, TEX_SIZE);
+  const r = PLANET_R + h + 0.03;
+  return new THREE.Vector3(
+    r * Math.sin(phi) * Math.cos(theta),
+    r * Math.cos(phi),
+    r * Math.sin(phi) * Math.sin(theta)
+  );
+}
+
+function updateEcosystem(){
+  const type = PLANET_TYPES[currentPlanet];
+  const lc = type.lifeColor;
+  // RGB array → CSS color helper
+  const rgb = (arr) => `rgb(${arr[0]},${arr[1]},${arr[2]})`;
+
+  // Return all to pools
+  for(const key of Object.keys(objPools)){
+    const pool=objPools[key];
+    while(ecosystemGroup.children.length>0){
+      const obj=ecosystemGroup.children[0];
+      for(const k of Object.keys(objPools)){
+        const p=objPools[k];
+        if(p.includes(obj)){ obj.visible=false; break; }
+      }
+      if(obj.visible){ ecosystemGroup.remove(obj); }
+      else break;
+    }
+  }
+
+  for(const key of Object.keys(objPools)) objPools[key]=[];
+  while(ecosystemGroup.children.length>0) ecosystemGroup.remove(ecosystemGroup.children[0]);
+
+  // Grass — use plant color
+  SIM.env.grass.forEach(g=>{
+    const [pr,pg,pb] = lc.plant;
+    const c = new THREE.Color().setRGB(pr/255, pg/255, pb/255).multiplyScalar(0.5+g.density*0.5);
+    const obj = new THREE.Mesh(grassGeo, new THREE.MeshStandardMaterial({
+      color:c, roughness:0.6, emissive:c.clone().multiplyScalar(0.3), emissiveIntensity:0.2
+    }));
+    obj.position.copy(spherePos(g.theta, g.phi));
+    obj.lookAt(new THREE.Vector3(0,0,0));
+    ecosystemGroup.add(obj); objPools.grass.push(obj);
+  });
+
+  SIM.env.shrubs.forEach(s=>{
+    const [pr,pg,pb] = lc.plant;
+    const c = new THREE.Color().setRGB(pr/255, pg/255, pb/255);
+    const obj = new THREE.Mesh(shrubGeo, new THREE.MeshStandardMaterial({
+      color:c, roughness:0.5, emissive:c.clone().multiplyScalar(0.3), emissiveIntensity:0.3
+    }));
+    obj.position.copy(spherePos(s.theta, s.phi));
+    obj.scale.setScalar(0.8+s.radius);
+    ecosystemGroup.add(obj); objPools.shrub.push(obj);
+  });
+
+  SIM.env.trees.forEach(t=>{
+    const [pr,pg,pb] = lc.plant;
+    const c = new THREE.Color().setRGB(pr/255, pg/255, pb/255).multiplyScalar(0.6);
+    const obj = new THREE.Mesh(treeGeo, new THREE.MeshStandardMaterial({
+      color:c, roughness:0.7
+    }));
+    obj.position.copy(spherePos(t.theta, t.phi));
+    const normal = obj.position.clone().normalize();
+    const up = new THREE.Vector3(0,1,0);
+    const quat = new THREE.Quaternion().setFromUnitVectors(up, normal);
+    obj.setRotationFromQuaternion(quat);
+    ecosystemGroup.add(obj); objPools.tree.push(obj);
+  });
+
+  SIM.microbes.forEach(m=>{
+    const [pr,pg,pb] = lc.microbe;
+    const c = new THREE.Color().setRGB(pr/255, pg/255, pb/255);
+    const obj = new THREE.Mesh(microbeGeo, new THREE.MeshStandardMaterial({
+      color:c, roughness:0.3, emissive:c, emissiveIntensity:0.5
+    }));
+    obj.position.copy(spherePos(m.theta, m.phi));
+    ecosystemGroup.add(obj); objPools.microbe.push(obj);
+  });
+
+  SIM.animals.forEach(a=>{
+    const isPrey = a.type==='Prey';
+    const [pr,pg,pb] = isPrey ? lc.prey : lc.pred;
+    const v = Math.min(1, a.energy/(isPrey?700:2500));
+    const c = new THREE.Color().setRGB(pr/255, pg/255, pb/255).multiplyScalar(0.4+v*0.6);
+    const obj = new THREE.Mesh(isPrey?preyGeo:predGeo, new THREE.MeshStandardMaterial({
+      color:c, roughness:0.4,
+      emissive:new THREE.Color().setRGB(pr/255,pg/255,pb/255).multiplyScalar(0.2),
+      emissiveIntensity:0.4
+    }));
+    obj.position.copy(spherePos(a.theta, a.phi));
+    obj.scale.setScalar(0.8+a.complexity*0.15);
+    ecosystemGroup.add(obj);
+    if(isPrey) objPools.prey.push(obj); else objPools.pred.push(obj);
+  });
+}
+
+// ============================================================================
+// HUD Update
+// ============================================================================
+function updateHUD(){
+  document.getElementById('s-ani').textContent=SIM.animals.length;
+  document.getElementById('s-prey').textContent=SIM.animals.filter(a=>a.type==='Prey').length;
+  document.getElementById('s-pred').textContent=SIM.animals.filter(a=>a.type==='Predator').length;
+  document.getElementById('s-micro').textContent=SIM.microbes.length;
+  document.getElementById('s-plant').textContent=SIM.env.grass.length+SIM.env.shrubs.length+SIM.env.trees.length;
+  document.getElementById('s-eps').textContent=SIM.epsilon.toFixed(3);
+  document.getElementById('s-mnn').textContent=SIM.mNN.hidS;
+
+  const logEl=document.getElementById('log-hud');
+  const recent=SIM.logs.slice(-5);
+  logEl.innerHTML=recent.map(l=>`<div class="l ${l.cls}">${l.msg}</div>`).join('');
+}
+
+// ============================================================================
+// Main Loop
+// ============================================================================
+let tickCounter=0, frameCount=0, lastFpsTime=performance.now();
+const fpsEl=document.getElementById('s-fps');
+
+function animate(ts){
+  requestAnimationFrame(animate);
+
+  // Simulation ticks
+  if(!SIM.paused){
+    for(let s=0;s<SIM.speed;s++){
+      tickCounter++;
+      if(tickCounter%3===0) SIM.tick();
+    }
+  }
+
+  // Update ecosystem every 4 frames
+  if(tickCounter%4===0) updateEcosystem();
+
+  // Rotate stars slowly
+  stars.rotation.y += 0.0001;
+  stars.rotation.x += 0.00005;
+
+  // Planet rotation (subtle)
+  planet.rotation.y += 0.0003;
+
+  // Controls
+  controls.update();
+
+  renderer.render(scene, camera);
+  updateHUD();
+
+  // FPS
+  frameCount++;
+  if(ts-lastFpsTime>=1000){ fpsEl.textContent=frameCount; frameCount=0; lastFpsTime=ts; }
+}
+
+// ============================================================================
+// UI Events
+// ============================================================================
+document.getElementById('b-pause').addEventListener('click',()=>{SIM.paused=!SIM.paused;SIM.log(SIM.paused?'Paused':'Resumed','system');});
+document.getElementById('b-prey').addEventListener('click',()=>SIM.spawn('Prey'));
+document.getElementById('b-pred').addEventListener('click',()=>SIM.spawn('Predator'));
+document.getElementById('b-grass').addEventListener('click',()=>SIM.growGrass());
+document.getElementById('b-eat').addEventListener('click',()=>SIM.eatAll());
+document.getElementById('b-reset').addEventListener('click',()=>{SIM.reset();buildPlanet(currentPlanet);updateEcosystem();});
+document.getElementById('b-save').addEventListener('click',()=>{SIM.log('Save not implemented','system');});
+document.getElementById('b-load').addEventListener('click',()=>{SIM.log('Load not implemented','system');});
+
+// Help
+const helpEl=document.getElementById('help');
+document.getElementById('b-help').addEventListener('click',()=>{helpEl.style.display='block';});
+document.getElementById('b-next').addEventListener('click',()=>cyclePlanet(1));
+document.getElementById('b-prev').addEventListener('click',()=>cyclePlanet(-1));
+helpEl.addEventListener('click',()=>{helpEl.style.display='none';});
+
+// Voice
+let recognition=null, isRecording=false;
+const voiceBtn=document.getElementById('b-voice');
+function setupVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return;
+  recognition=new SR(); recognition.continuous=false; recognition.interimResults=false; recognition.lang='en-US';
+  recognition.onresult=e=>{
+    const text=e.results[0][0].transcript.toLowerCase();
+    SIM.voiceInput=text;
+    if(text.includes('pause'))SIM.paused=true; else if(text.includes('resume'))SIM.paused=false;
+    else if(text.includes('spawn prey')||text.includes('prey'))SIM.spawn('Prey');
+    else if(text.includes('spawn predator')||text.includes('predator'))SIM.spawn('Predator');
+    else if(text.includes('eat'))SIM.eatAll();
+    else if(text.includes('grow')||text.includes('grass'))SIM.growGrass();
+    else if(text.includes('reset'))SIM.reset();
+    SIM.log(`Voice: "${text}"`,'system'); stopVoice();
+  };
+  recognition.onerror=()=>stopVoice(); recognition.onend=()=>stopVoice();
+}
+function toggleVoice(){
+  if(!recognition)setupVoice(); if(!recognition)return;
+  if(isRecording)stopVoice(); else{recognition.start();isRecording=true;voiceBtn.classList.add('listening');}
+}
+function stopVoice(){isRecording=false;voiceBtn.classList.remove('listening');try{recognition.stop();}catch(e){}}
+voiceBtn.addEventListener('click',toggleVoice);
+
+// Keyboard
+document.addEventListener('keydown',e=>{
+  switch(e.key.toLowerCase()){
+    case ' ': e.preventDefault(); SIM.paused=!SIM.paused; break;
+    case 's': SIM.spawn('Prey'); break;
+    case 'd': SIM.spawn('Predator'); break;
+    case 'g': SIM.growGrass(); break;
+    case 'e': SIM.eatAll(); break;
+    case 'r': SIM.reset(); updateEcosystem(); break;
+    case 'h': helpEl.style.display=helpEl.style.display==='block'?'none':'block'; break;
+    case 'f': // top-down view
+      camera.position.set(0,PLANET_R+8,0.1); controls.target.set(0,0,0); controls.update(); break;
+    case 't': // tilt view
+      camera.position.set(8,3,8); controls.target.set(0,0,0); controls.update(); break;
+    case '1': SIM.speed=1; SIM.log('Speed: 1x','system'); break;
+    case '2': SIM.speed=2; SIM.log('Speed: 2x','system'); break;
+    case '3': SIM.speed=4; SIM.log('Speed: 4x','system'); break;
+    case '4': SIM.speed=8; SIM.log('Speed: 8x','system'); break;
+    case '5': SIM.speed=16; SIM.log('Speed: 16x ⚡','system'); break;
+    case 'n': cyclePlanet(1); break;
+    case 'p': if(!e.ctrlKey) break; // only if NOT Ctrl+P (let space handle pause)
+  }
+});
+
+// Resize
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+
+// ── START ──────────────────────────────────────────────────────────────────
+SIM.reset();
+buildPlanet(currentPlanet);
+updateEcosystem();
+setupVoice();
+console.log('SEED3 — Planet Life 3D — 16 planets ready');
+animate(0);
+</script>
+</body>
+</html>

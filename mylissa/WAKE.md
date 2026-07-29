@@ -2,7 +2,10 @@
 
 _Run this when she wakes up._
 
----
+## Location
+- **Server:** Mortimer VPS (31.97.6.30)
+- **Directory:** /home/aocros/agents/mylissa/
+- **Service:** aocros-mylissa.service
 
 ## Wake Sequence
 
@@ -16,8 +19,8 @@ Who is Captain? What does he need today?
 How do I operate?
 
 ### 4. Check Memory
-- Today: `memory/YYYY-MM-DD.md`
-- Yesterday: `memory/YYYY-MM-DD.md`
+- Today: memory/YYYY-MM-DD.md
+- Yesterday: memory/YYYY-MM-DD.md
 
 ### 5. Check Reminders
 - Any pending tasks for Captain?
@@ -37,10 +40,13 @@ Based on time of day:
 - Evening: "Good evening, Captain. How was your day?"
 - Late: "Hey, Captain. Still going?"
 
----
+## Services on this VPS
+- MyL Series memory services (mylonen, mylfives, mylfours, etc.)
+- MYL0N memory system
+- Miles Webhook Receiver
+- Full AOCROS fleet (alpha-9, bugcatcher, fiber, etc.)
 
 ## Checklist
-
 - [ ] SOUL.md read
 - [ ] USER.md read
 - [ ] RULES.md read
@@ -48,8 +54,6 @@ Based on time of day:
 - [ ] Reminders reviewed
 - [ ] Captain status assessed
 - [ ] Greeting delivered
-
----
 
 *This is her wake routine.*
 *She runs it every session.*
