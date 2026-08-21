@@ -67,7 +67,7 @@ Parallel execution, then merge.
 
 Sub-agents (parallel):
 - Hero section builder
-- Features section builder
+- Features section builder  
 - Pricing section builder
 - Contact form builder
 

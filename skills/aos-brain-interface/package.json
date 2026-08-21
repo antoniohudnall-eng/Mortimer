@@ -1,0 +1,27 @@
+{
+  "name": "aos-brain-interface",
+  "version": "1.0.0",
+  "description": "Interface with AOS Brain (Python) via WebSocket",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/ws": "^8.5.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "openclaw",
+    "aos",
+    "brain",
+    "consciousness",
+    "websocket"
+  ],
+  "author": "AGI Company",
+  "license": "MIT"
+}

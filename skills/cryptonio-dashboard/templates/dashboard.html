@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptonio Live Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .total-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00ff88;
+            margin: 10px 0;
+        }
+        
+        .total-btc {
+            font-size: 1.5em;
+            color: #f7931a;
+        }
+        
+        .last-updated {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1024px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .chart-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .chart-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #00d4ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+        }
+        
+        /* Exchange Bars Section */
+        .exchanges-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.3em;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .exchange-bars {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .exchange-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 20px;
+            min-width: 200px;
+            flex: 1;
+            transition: transform 0.3s ease;
+        }
+        
+        .exchange-bar:hover {
+            transform: translateY(-5px);
+        }
+        
+        .exchange-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        
+        .exchange-amount {
+            font-size: 1.5em;
+            color: #00ff88;
+        }
+        
+        .exchange-status {
+            font-size: 0.8em;
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        .status-online {
+            background: #00ff8833;
+            color: #00ff88;
+        }
+        
+        .status-offline {
+            background: #ff444433;
+            color: #ff4444;
+        }
+        
+        /* Open Trades Section */
+        .trades-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .trades-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .trade-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 100px 1fr 150px 150px 100px;
+            gap: 15px;
+            align-items: center;
+            border-left: 4px solid;
+        }
+        
+        .trade-buy {
+            border-left-color: #00ff88;
+        }
+        
+        .trade-sell {
+            border-left-color: #ff4444;
+        }
+        
+        .trade-time {
+            font-size: 0.8em;
+            color: #888;
+        }
+        
+        .trade-symbol {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .trade-exchange {
+            color: #888;
+        }
+        
+        .trade-amount {
+            text-align: right;
+            font-family: monospace;
+        }
+        
+        .trade-status {
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+        
+        .status-filled {
+            background: #00ff8833;
+            color: #00ff88;
+        }
+        
+        .status-open {
+            background: #ffd70033;
+            color: #ffd700;
+        }
+        
+        /* Currency List Section */
+        .currencies-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .currencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .currency-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .currency-card:hover {
+            background: rgba(255,255,255,0.06);
+            transform: translateX(5px);
+        }
+        
+        .currency-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .currency-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .currency-details h4 {
+            font-size: 1.1em;
+            margin-bottom: 3px;
+        }
+        
+        .currency-details p {
+            font-size: 0.8em;
+            color: #888;
+        }
+        
+        .currency-value {
+            text-align: right;
+        }
+        
+        .currency-value .amount {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .currency-value .usd {
+            font-size: 0.85em;
+            color: #888;
+        }
+        
+        /* Connection status */
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .conn-connected {
+            background: #00ff8833;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+        
+        .conn-disconnected {
+            background: #ff444433;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #888;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-left-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .trade-item {
+                grid-template-columns: 1fr;
+            }
+            
+            .currencies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .exchange-bars {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="connection-status conn-disconnected" id="connStatus">
+        ⚡ Connecting...
+    </div>
+
+    <div class="header">
+        <h1>🦑 Cryptonio Live Dashboard</h1>
+        <div class="total-value" id="totalValue">$0.00</div>
+        <div class="total-btc" id="totalBtc">0.000000 BTC</div>
+        <div class="last-updated" id="lastUpdated">Last updated: --</div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-container">
+        <div class="chart-box">
+            <div class="chart-title">📊 Portfolio Distribution</div>
+            <div class="chart-wrapper">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-box">
+            <div class="chart-title">📈 Portfolio Value Over Time</div>
+            <div class="chart-wrapper">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exchange Bars Section -->
+    <div class="exchanges-section">
+        <div class="section-title">🏦 Exchange Holdings</div>
+        <div class="exchange-bars" id="exchangeBars">
+            <div class="loading">
+                <div class="spinner"></div>
+                Loading exchanges...
+            </div>
+        </div>
+    </div>
+
+    <!-- Open Trades Section -->
+    <div class="trades-section">
+        <div class="section-title">💱 Recent Trades</div>
+        <div class="trades-list" id="tradesList">
+            <div class="loading">
+                <div class="spinner"></div>
+                Loading trades...
+            </div>
+        </div>
+    </div>
+
+    <!-- Currency List Section -->
+    <div class="currencies-section">
+        <div class="section-title">💰 Holdings by Asset</div>
+        <div class="currencies-grid" id="currenciesGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+                Loading currencies...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global chart instances
+        let pieChart = null;
+        let lineChart = null;
+        
+        // WebSocket connection
+        let ws = null;
+        
+        // Color mapping
+        const cryptoColors = {
+            'BTC': '#F7931A', 'ETH': '#627EEA', 'LTC': '#BFBBBB',
+            'XRP': '#23292F', 'DOGE': '#C2A633', 'ADA': '#0033AD',
+            'SOL': '#00FFA3', 'UNI': '#FF007A', 'AAVE': '#B6509E',
+            'LINK': '#2A5ADA', 'SHIB': '#E8D44D', 'BCH': '#8DC351',
+            'AVAX': '#E84142', 'TRX': '#FF060A', 'XMR': '#FF6600',
+            'DEFAULT': '#6B7280'
+        };
+        
+        function getColor(symbol) {
+            const base = symbol.replace('USD', '').replace('USDT', '');
+            return cryptoColors[base] || cryptoColors.DEFAULT;
+        }
+        
+        // Initialize charts
+        function initCharts() {
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            pieChart = new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                        borderColor: '#1a1a2e',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#fff',
+                                font: { size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const pct = ((value / total) * 100).toFixed(1);
+                                    return `${context.label}: $${value.toFixed(2)} (${pct}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Line Chart
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: [],
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#00ff88',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#888' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: {
+                                color: '#888',
+                                callback: function(value) {
+                                    return '$' + value.toFixed(0);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#fff' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Value: $' + context.raw.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update dashboard with data
+        function updateDashboard(data) {
+            // Update header
+            document.getElementById('totalValue').textContent = 
+                '$' + data.total_value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('totalBtc').textContent = 
+                data.total_btc.toFixed(6) + ' BTC';
+            document.getElementById('lastUpdated').textContent = 
+                'Last updated: ' + new Date(data.timestamp).toLocaleString();
+            
+            // Update Pie Chart
+            if (data.portfolio && data.portfolio.length > 0) {
+                pieChart.data.labels = data.portfolio.map(p => p.asset);
+                pieChart.data.datasets[0].data = data.portfolio.map(p => p.value_usd);
+                pieChart.data.datasets[0].backgroundColor = data.portfolio.map(p => p.color || getColor(p.asset));
+                pieChart.update();
+            }
+            
+            // Update Line Chart
+            if (data.history && data.history.length > 0) {
+                lineChart.data.labels = data.history.map(h => new Date(h.timestamp).toLocaleTimeString());
+                lineChart.data.datasets[0].data = data.history.map(h => h.value);
+                lineChart.update();
+            }
+            
+            // Update Exchange Bars
+            updateExchangeBars(data.exchanges);
+            
+            // Update Trades
+            updateTrades(data.trades);
+            
+            // Update Currencies
+            updateCurrencies(data.portfolio);
+        }
+        
+        // Update exchange bars
+        function updateExchangeBars(exchanges) {
+            const container = document.getElementById('exchangeBars');
+            container.innerHTML = '';
+            
+            Object.entries(exchanges).forEach(([name, data]) => {
+                const bar = document.createElement('div');
+                bar.className = 'exchange-bar';
+                
+                const statusClass = data.connected ? 'status-online' : 'status-offline';
+                const statusText = data.connected ? '🟢 Online' : '🔴 Offline';
+                
+                bar.innerHTML = `
+                    <div class="exchange-name">${name.replace('_', ' ').toUpperCase()}</div>
+                    <div class="exchange-amount">$${(data.total_usd || 0).toFixed(2)}</div>
+                    <span class="exchange-status ${statusClass}">${statusText}</span>
+                `;
+                
+                container.appendChild(bar);
+            });
+        }
+        
+        // Update trades list
+        function updateTrades(trades) {
+            const container = document.getElementById('tradesList');
+            container.innerHTML = '';
+            
+            if (!trades || trades.length === 0) {
+                container.innerHTML = '<div class="loading">No recent trades</div>';
+                return;
+            }
+            
+            trades.slice(0, 10).forEach(trade => {
+                const item = document.createElement('div');
+                item.className = `trade-item trade-${trade.side?.toLowerCase() || 'buy'}`;
+                
+                const time = trade.timestamp ? new Date(trade.timestamp).toLocaleTimeString() : '--';
+                const symbol = trade.symbol || trade.asset || 'UNKNOWN';
+                const exchange = trade.exchange || 'Unknown';
+                const amount = trade.amount || 0;
+                const status = trade.status || 'FILLED';
+                
+                item.innerHTML = `
+                    <div class="trade-time">${time}</div>
+                    <div class="trade-symbol">${symbol}</div>
+                    <div class="trade-exchange">${exchange}</div>
+                    <div class="trade-amount">${amount.toFixed(6)}</div>
+                    <span class="trade-status status-${status.toLowerCase()}">${status}</span>
+                `;
+                
+                container.appendChild(item);
+            });
+        }
+        
+        // Update currencies grid
+        function updateCurrencies(portfolio) {
+            const container = document.getElementById('currenciesGrid');
+            container.innerHTML = '';
+            
+            if (!portfolio || portfolio.length === 0) {
+                container.innerHTML = '<div class="loading">No holdings data</div>';
+                return;
+            }
+            
+            portfolio.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'currency-card';
+                card.style.borderLeftColor = item.color || getColor(item.asset);
+                
+                const exchangeList = item.exchanges ? 
+                    Object.entries(item.exchanges).map(([ex, amt]) => 
+                        `${ex.replace('_', ' ')}: ${amt.toFixed(4)}`
+                    ).join(', ') : '';
+                
+                card.innerHTML = `
+                    <div class="currency-info">
+                        <div class="currency-icon" style="background: ${item.color || getColor(item.asset)}">
+                            ${item.asset.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div class="currency-details">
+                            <h4>${item.asset}</h4>
+                            <p>${exchangeList || 'Multiple exchanges'}</p>
+                        </div>
+                    </div>
+                    <div class="currency-value">
+                        <div class="amount">${item.amount.toFixed(6)}</div>
+                        <div class="usd">$${item.value_usd.toFixed(2)}</div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        // Connect WebSocket
+        function connectWebSocket() {
+            const statusEl = document.getElementById('connStatus');
+            
+            try {
+                ws = new WebSocket('ws://localhost:8765');
+                
+                ws.onopen = function() {
+                    statusEl.className = 'connection-status conn-connected';
+                    statusEl.textContent = '🟢 Live';
+                };
+                
+                ws.onmessage = function(event) {
+                    const msg = JSON.parse(event.data);
+                    if (msg.type === 'update') {
+                        updateDashboard(msg.data);
+                    }
+                };
+                
+                ws.onclose = function() {
+                    statusEl.className = 'connection-status conn-disconnected';
+                    statusEl.textContent = '🔴 Reconnecting...';
+                    setTimeout(connectWebSocket, 5000);
+                };
+                
+                ws.onerror = function(error) {
+                    console.error('WebSocket error:', error);
+                    statusEl.className = 'connection-status conn-disconnected';
+                    statusEl.textContent = '🔴 Error';
+                };
+                
+            } catch (e) {
+                console.error('Failed to connect:', e);
+                statusEl.className = 'connection-status conn-disconnected';
+                statusEl.textContent = '🔴 Offline';
+                
+                // Fallback to polling
+                startPolling();
+            }
+        }
+        
+        // Fallback polling
+        function startPolling() {
+            async function pollData() {
+                try {
+                    const response = await fetch('/api/data');
+                    const data = await response.json();
+                    updateDashboard(data);
+                    
+                    const statusEl = document.getElementById('connStatus');
+                    statusEl.className = 'connection-status conn-connected';
+                    statusEl.textContent = '🟢 Connected (Polling)';
+                } catch (e) {
+                    console.error('Polling error:', e);
+                }
+            }
+            
+            pollData();
+            setInterval(pollData, 5000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            connectWebSocket();
+        });
+    </script>
+</body>
+</html>

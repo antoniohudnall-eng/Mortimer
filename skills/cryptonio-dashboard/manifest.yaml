@@ -1,0 +1,63 @@
+name: cryptonio-dashboard
+version: 1.0.0
+description: Real-time cryptocurrency portfolio dashboard with live data visualization
+author: Performance Supply Depot LLC
+license: Private
+
+runtime:
+  language: python
+  version: "3.11"
+  
+entrypoint:
+  server: dashboard_server.py
+  launcher: start_dashboard.sh
+
+ports:
+  http: 5000
+  websocket: 8765
+
+dependencies:
+  pip:
+    - flask
+    - flask-cors
+    - websockets
+    - pandas
+    - numpy
+    - requests
+
+env:
+  required:
+    - BINANCE_US_API_KEY
+    - BINANCE_US_API_SECRET
+    - KRAKEN_API_KEY
+    - KRAKEN_API_SECRET
+  optional:
+    - GEMINI_API_KEY
+    - GEMINI_API_SECRET
+    - COINBASE_API_KEY
+    - COINBASE_API_SECRET
+    - COINBASE_PASSPHRASE
+
+files:
+  - dashboard_server.py
+  - templates/dashboard.html
+  - start_dashboard.sh
+  - start_dashboard_systemd.sh
+  - cron_dashboard.sh
+  - vault/
+
+systemd:
+  service: cryptonio-dashboard.service
+  enabled: true
+  
+cron:
+  - name: dashboard-autostart
+    schedule: "*/5 * * * *"
+    command: "./cron_dashboard.sh"
+    
+tags:
+  - crypto
+  - trading
+  - portfolio
+  - dashboard
+  - visualization

@@ -77,7 +77,7 @@ The counsel speaks with:
 
 **Counsel:**
 ```
-SITUATION: Mortimer.cloud has 55 pending upgrades including kernel and Docker.
+SITUATION: Mortimer.cloud has 55 pending upgrades including kernel and Docker. 
 Uptime is 68 days. Services are stable but Keycloak is unhealthy.
 
 OPTION A: Upgrade now
@@ -89,7 +89,7 @@ OPTION B: Wait 24 hours
 - Upside: Schedule during low-usage window, prepare rollback plan
 - Downside: Vulnerability window extended, Keycloak stays unhealthy
 
-RECOMMENDATION: Option B — schedule for off-peak.
+RECOMMENDATION: Option B — schedule for off-peak. 
 Confidence: Medium-High
 Reason: The upgrades are not emergency patches. Better to plan than rush.
 

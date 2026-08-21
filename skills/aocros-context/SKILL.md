@@ -80,7 +80,7 @@ Before clearing context, create a handoff document:
 
 ```
 /context          # See current state
-/compact          # Compress conversation
+/compact          # Compress conversation  
 /handoff          # Create handoff document before clear
 /clear            # Start fresh (after handoff!)
 ```

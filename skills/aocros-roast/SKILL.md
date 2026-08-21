@@ -30,7 +30,7 @@ Invoke before:
 **Role:** Find fatal flaws
 **Prompt:** What could absolutely destroy this? What assumptions are fatal? What's the worst case?
 
-### 2. Expansionist
+### 2. Expansionist  
 **Role:** Find biggest upside
 **Prompt:** What's the ceiling? What if everything went perfectly? What's the 10x opportunity?
 

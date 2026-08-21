@@ -1,95 +1,48 @@
 ---
 name: agent-orchestrator
-description: Spawn and manage sub-agents for parallel task execution. Uses Agent Factory task queue with real backends (not blocked sessions_spawn API).
-metadata:
-  emoji: 🚀
-  triggers:
-    - spawn agent
-    - orchestrate
-    - sub-agent
-    - parallel
-    - /spawn
+description: Spawn and manage sub-agents for parallel task execution. Use when breaking down complex tasks into smaller sub-tasks that can run concurrently, monitoring sub-agent progress, collecting results, and handling failures. Ideal for multi-component builds, testing suites, and distributed workflows.
 ---
 
-# Agent Orchestrator v2.0
+# Agent Orchestrator Skill
 
-Real sub-agent orchestration via Agent Factory task queue.
-
-**Status: 🟢 VERIFIED WORKING (2026-07-24)**
+Manage sub-agents for parallel task execution.
 
 ## Quick Start
 
+Spawn a sub-agent:
 ```bash
-# Spawn a sub-agent
-spawn-agent.sh "Scrape https://psdepot.com for meta and prices" browser-agent high
-
-# Check fleet status
-spawn-agent.sh --status
-
-# Collect results from an agent
-spawn-agent.sh --collect browser-agent
+scripts/spawn-agent.sh "Build component X" component-builder
 ```
 
-## Verified Agents (with working backends)
-
-| Agent | Backend | Capability |
-|-------|---------|------------|
-| **browser-agent** ✅ | browser_agent.py | Web scraping, price extraction, competitor monitoring |
-| **jordan** ✅ | cmd.sh | Office controller, diagnostics |
-| **patricia** ⚠️ | patricia_service.py | Process excellence (service mode) |
-| **mortimer** ✅ | self | All tasks (orchestrator default) |
-
-## Orchestration Patterns
-
-### Fan-Out: Parallel Scraping
-
+Check all sub-agents:
 ```bash
-spawn-agent.sh "Scrape https://competitor1.com" browser-agent high &
-spawn-agent.sh "Scrape https://competitor2.com" browser-agent high &
-spawn-agent.sh "Scrape https://competitor3.com" browser-agent high &
-wait
-spawn-agent.sh --collect browser-agent
+openclaw subagents list
 ```
 
-### Pipeline: Scrape → Analyze
+## Common Patterns
 
-```bash
-# Step 1: Browser agent scrapes data
-spawn-agent.sh "Scrape https://psdepot.com products" browser-agent high
+### Parallel Component Build
+Spawn multiple agents to build different components simultaneously:
+1. Spawn agent for core-api
+2. Spawn agent for frontend
+3. Spawn agent for database
+4. Wait for all to complete
+5. Collect results
 
-# Step 2: Patricia analyzes results
-spawn-agent.sh "Analyze scraped pricing data" patricia normal
+### Test Suite Distribution
+Distribute tests across agents:
+1. Split test files into batches
+2. Spawn agent per batch
+3. Collect pass/fail results
+4. Generate combined report
 
-# Step 3: Collect all
-spawn-agent.sh --collect
-```
+## Best Practices
 
-### Map-Reduce: Distributed Processing
+- Keep sub-agent tasks focused and independent
+- Set appropriate timeouts (default: 300s)
+- Use descriptive labels for tracking
+- Always check results before proceeding
 
-```bash
-# Map: Split work across agents
-spawn-agent.sh "Process DepotChaos leads batch 1" miles high
-spawn-agent.sh "Process DepotChaos leads batch 2" pulp high
-spawn-agent.sh "Process DepotChaos leads batch 3" jane high
+## Reference
 
-# Wait for completion, then reduce
-spawn-agent.sh --collect
-```
-
-## File Locations
-
-- **Orchestrator:** `~/.pi/agent/skills/mortimer/skills/agent-orchestrator/scripts/spawn-agent.sh`
-- **Task Queue:** `~/agents/tasks/`
-- **Executor:** `~/agents/execute_task.sh` (v2.0 — real dispatch engine)
-
-## History
-
-- **v2.0 (2026-07-24):** Rewired to use Agent Factory task queue, bypassing blocked `sessions_spawn` API. First successful sub-agent spawn (browser-agent → psdepot.com).
-- **v1.0 (2026-06-18):** Original template — referenced blocked API, never actually spawned agents.
-
-## Notes
-
-- Add new agent backends to `~/agents/execute_task.sh` AGENT_BACKENDS array
-- All spawns recorded in `~/agents/orchestrator.log`
-- Tasks auto-dispatch immediately on spawn
-- Failed spawns go to `~/agents/tasks/failed/`
+See [references/patterns.md](references/patterns.md) for workflow patterns.
