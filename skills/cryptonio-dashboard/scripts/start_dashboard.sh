@@ -7,7 +7,7 @@ echo "🚀 Cryptonio Live Dashboard Starting..."
 echo "=========================================="
 echo ""
 
-cd /root/.openclaw/workspace/agent_sandboxes/the-great-cryptonio
+cd "$HOME/.openclaw/workspace/agent_sandboxes/the-great-cryptonio"
 
 # Check if already running
 if pgrep -f "dashboard_server.py" > /dev/null; then

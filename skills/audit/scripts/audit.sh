@@ -99,7 +99,7 @@ MORTIMER=$(curl -s http://localhost:11434/api/tags 2>/dev/null | grep -c "Mort_I
 [ -S /tmp/aos_brain.sock ] && ((CONNECTIONS_SCORE+=5))
 [ "$MC_STATUS" = "200" ] && ((CONNECTIONS_SCORE+=5))
 [ -f "$WORKSPACE_DIR/aocros/secrets/smtp.env" ] && ((CONNECTIONS_SCORE+=5))
-[ -f "/root/.deepseek_env" ] && ((CONNECTIONS_SCORE+=5))
+[ -f "$HOME/.deepseek_env" ] && ((CONNECTIONS_SCORE+=5))
 
 # Capabilities scoring
 ACTIVE_AGENTS=0

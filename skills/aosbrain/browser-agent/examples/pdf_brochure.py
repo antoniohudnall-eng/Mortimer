@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from browser_agent import BrowserAgent
 
-OUTPUT_DIR = Path("/root/.openclaw/workspace/AGI_COMPANY/marketing/brochures")
+OUTPUT_DIR = Path.home() / ".openclaw/workspace/AGI_COMPANY/marketing/brochures"
 
 def generate_pdf_brochure():
     """Generate PDF brochure from website"""

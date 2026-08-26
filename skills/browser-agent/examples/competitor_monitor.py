@@ -113,7 +113,7 @@ def monitor_competitors():
         browser.close()
     
     # Save report
-    output_dir = Path("/root/.openclaw/workspace/data/competitor_reports")
+    output_dir = Path.home() / ".openclaw/workspace/data/competitor_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
     
     report_file = output_dir / f"report_{datetime.now().strftime('%Y%m%d')}.json"

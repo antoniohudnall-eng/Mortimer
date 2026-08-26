@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from browser_agent import BrowserAgent
 
-OUTPUT_DIR = Path("/root/.openclaw/workspace/AGI_COMPANY/marketing/social_assets")
+OUTPUT_DIR = Path.home() / ".openclaw/workspace/AGI_COMPANY/marketing/social_assets"
 
 def generate_social_assets():
     """Generate social media screenshots from psdepot.com"""

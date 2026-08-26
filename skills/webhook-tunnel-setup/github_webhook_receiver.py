@@ -20,9 +20,9 @@ from pathlib import Path
 # Configuration
 WEBHOOK_PORT = 9001
 WEBHOOK_SECRET = os.environ.get('GITHUB_WEBHOOK_SECRET', 'AOCROS-WEBHOOK-2025')
-LOG_PATH = '/var/log/openclaw/webhook/'
+LOG_PATH = str(Path.home() / '.openclaw/workspace/logs/webhook/')
 MILES_REPO = 'performance-supply-depot'
-NOTIFICATION_PIPE = '/root/.openclaw/workspace/pipes/webhook/notifications/'
+NOTIFICATION_PIPE = str(Path.home() / '.openclaw/workspace/pipes/webhook/notifications/')
 
 # Ensure directories exist
 Path(LOG_PATH).mkdir(parents=True, exist_ok=True)
@@ -178,7 +178,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/root/.openclaw/workspace/pipes/webhook
-ExecStart=/usr/bin/python3 /root/.openclaw/workspace/pipes/webhook/github_webhook_receiver.py
+ExecStart=/usr/bin/env python3 /root/.openclaw/workspace/pipes/webhook/github_webhook_receiver.py
 Restart=always
 RestartSec=5
 Environment="GITHUB_WEBHOOK_SECRET=AOCROS-WEBHOOK-2025"

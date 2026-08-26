@@ -2,7 +2,7 @@
 # Cryptonio Dashboard Wrapper for SystemD
 # Loads credentials and starts dashboard
 
-SCRIPT_DIR="/root/.openclaw/workspace/agent_sandboxes/the-great-cryptonio"
+SCRIPT_DIR="$HOME/.openclaw/workspace/agent_sandboxes/the-great-cryptonio"
 cd "$SCRIPT_DIR"
 
 # Load credentials

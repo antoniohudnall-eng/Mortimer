@@ -83,7 +83,7 @@ def run_checks():
     
     # 4. Database Connectivity
     try:
-        conn = sqlite3.connect('/root/.openclaw/workspace/data/depot_chaos/unified.db')
+        conn = sqlite3.connect(str(Path.home() / ".openclaw/workspace/data/depot_chaos/unified.db"))
         c = conn.cursor()
         c.execute("SELECT COUNT(*) FROM leads WHERE deleted = 0")
         lead_count = c.fetchone()[0]
@@ -123,7 +123,7 @@ def run_checks():
         results['nginx'] = check("Nginx Configuration", True, "Not installed (optional)")
     
     # 7. Email Queue
-    queue_file = Path('/root/.openclaw/workspace/datadepot/queue/pending_emails.json')
+    queue_file = Path.home() / ".openclaw/workspace/datadepot/queue/pending_emails.json"
     if queue_file.exists():
         try:
             with open(queue_file) as f:

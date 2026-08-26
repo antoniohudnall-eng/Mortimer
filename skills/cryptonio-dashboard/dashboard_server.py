@@ -12,6 +12,7 @@ from threading import Thread
 import time
 from datetime import datetime
 import sys
+from pathlib import Path
 import os
 
 # Optional websockets support
@@ -22,7 +23,7 @@ except ImportError:
     WEBSOCKETS_AVAILABLE = False
     print("⚠️ websockets not available - using HTTP polling only")
 
-sys.path.insert(0, '/root/.openclaw/workspace/agent_sandboxes/the-great-cryptonio')
+sys.path.insert(0, str(Path.home() / ".openclaw/workspace/agent_sandboxes/the-great-cryptonio"))
 
 from cryptonio_multi_exchange import UnifiedExchangeManager, Config as BotConfig
 

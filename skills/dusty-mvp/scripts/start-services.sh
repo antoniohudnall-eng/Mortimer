@@ -4,21 +4,21 @@
 echo "Starting Dusty MVP services..."
 
 # Start core-agent
-cd /root/.openclaw/workspace/dusty_mvp_sandbox/core-agent
+cd "$HOME/.openclaw/workspace/dusty_mvp_sandbox/core-agent"
 npm install > /dev/null 2>&1
 nohup node src/index.js > /tmp/core-agent.log 2>&1 &
 echo $! > /tmp/core-agent.pid
 echo "✓ core-agent started (port 3000)"
 
 # Start bridge-mock
-cd /root/.openclaw/workspace/dusty_mvp_sandbox/bridge_mock
+cd "$HOME/.openclaw/workspace/dusty_mvp_sandbox/bridge_mock"
 npm install > /dev/null 2>&1
 nohup node bridge_mock.js > /tmp/bridge.log 2>&1 &
 echo $! > /tmp/bridge.pid
 echo "✓ bridge-mock started (port 3001)"
 
 # Start openclaw-mock
-cd /root/.openclaw/workspace/dusty_mvp_sandbox/openclaw_mock
+cd "$HOME/.openclaw/workspace/dusty_mvp_sandbox/openclaw_mock"
 npm install > /dev/null 2>&1
 nohup node openclaw_mock.js > /tmp/openclaw.log 2>&1 &
 echo $! > /tmp/openclaw.pid

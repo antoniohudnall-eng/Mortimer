@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from browser_agent import BrowserAgent
 
-OUTPUT_DIR = Path("/root/.openclaw/workspace/AGI_COMPANY/marketing")
+OUTPUT_DIR = Path.home() / ".openclaw/workspace/AGI_COMPANY/marketing"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 def test_basic_functionality():

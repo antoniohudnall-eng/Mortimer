@@ -10,8 +10,8 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-AGENTS_DIR = Path("/root/.openclaw/workspace/agents")
-TEMPLATES_DIR = Path("/root/.openclaw/workspace/skills/skill-builder/templates")
+AGENTS_DIR = Path.home() / ".openclaw/workspace/agents"
+TEMPLATES_DIR = Path.home() / ".openclaw/workspace/skills/skill-builder/templates"
 
 class SkillBuilder:
     def __init__(self):
@@ -101,7 +101,7 @@ import time
 from pathlib import Path
 
 # Add BHSI integration
-sys.path.insert(0, '/root/.openclaw/workspace/aocros/BHSI')
+sys.path.insert(0, str(Path.home() / ".openclaw/workspace/aocros/BHSI"))
 
 class {self.agent_class}Agent:
     def __init__(self, config_path=None):
