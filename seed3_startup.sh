@@ -10,6 +10,7 @@
 #   bash seed3_startup.sh --status     # Check what's running
 #
 # Changelog:
+#   v2.1 (2026-08-25): Added Brain Viz (morty_body.py, :8080) to boot + status + health report.
 #   v2.0 (2026-07-24): Merged pi_startup.sh + seed3_startup.sh. Added health checks, idempotency, dry-run.
 #   v1.0 (2026-06-18): Original seed3 startup with service launches
 
@@ -96,6 +97,7 @@ if [ "$MODE" = "status" ]; then
     check_process "pulseaudio" "PulseAudio"
     check_process "ollama serve" "Ollama"
     check_http 8000 "QMD Brain" "/query"
+    check_http 8080 "Brain Viz" "/health"
     check_http 7777 "Quantum Oracle"
     check_http 7778 "Prime Helix" 
     check_http 7779 "Riemann Helix"
@@ -167,6 +169,16 @@ check_http 7777 "Quantum Oracle"
 check_http 7778 "Prime Helix"
 check_http 7779 "Riemann Helix"
 
+# Brain Viz (morty_body.py) — 3D constellation on :8080
+if [ -f "$HOME_DIR/mortimer/brain-viz/start.sh" ]; then
+    start_if_dead "brain-viz/server.py" "Brain Viz" \
+        "cd $HOME_DIR/mortimer/brain-viz && bash start.sh 2>/dev/null"
+    sleep 2
+    check_http 8080 "Brain Viz" "/health"
+else
+    log "  ${YELLOW}⚠${NC} Brain Viz not found — skipping"
+fi
+
 # ─── Step 5: Patricia ────────────────────────────────
 log ""
 log "${BLUE}[5/7] Patricia (Process Excellence)${NC}"
@@ -237,6 +249,7 @@ check_final "qmd_service" "QMD"
 check_final "quantum_oracle" "Quantum Oracle"
 check_final "prime_helix" "Prime Helix"
 check_final "riemann_helix" "Riemann Helix"
+check_final "brain-viz/server.py" "Brain Viz"
 check_final "patricia" "Patricia"
 
 log ""
