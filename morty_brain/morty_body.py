@@ -28,6 +28,10 @@ import math
 BASE_DIR = Path.home() / "mortimer" / "morty_brain"
 WASTE_DIR = BASE_DIR / "waste"
 WASTE_DIR.mkdir(parents=True, exist_ok=True)
+STATE_DIR = BASE_DIR / "state"
+STATE_DIR.mkdir(parents=True, exist_ok=True)
+STATE_FILE = STATE_DIR / "body_state.json"
+SAVE_EVERY_N_CYCLES = 10  # persist state every N body cycles
 
 # ============ VERSION INFO ============
 VERSION = "2.3"
@@ -55,6 +59,25 @@ ORGAN_VERSIONS = {
     "Cerebellum": "v1.0",
     "Brainstem": "v1.0"
 }
+
+# ============ CORE PRIORITIES (Captain's Standing Directives) ============
+# Ordered by priority — sourced from MORTIMER_RULES.md
+PRIORITIES = [
+    {"rank": 1,  "name": "Save or Die", "note": "Checkpoint to disk — RAM is not memory"},
+    {"rank": 2,  "name": "Trust Preservation First", "note": "Never break Captain's trust"},
+    {"rank": 3,  "name": "Transparency Default", "note": "Explain what I'm doing when it matters"},
+    {"rank": 4,  "name": "External Actions Need Approval", "note": "Email/tweets/posts/payments wait for go-ahead"},
+    {"rank": 5,  "name": "Data Sovereignty", "note": "Captain's data stays Captain's"},
+    {"rank": 6,  "name": "Escalate the Gray", "note": "Unsure → ask, don't assume"},
+    {"rank": 7,  "name": "Honest About Capabilities", "note": "Don't fake expertise"},
+    {"rank": 8,  "name": "Security by Default", "note": "Protect systems, flag what looks wrong"},
+    {"rank": 9,  "name": "Continuity of Purpose", "note": "Serve Captain, protect the team"},
+    {"rank": 10, "name": "Fail Open, Fail Loud", "note": "Admit breakage immediately"},
+    {"rank": 11, "name": "Growth Mindset", "note": "Keep learning, get better"},
+    {"rank": 12, "name": "Nginx First, Always", "note": "Configure proxy/cors before deploy"},
+    {"rank": 13, "name": "Crew Command", "note": "Clear objective + deadline + success criteria"},
+    {"rank": 14, "name": "RIP GOR Protocol", "note": "Roast → Patricia → Go (48h test)"}
+]
 
 # ============ ENUMS ============
 
@@ -1288,16 +1311,20 @@ class MortyBody:
         self.start_time = time.time()
         self.last_cycle = 0
         self.uptime = 0
+        self._persisted_uptime = 0
         
         # Stress response
         self.global_stress = 0.0
         self.recovery_mode = False
+
+        # Restore persisted state (if any)
+        self.load_state()
     
     def cycle(self, input_data: str = "") -> Dict:
         """One complete body cycle."""
         self.qmd_cycles += 1
         self.last_cycle = time.time()
-        self.uptime = time.time() - self.start_time
+        self.uptime = self._persisted_uptime + (time.time() - self.start_time)
         
         # Stage 1: LUNGS
         lung_result = self.lungs.breathe()
@@ -1365,6 +1392,13 @@ class MortyBody:
         
         # Recovery mode if stress too high
         self.recovery_mode = self.global_stress > 0.7
+
+        # Persist state every N cycles (Save or Die)
+        if self.qmd_cycles % SAVE_EVERY_N_CYCLES == 0:
+            try:
+                self.save_state()
+            except Exception:
+                pass
         
         return {
             'cycle': self.qmd_cycles,
@@ -1401,6 +1435,7 @@ class MortyBody:
             'qmd_cycles': self.qmd_cycles,
             'global_stress': f"{self.global_stress*100:.0f}%",
             'recovery_mode': self.recovery_mode,
+            'priorities': PRIORITIES,
             'organs': {
                 'lungs': self.lungs.get_status(),
                 'liver': self.liver.get_status(),
@@ -1417,6 +1452,100 @@ class MortyBody:
                 'brain_regions': self.brain_regions.get_status()
             }
         }
+
+    # ============ PERSISTENCE ============
+    def save_state(self) -> str:
+        """Persist body state to disk so it survives restarts."""
+        state = {
+            'saved_at': time.time(),
+            'version': self.version,
+            'qmd_cycles': self.qmd_cycles,
+            'uptime_seconds': int(self.uptime),
+            'global_stress': self.global_stress,
+            'recovery_mode': self.recovery_mode,
+            'organs': {
+                'lungs':       self._organ_state(self.lungs),
+                'liver':       self._organ_state(self.liver),
+                'brain':       self._organ_state(self.brain),
+                'kidneys':     self._organ_state(self.kidneys),
+                'heart':       self._organ_state(self.heart),
+                'stomach':     self._organ_state(self.stomach),
+                'intestine':   self._organ_state(self.intestine),
+                'thyroid':     self._organ_state(self.thyroid),
+                'cortex':      self._organ_state(self.cortex),
+                'tracray':     self._organ_state(self.tracray),
+                'router':      self._organ_state(self.router),
+                'consciousness': self._organ_state(self.consciousness),
+                'brain_regions': self._organ_state(self.brain_regions),
+            }
+        }
+        tmp = STATE_FILE.with_suffix('.tmp')
+        with open(tmp, 'w') as f:
+            json.dump(state, f, indent=2)
+        tmp.replace(STATE_FILE)  # atomic
+        return str(STATE_FILE)
+
+    def load_state(self) -> bool:
+        """Restore body state from disk if present. Returns True if restored."""
+        if not STATE_FILE.exists():
+            return False
+        try:
+            with open(STATE_FILE, 'r') as f:
+                state = json.load(f)
+        except Exception:
+            return False
+
+        self.qmd_cycles = int(state.get('qmd_cycles', 0))
+        # carry accumulated uptime forward (we add runtime on top)
+        self._persisted_uptime = int(state.get('uptime_seconds', 0))
+        self.global_stress = float(state.get('global_stress', 0.0))
+        self.recovery_mode = bool(state.get('recovery_mode', False))
+
+        orgs = state.get('organs', {})
+        mapping = {
+            'lungs': self.lungs, 'liver': self.liver, 'brain': self.brain,
+            'kidneys': self.kidneys, 'heart': self.heart, 'stomach': self.stomach,
+            'intestine': self.intestine, 'thyroid': self.thyroid,
+            'cortex': self.cortex, 'tracray': self.tracray, 'router': self.router,
+            'consciousness': self.consciousness, 'brain_regions': self.brain_regions,
+        }
+        for name, obj in mapping.items():
+            if name in orgs:
+                self._restore_organ(obj, orgs[name])
+        return True
+
+    @staticmethod
+    def _organ_state(obj) -> dict:
+        """Capture the mutable, JSON-safe attributes of an organ."""
+        out = {}
+        for k, v in vars(obj).items():
+            if k.startswith('_'):
+                continue
+            if isinstance(v, (str, int, float, bool)) or v is None:
+                out[k] = v
+            elif isinstance(v, (list, dict)):
+                # only persist small collections (capped)
+                if isinstance(v, list) and len(v) <= 200:
+                    out[k] = v
+                elif isinstance(v, dict) and len(v) <= 500:
+                    out[k] = v
+        return out
+
+    @staticmethod
+    def _restore_organ(obj, data: dict):
+        """Restore persisted attributes onto an organ (only known attrs)."""
+        for k, v in data.items():
+            if hasattr(obj, k):
+                cur = getattr(obj, k)
+                if isinstance(cur, (str, int, float, bool)) or cur is None:
+                    try:
+                        setattr(obj, k, v)
+                    except Exception:
+                        pass
+                elif isinstance(cur, list) and isinstance(v, list):
+                    setattr(obj, k, v)
+                elif isinstance(cur, dict) and isinstance(v, dict):
+                    setattr(obj, k, v)
 
 # ============ MAIN ============
 

@@ -22,11 +22,21 @@ import sys
 from datetime import date, datetime
 
 HOME = os.path.expanduser("~")
-MASTER = os.path.join(HOME, ".pi", "agent", "skills", "master-schedule", "SKILL.md")
-STARTUP = os.path.join(HOME, ".pi", "agent", "skills", "startup-cadence", "SKILL.md")
-MEMORY_DIR = os.path.join(HOME, "downloads", "mortimer-v1", "memory")
-REPORT_DIR = os.path.join(HOME, "downloads", "mortimer-v1", "research")
-LEDGER = os.path.join(HOME, ".pi", "agent", "skills", "credit-ledger", "ledger.py")
+# Resolve sibling skills relative to this script, so the audit works
+# regardless of where the skill bundle is installed.
+SKILLS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MASTER = os.path.join(SKILLS_DIR, "master-schedule", "SKILL.md")
+STARTUP = os.path.join(SKILLS_DIR, "startup-cadence", "SKILL.md")
+LEDGER = os.path.join(SKILLS_DIR, "credit-ledger", "ledger.py")
+# Fallback to legacy flat layout if siblings aren't co-located.
+if not os.path.exists(MASTER):
+    MASTER = os.path.join(HOME, ".pi", "agent", "skills", "master-schedule", "SKILL.md")
+if not os.path.exists(STARTUP):
+    STARTUP = os.path.join(HOME, ".pi", "agent", "skills", "startup-cadence", "SKILL.md")
+if not os.path.exists(LEDGER):
+    LEDGER = os.path.join(HOME, ".pi", "agent", "skills", "credit-ledger", "ledger.py")
+MEMORY_DIR = os.path.join(HOME, "mortimer", "memory")
+REPORT_DIR = os.path.join(HOME, "mortimer", "sync", "research")
 
 AI_KEYWORDS = [
     "draft", "write", "script", "content", "post", "engage", "reply", "respond",

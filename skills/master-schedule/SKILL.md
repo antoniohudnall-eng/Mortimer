@@ -52,6 +52,15 @@ This is the SINGLE source of truth for every recurring task across the AIOS ecos
 | **Before sleep** | Sync Push — upload everything to GitHub | Startup Cadence | 30s |
 | **Before sleep** | Rule 11 Check — did everything get saved? | Aave/Rule 11 | 10s |
 
+### Brain & Body — Persistence & Health (Daily)
+| Time | Task | Owner | Duration |
+|------|------|-------|----------|
+| **Every 10 cycles** | Brain state persistence — save body_state.json (morty_body) | Morty Body | 1s |
+| **Every 10 polls** | Brain Viz state persistence — save viz_state.json | Brain Viz | 1s |
+| **On wake** | Brain health check — tick latency, memory, ollama, skills | Brain Health Check | 30s |
+| **On wake** | Brain Viz health — /health + /api/status on :8080 | Brain Viz | 10s |
+| **On wake** | Brain priorities load — verify 14 core directives surfaced | Morty Body | 10s |
+
 ---
 
 ## 📅 WEEKLY RHYTHM
